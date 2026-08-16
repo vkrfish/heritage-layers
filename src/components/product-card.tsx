@@ -11,7 +11,7 @@ export function ProductCard({ product }: { product: Product }) {
   const { add } = useCart();
   const [weightIndex, setWeightIndex] = React.useState(0);
   const [wished, setWished] = React.useState(false);
-  const weight = product.weights[weightIndex];
+  const weight = product.weights[weightIndex] ?? product.weights[0]!;
 
   return (
     <article className="group flex flex-col overflow-hidden rounded-[12px] border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lift">
