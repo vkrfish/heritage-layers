@@ -17,6 +17,7 @@ import { Route as GiftingRouteImport } from './routes/gifting'
 import { Route as JournalRouteImport } from './routes/journal'
 import { Route as OurStoryRouteImport } from './routes/our-story'
 import { Route as TheCraftRouteImport } from './routes/the-craft'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as ShopIndexRouteImport } from './routes/shop.index'
 import { Route as ShopSlugRouteImport } from './routes/shop.$slug'
 
@@ -60,6 +61,11 @@ const TheCraftRoute = TheCraftRouteImport.update({
   path: '/the-craft',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
 const ShopIndexRoute = ShopIndexRouteImport.update({
   id: '/shop/',
   path: '/shop/',
@@ -73,7 +79,7 @@ const ShopSlugRoute = ShopSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
   '/gifting': typeof GiftingRoute
@@ -81,11 +87,11 @@ export interface FileRoutesByFullPath {
   '/our-story': typeof OurStoryRoute
   '/the-craft': typeof TheCraftRoute
   '/shop/$slug': typeof ShopSlugRoute
+  '/admin/': typeof AdminIndexRoute
   '/shop/': typeof ShopIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
   '/gifting': typeof GiftingRoute
@@ -93,12 +99,13 @@ export interface FileRoutesByTo {
   '/our-story': typeof OurStoryRoute
   '/the-craft': typeof TheCraftRoute
   '/shop/$slug': typeof ShopSlugRoute
+  '/admin': typeof AdminIndexRoute
   '/shop': typeof ShopIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
   '/gifting': typeof GiftingRoute
@@ -106,6 +113,7 @@ export interface FileRoutesById {
   '/our-story': typeof OurStoryRoute
   '/the-craft': typeof TheCraftRoute
   '/shop/$slug': typeof ShopSlugRoute
+  '/admin/': typeof AdminIndexRoute
   '/shop/': typeof ShopIndexRoute
 }
 export interface FileRouteTypes {
@@ -120,11 +128,11 @@ export interface FileRouteTypes {
     | '/our-story'
     | '/the-craft'
     | '/shop/$slug'
+    | '/admin/'
     | '/shop/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/admin'
     | '/checkout'
     | '/contact'
     | '/gifting'
@@ -132,6 +140,7 @@ export interface FileRouteTypes {
     | '/our-story'
     | '/the-craft'
     | '/shop/$slug'
+    | '/admin'
     | '/shop'
   id:
     | '__root__'
@@ -144,12 +153,13 @@ export interface FileRouteTypes {
     | '/our-story'
     | '/the-craft'
     | '/shop/$slug'
+    | '/admin/'
     | '/shop/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AdminRoute: typeof AdminRoute
+  AdminRoute: typeof AdminRouteWithChildren
   CheckoutRoute: typeof CheckoutRoute
   ContactRoute: typeof ContactRoute
   GiftingRoute: typeof GiftingRoute
@@ -218,6 +228,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TheCraftRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/shop/': {
       id: '/shop/'
       path: '/shop'
@@ -235,9 +252,19 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AdminRouteChildren {
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AdminRoute: AdminRoute,
+  AdminRoute: AdminRouteWithChildren,
   CheckoutRoute: CheckoutRoute,
   ContactRoute: ContactRoute,
   GiftingRoute: GiftingRoute,
