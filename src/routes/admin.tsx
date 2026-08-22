@@ -87,7 +87,7 @@ function AdminLayout() {
               {nav.map((item) => (
                 <li key={item.to}>
                   <Link
-                    to={item.to}
+                    to={item.to as "/admin"}
                     activeOptions={{ exact: item.exact ?? false }}
                     onClick={() => setOpen(false)}
                     className="flex min-h-11 items-center gap-3 rounded-[10px] px-3 text-sm text-on-dark-muted transition-colors hover:bg-cream/10 hover:text-on-dark"
