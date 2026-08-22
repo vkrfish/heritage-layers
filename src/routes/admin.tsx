@@ -38,7 +38,14 @@ export const Route = createFileRoute("/admin")({
   component: AdminLayout,
 });
 
-const nav = [
+type NavItem = {
+  to: string;
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+  exact?: boolean;
+};
+
+const nav: NavItem[] = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { to: "/admin/products", label: "Products", icon: Package },
   { to: "/admin/orders", label: "Orders", icon: ReceiptText },
@@ -48,7 +55,7 @@ const nav = [
   { to: "/admin/discounts", label: "Discounts", icon: Ticket },
   { to: "/admin/reviews", label: "Reviews", icon: Star },
   { to: "/admin/settings", label: "Settings", icon: SettingsIcon },
-] as const;
+];
 
 function AdminLayout() {
   const [open, setOpen] = React.useState(false);
