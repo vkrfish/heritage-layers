@@ -13,13 +13,25 @@ export const Route = createFileRoute("/the-craft")({
       {
         name: "description",
         content:
-          "Four steps, no shortcuts: soaking the rice, lifting the sheet, brushing the ghee, folding the nine layers.",
+          "Discover the traditional art of making Putharekulu - four authentic steps from rice batter to paper-thin layers. Handcrafted in Andhra Pradesh using age-old techniques.",
       },
+      { name: "keywords", content: "how Putharekulu is made, Putharekulu recipe, Indian sweet making, traditional food craft, Andhra cuisine, handmade sweets, authentic Indian cooking, food heritage" },
+      { name: "robots", content: "index, follow" },
       { property: "og:title", content: "The Craft — How Putharekulu Is Made" },
       {
         property: "og:description",
         content: "Soaking, lifting, brushing, folding — the four steps behind every sheet.",
       },
+      { property: "og:image", content: "https://9storiesandco.com/craft-sheet.jpg" },
+      { property: "og:url", content: "https://9storiesandco.com/the-craft" },
+      { property: "og:type", content: "article" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "The Craft — How Putharekulu Is Made" },
+      { name: "twitter:description", content: "Soaking, lifting, brushing, folding — the four steps behind every sheet." },
+      { name: "twitter:image", content: "https://9storiesandco.com/craft-sheet.jpg" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://9storiesandco.com/the-craft" },
     ],
   }),
   component: TheCraft,

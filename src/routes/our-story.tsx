@@ -7,17 +7,29 @@ import craftLayers from "@/assets/craft-layers.jpg";
 export const Route = createFileRoute("/our-story")({
   head: () => ({
     meta: [
-      { title: "Our Story — 9 Stories & Co." },
+      { title: "Our Story — 9 Stories & Co. | Nine Generations of Andhra Heritage" },
       {
         name: "description",
         content:
-          "Nine generations of a family kitchen in Atreyapuram, Andhra Pradesh, and the sweet they refused to change.",
+          "Discover the story of 9 Stories & Co. - nine generations of Putharekulu craftsmanship from Atreyapuram, Andhra Pradesh. Authentic tradition passed down since 1908.",
       },
+      { name: "keywords", content: "Andhra heritage, traditional sweets, family recipe, Atreyapuram sweets, Indian sweet history, Putharekulu origin, authentic Indian food, heritage food brand" },
+      { name: "robots", content: "index, follow" },
       { property: "og:title", content: "Our Story — 9 Stories & Co." },
       {
         property: "og:description",
-        content: "Nine generations of a family kitchen in Atreyapuram, Andhra Pradesh.",
+        content: "Nine generations of a family kitchen in Atreyapuram, Andhra Pradesh, preserving the art of Putharekulu.",
       },
+      { property: "og:image", content: "https://9storiesandco.com/heritage.jpg" },
+      { property: "og:url", content: "https://9storiesandco.com/our-story" },
+      { property: "og:type", content: "article" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Our Story — 9 Stories & Co." },
+      { name: "twitter:description", content: "Nine generations of a family kitchen in Atreyapuram, Andhra Pradesh." },
+      { name: "twitter:image", content: "https://9storiesandco.com/heritage.jpg" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://9storiesandco.com/our-story" },
     ],
   }),
   component: OurStory,

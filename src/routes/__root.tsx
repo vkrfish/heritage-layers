@@ -4,6 +4,7 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useMatchRoute,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -12,15 +13,18 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { CartProvider } from "@/components/cart";
+import { AdminStoreProvider } from "@/lib/admin-store.tsx";
 import { Navbar } from "@/components/navbar";
 import { Footer, Newsletter } from "@/components/footer";
+import { StructuredData } from "@/components/seo";
+import { GoogleAnalytics } from "@/components/analytics";
 
 function NotFoundComponent() {
   return (
     <div className="flex min-h-[70vh] items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <p className="eyebrow text-accent">404</p>
-        <h1 className="mt-4 text-4xl text-primary">This page has melted away</h1>
+        <h1 className="mt-4 text-4xl text-primary font-display">This page has melted away</h1>
         <p className="mt-3 text-sm text-muted-foreground">
           The page you're looking for doesn't exist or has been moved.
         </p>
@@ -47,7 +51,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   return (
     <div className="flex min-h-[70vh] items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
-        <h1 className="text-3xl text-primary">This page didn't load</h1>
+        <h1 className="text-3xl text-primary font-display">This page didn't load</h1>
         <p className="mt-3 text-sm text-muted-foreground">
           Something went wrong on our end. You can try refreshing or head back home.
         </p>
@@ -78,15 +82,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "9 Stories & Co. — Handcrafted Andhra Putharekulu" },
+      { title: "9 Stories & Co. — Handcrafted Andhra Putharekulu | Premium Indian Sweets" },
       {
         name: "description",
         content:
-          "Authentic handcrafted Putharekulu from Andhra Pradesh. Paper-thin layers, pure ghee, made fresh in small batches.",
+          "Authentic handcrafted Putharekulu from Andhra Pradesh. Paper-thin layers, pure ghee, made fresh in small batches. Order premium Indian sweets online for delivery across India.",
       },
+      { name: "keywords", content: "Putharekulu, Andhra sweets, Indian sweets, handcrafted sweets, premium sweets, traditional sweets, authentic Indian food, Diwali sweets, wedding sweets, gifting sweets" },
+      { name: "author", content: "9 Stories & Co." },
+      { name: "robots", content: "index, follow" },
       { property: "og:site_name", content: "9 Stories & Co." },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:title", content: "9 Stories & Co. — Handcrafted Andhra Putharekulu" },
+      { property: "og:description", content: "Authentic handcrafted Putharekulu from Andhra Pradesh. Paper-thin layers, pure ghee, made fresh in small batches." },
+      { property: "og:image", content: "https://9storiesandco.com/hero-putharekulu.jpg" },
+      { property: "og:url", content: "https://9storiesandco.com" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -97,6 +107,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap",
       },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "canonical", href: "https://9storiesandco.com" },
     ],
   }),
   shellComponent: RootShell,
@@ -121,18 +132,31 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const matchRoute = useMatchRoute();
+  const isAdminRoute = matchRoute({ to: "/admin", fuzzy: true });
 
   return (
     <QueryClientProvider client={queryClient}>
-      <CartProvider>
-        <Navbar />
-        <main>
-          {/* Required: nested routes render here. */}
-          <Outlet />
-        </main>
-        <Newsletter />
-        <Footer />
-      </CartProvider>
+      <AdminStoreProvider>
+        <CartProvider>
+          <GoogleAnalytics measurementId="G-XXXXXXXXXX" />
+          <StructuredData type="organization" data={{}} />
+          
+          {/* Hide public header/footer on admin routes */}
+          {!isAdminRoute && <Navbar />}
+
+          <main>
+            <Outlet />
+          </main>
+
+          {!isAdminRoute && (
+            <>
+              <Newsletter />
+              <Footer />
+            </>
+          )}
+        </CartProvider>
+      </AdminStoreProvider>
     </QueryClientProvider>
   );
 }

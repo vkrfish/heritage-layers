@@ -10,17 +10,29 @@ import occasionFestival from "@/assets/occasion-festival.jpg";
 export const Route = createFileRoute("/gifting")({
   head: () => ({
     meta: [
-      { title: "Gifting — Premium Putharekulu Boxes | 9 Stories & Co." },
+      { title: "Gifting — Premium Putharekulu Gift Boxes | 9 Stories & Co." },
       {
         name: "description",
         content:
-          "Teal and gold keepsake boxes of handcrafted Putharekulu for weddings, festivals and corporate gifting across India.",
+          "Premium Putharekulu gift boxes for weddings, festivals, and corporate gifting. Handcrafted in Andhra Pradesh with elegant teal and gold packaging. Order bulk gift boxes across India.",
       },
+      { name: "keywords", content: "Indian sweets gifts, wedding return gifts, Diwali gift boxes, corporate gifting, premium gift boxes, Indian sweet hampers, festival gifts, traditional sweets gifts, bulk sweets order" },
+      { name: "robots", content: "index, follow" },
       { property: "og:title", content: "Gifting — Premium Putharekulu Boxes" },
       {
         property: "og:description",
         content: "Keepsake boxes for weddings, festivals and corporate gifting.",
       },
+      { property: "og:image", content: "https://9storiesandco.com/product-giftbox.jpg" },
+      { property: "og:url", content: "https://9storiesandco.com/gifting" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Gifting — Premium Putharekulu Boxes" },
+      { name: "twitter:description", content: "Keepsake boxes for weddings, festivals and corporate gifting." },
+      { name: "twitter:image", content: "https://9storiesandco.com/product-giftbox.jpg" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://9storiesandco.com/gifting" },
     ],
   }),
   component: Gifting,

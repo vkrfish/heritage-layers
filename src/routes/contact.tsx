@@ -2,21 +2,34 @@ import { createFileRoute } from "@tanstack/react-router";
 import * as React from "react";
 
 import { Button, SectionHeading } from "@/components/ui-kit";
+import { StructuredData } from "@/components/seo";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
-      { title: "Contact & Help — 9 Stories & Co." },
+      { title: "Contact Us — 9 Stories & Co. | Customer Support & Enquiries" },
       {
         name: "description",
         content:
-          "Shipping, returns and bulk order enquiries for handcrafted Andhra Putharekulu. We reply within one working day.",
+          "Contact 9 Stories & Co. for shipping, returns, bulk orders, and customer support. Get help with your Putharekulu orders. We reply within one working day.",
       },
+      { name: "keywords", content: "contact 9 Stories & Co, Putharekulu customer support, Indian sweets shipping, bulk sweets order, sweet delivery help, customer service" },
+      { name: "robots", content: "index, follow" },
       { property: "og:title", content: "Contact & Help — 9 Stories & Co." },
       {
         property: "og:description",
         content: "Shipping, returns and bulk order enquiries. We reply within one working day.",
       },
+      { property: "og:image", content: "https://9storiesandco.com/hero-putharekulu.jpg" },
+      { property: "og:url", content: "https://9storiesandco.com/contact" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Contact & Help — 9 Stories & Co." },
+      { name: "twitter:description", content: "Shipping, returns and bulk order enquiries. We reply within one working day." },
+      { name: "twitter:image", content: "https://9storiesandco.com/hero-putharekulu.jpg" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://9storiesandco.com/contact" },
     ],
   }),
   component: Contact,
@@ -33,8 +46,14 @@ const faqs = [
 function Contact() {
   const [sent, setSent] = React.useState(false);
 
+  const faqSchemaData = faqs.map(([question, answer]) => ({
+    question,
+    answer,
+  }));
+
   return (
     <div className="px-5 py-20 lg:px-10 lg:py-28">
+      <StructuredData type="faq" data={faqSchemaData} />
       <div className="mx-auto max-w-[1400px]">
         <SectionHeading
           eyebrow="Contact"
@@ -84,7 +103,7 @@ function Contact() {
           </form>
 
           <div>
-            <h2 className="text-3xl text-primary">Frequently asked</h2>
+            <h3 className="text-3xl text-primary">Frequently asked</h3>
             <dl className="mt-6 divide-y divide-border border-t border-border">
               {faqs.map(([q, a]) => (
                 <div key={q} className="py-5">
@@ -93,14 +112,14 @@ function Contact() {
                 </div>
               ))}
             </dl>
-            <div className="mt-10 rounded-[12px] bg-primary p-8">
+            <address className="mt-10 rounded-[12px] bg-primary p-8 not-italic">
               <p className="eyebrow text-gold">Visit the kitchen</p>
               <p className="mt-3 leading-relaxed text-on-dark-muted">
                 Atreyapuram, East Godavari, Andhra Pradesh 533235
                 <br />
-                hello@9stories.co · +91 98490 00000
+                <a href="mailto:hello@9stories.co" className="hover:text-gold">hello@9stories.co</a> · <a href="tel:+919849000000" className="hover:text-gold">+91 98490 00000</a>
               </p>
-            </div>
+            </address>
           </div>
         </div>
       </div>

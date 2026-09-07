@@ -1,10 +1,10 @@
 import { Link } from "@tanstack/react-router";
-import { Heart } from "lucide-react";
+import { Heart, ShoppingBag } from "lucide-react";
 import * as React from "react";
 
 import { useCart } from "@/components/cart";
-import { Badge, Button, Price, Rating } from "@/components/ui-kit";
-import type { Product } from "@/lib/products";
+import { Badge, Button, Rating } from "@/components/ui-kit";
+import { formatPrice, type Product } from "@/lib/products";
 import { cn } from "@/lib/utils";
 
 export function ProductCard({ product }: { product: Product }) {
@@ -13,8 +13,10 @@ export function ProductCard({ product }: { product: Product }) {
   const [wished, setWished] = React.useState(false);
   const weight = product.weights[weightIndex] ?? product.weights[0]!;
 
+  const reviews = product.reviewsCount ?? (product as any).reviews ?? 100;
+
   return (
-    <article className="group flex flex-col overflow-hidden rounded-[12px] border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lift">
+    <article className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lift">
       <div className="relative overflow-hidden bg-parchment/40">
         <Link
           to="/shop/$slug"
@@ -28,7 +30,7 @@ export function ProductCard({ product }: { product: Product }) {
             loading="lazy"
             width={900}
             height={900}
-            className="aspect-square w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+            className="aspect-square w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
           />
         </Link>
         {product.badge ? (
@@ -41,24 +43,29 @@ export function ProductCard({ product }: { product: Product }) {
           aria-pressed={wished}
           aria-label={wished ? `Remove ${product.name} from wishlist` : `Add ${product.name} to wishlist`}
           onClick={() => setWished((v) => !v)}
-          className="absolute top-2 right-2 grid h-11 w-11 place-items-center rounded-full text-primary transition-colors duration-200 hover:text-accent"
+          className="absolute top-2 right-2 grid h-10 w-10 place-items-center rounded-full bg-cream/80 backdrop-blur-sm text-primary transition-colors duration-200 hover:text-accent shadow-sm"
         >
-          <Heart className={cn("h-[18px] w-[18px]", wished && "fill-accent text-accent")} />
+          <Heart className={cn("h-4 w-4", wished && "fill-accent text-accent")} />
         </button>
       </div>
 
-      <div className="flex flex-1 flex-col p-5">
-        <Link to="/shop/$slug" params={{ slug: product.slug }}>
-          <h3 className="font-display text-2xl leading-tight text-primary">{product.name}</h3>
-        </Link>
-        <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-muted-foreground">
-          {product.description}
-        </p>
-        <div className="mt-3">
-          <Rating value={product.rating} count={product.reviews} />
+      <div className="flex flex-1 flex-col p-4 sm:p-5">
+        <div className="mb-1 flex items-center justify-between">
+          <span className="eyebrow text-[10px] font-bold text-muted-foreground uppercase">{product.category}</span>
+          <Rating value={product.rating} count={reviews} />
         </div>
 
-        <div className="mt-4 flex flex-wrap gap-2">
+        <Link to="/shop/$slug" params={{ slug: product.slug }}>
+          <h3 className="font-display text-xl leading-snug text-primary font-medium hover:text-accent transition-colors">
+            {product.name}
+          </h3>
+        </Link>
+        <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-muted-foreground">
+          {product.tagline || product.description}
+        </p>
+
+        {/* Interactive Weight Variant Selector Pills */}
+        <div className="mt-4 flex flex-wrap gap-1.5">
           {product.weights.map((w, i) => (
             <button
               key={w.label}
@@ -66,19 +73,34 @@ export function ProductCard({ product }: { product: Product }) {
               onClick={() => setWeightIndex(i)}
               aria-pressed={i === weightIndex}
               className={cn(
-                "rounded-[8px] border px-3 py-1.5 text-xs transition-colors duration-200",
+                "rounded-lg border px-2.5 py-1 text-xs font-medium transition-all duration-200",
                 i === weightIndex
-                  ? "border-accent bg-accent/10 text-accent"
-                  : "border-border text-muted-foreground hover:border-primary/40",
+                  ? "border-accent bg-accent/10 text-accent font-bold shadow-sm"
+                  : "border-border text-muted-foreground hover:border-primary/40 hover:bg-parchment/50",
               )}
             >
-              {w.label.split(" · ")[0]}
+              {w.label.split(" (")[0]}
             </button>
           ))}
         </div>
 
-        <div className="mt-auto flex items-center justify-between gap-3 pt-5">
-          <Price value={weight.price} className="text-lg" />
+        <div className="mt-auto flex items-center justify-between gap-2 pt-4 border-t border-border/60">
+          <div>
+            <div className="flex items-baseline gap-1.5">
+              <span className="text-base font-bold text-primary">{formatPrice(weight.price)}</span>
+              {weight.msrp && weight.msrp > weight.price && (
+                <span className="text-xs text-muted-foreground line-through tabular-nums">
+                  {formatPrice(weight.msrp)}
+                </span>
+              )}
+            </div>
+            {weight.msrp && weight.msrp > weight.price && (
+              <span className="text-[10px] font-bold text-accent">
+                Save {Math.round(((weight.msrp - weight.price) / weight.msrp) * 100)}%
+              </span>
+            )}
+          </div>
+
           <Button
             size="sm"
             onClick={() =>
@@ -91,8 +113,9 @@ export function ProductCard({ product }: { product: Product }) {
                 qty: 1,
               })
             }
+            className="gap-1 px-3 text-xs"
           >
-            Add to cart
+            <ShoppingBag className="h-3.5 w-3.5" /> Add
           </Button>
         </div>
       </div>
