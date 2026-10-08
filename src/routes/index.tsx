@@ -1,16 +1,17 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Leaf, Package, Sparkles, Truck, Star, ChevronRight, CheckCircle2, ShieldCheck, Phone } from "lucide-react";
+import { ChevronLeft, ChevronRight, Star, CheckCircle2, ShieldCheck } from "lucide-react";
 import * as React from "react";
 
 import { ProductCard } from "@/components/product-card";
 import { Button, Eyebrow, SectionHeading } from "@/components/ui-kit";
+import { BrandTrustStrip } from "@/components/brand-trust-strip";
 import { products } from "@/lib/products";
-import hero from "@/assets/hero-putharekulu.jpg";
 import craftSheet from "@/assets/craft-sheet.jpg";
 import giftbox from "@/assets/product-giftbox.jpg";
 import classic from "@/assets/product-classic.jpg";
 import ghee from "@/assets/product-ghee.jpg";
 import jaggery from "@/assets/product-jaggery.jpg";
+import heroPutharekulu from "@/assets/hero-putharekulu.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -19,12 +20,11 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Authentic paper-thin Putharekulu, A2 ghee sweets, savouries, gunpowder podi, and luxury gift boxes. Shipped fresh across India, USA, UK & worldwide.",
+          "Authentic paper-thin Putharekulu, A2 ghee sweets, savouries, gunpowder podi, and luxury gift boxes. Shipped fresh across India & worldwide.",
       },
       { name: "keywords", content: "9 Stories, Putharekulu, Andhra sweets, Indian sweets, butter murukku, gunpowder podi, Atreyapuram sweets, online sweet shop" },
       { name: "robots", content: "index, follow" },
       { property: "og:title", content: "9 Stories & Co. — Handcrafted Andhra Putharekulu & Heritage Delicacies" },
-      { property: "og:image", content: "https://9storiesandco.com/hero-putharekulu.jpg" },
       { property: "og:type", content: "website" },
     ],
     links: [{ rel: "canonical", href: "https://9storiesandco.com" }],
@@ -32,39 +32,68 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-const heroSlides = [
-  {
-    tagline: "Festive Season & Luxury Gifting",
-    title: "Handcrafted Andhra Putharekulu Shipped Worldwide",
-    copy: "Paper-thin rice sheets brushed with pure A2 cow ghee and organic jaggery. Delivered fresh within 48 hours.",
-    image: hero,
-    ctaText: "Explore Collection",
-    ctaLink: "/shop",
-  },
-  {
-    tagline: "Royal Heritage Gift Boxes",
-    title: "The Ultimate Celebration Gift Box",
-    copy: "Four artisanal sweet varieties wrapped in gold parchment paper inside a hand-tied keepsake box.",
-    image: giftbox,
-    ctaText: "Shop Gift Sets",
-    ctaLink: "/gifting",
-  },
-];
-
 const categoryIcons = [
-  { name: "Sweets", image: classic, category: "Sweets", badge: "Hot" },
+  { name: "Putharekulu", image: classic, category: "Sweets", badge: "Must Try" },
+  { name: "A2 Ghee Sweets", image: ghee, category: "Sweets" },
   { name: "Savouries", image: ghee, category: "Savouries" },
   { name: "Podi & Mixes", image: jaggery, category: "Podi & Mixes" },
-  { name: "Gift Sets", image: giftbox, category: "Gift Boxes", badge: "Luxury" },
-  { name: "New Arrivals", image: classic, tag: "New" },
-  { name: "Under ₹99", image: ghee, category: "Special Offers", badge: "₹99" },
+  { name: "Gift Boxes", image: giftbox, category: "Gift Boxes", badge: "Luxury" },
+  { name: "Under ₹99", image: ghee, category: "Special Offers", badge: "Offer" },
+];
+
+const heroPosters = [
+  {
+    id: "putharekulu",
+    image: heroPutharekulu,
+    eyebrow: "Festive Collection · Atreyapuram Original",
+    title: "Handcrafted Paper-Thin Putharekulu",
+    subtitle: "Brushed with pure A2 cow ghee, layered with organic jaggery & dry fruits. A 300-year Godavari heritage.",
+    primaryCta: "Explore Sweets",
+    primaryLink: "/shop",
+    secondaryCta: "Discover Gifting",
+    secondaryLink: "/gifting",
+    badge: "9 Generations Craft",
+  },
+  {
+    id: "gifting",
+    image: giftbox,
+    eyebrow: "Royal Gifting · Corporate & Weddings",
+    title: "Luxury Heritage Gift Hampers",
+    subtitle: "Exquisite gold-embossed hampers curated with fresh Putharekulu, savouries, and traditional sweets.",
+    primaryCta: "Explore Gifting",
+    primaryLink: "/gifting",
+    secondaryCta: "Custom Bulk Orders",
+    secondaryLink: "/contact",
+    badge: "Luxury Edition",
+  },
+  {
+    id: "heritage",
+    image: craftSheet,
+    eyebrow: "Artisan Heritage · Handmade Daily",
+    title: "Slow-Made In Pot Kilns",
+    subtitle: "Hand-swiped over earthen pots in Atreyapuram village. 100% natural ingredients, zero preservatives.",
+    primaryCta: "Our Craft Story",
+    primaryLink: "/the-craft",
+    secondaryCta: "View Catalog",
+    secondaryLink: "/shop",
+    badge: "Authentic Recipe",
+  },
 ];
 
 export function Home() {
-  const [currentSlide, setCurrentSlide] = React.useState(0);
   const [activeTab, setActiveTab] = React.useState<"bestsellers" | "new" | "gifting" | "offers">("bestsellers");
+  const [currentSlide, setCurrentSlide] = React.useState(0);
 
-  // Filter products based on active showcase tab
+  React.useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % heroPosters.length);
+    }, 5500);
+    return () => clearInterval(timer);
+  }, []);
+
+  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % heroPosters.length);
+  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + heroPosters.length) % heroPosters.length);
+
   const showcaseProducts = React.useMemo(() => {
     switch (activeTab) {
       case "bestsellers":
@@ -80,101 +109,131 @@ export function Home() {
     }
   }, [activeTab]);
 
-  React.useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
-    }, 6000);
-    return () => clearInterval(timer);
-  }, []);
-
   return (
-    <>
-      {/* 1. HERO CAROUSEL */}
-      <section className="relative isolate overflow-hidden bg-primary" aria-label="Hero Showcase">
-        {heroSlides.map((slide, index) => (
-          <div
-            key={index}
-            className={`transition-opacity duration-700 ${
-              index === currentSlide ? "opacity-100 relative z-10" : "opacity-0 absolute inset-0 pointer-events-none"
-            }`}
-          >
-            <img
-              src={slide.image}
-              alt={slide.title}
-              className="absolute inset-0 h-full w-full object-cover opacity-45"
-              width={1920}
-              height={1200}
-            />
-            <div className="relative mx-auto grid min-h-[75vh] max-w-[1400px] items-center px-5 py-20 lg:px-10">
-              <div className="max-w-2xl reveal">
-                <Eyebrow tone="gold">{slide.tagline}</Eyebrow>
-                <h1 className="mt-4 text-4xl leading-[1.1] text-on-dark sm:text-6xl lg:text-7xl font-light">
-                  {slide.title}
-                </h1>
-                <p className="mt-5 max-w-lg text-base leading-relaxed text-on-dark-muted sm:text-lg">
-                  {slide.copy}
-                </p>
-                <div className="mt-8 flex flex-wrap gap-4">
-                  <Link to={slide.ctaLink}>
-                    <Button size="lg" className="shadow-lift">{slide.ctaText}</Button>
-                  </Link>
-                  <Link to="/our-story">
-                    <Button size="lg" variant="onDark">
-                      Our Heritage Story
-                    </Button>
-                  </Link>
+    <div className="pb-16 lg:pb-0">
+      {/* 1. HERO POSTER CAROUSEL SECTION */}
+      <section className="relative overflow-hidden bg-brown text-cream" aria-label="Hero Posters">
+        <div className="relative min-h-[460px] sm:min-h-[540px] lg:min-h-[620px] flex items-center">
+          {heroPosters.map((poster, index) => {
+            const isActive = index === currentSlide;
+            return (
+              <div
+                key={poster.id}
+                className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
+                  isActive ? "opacity-100 z-10 pointer-events-auto" : "opacity-0 z-0 pointer-events-none"
+                }`}
+              >
+                {/* Poster Image Background */}
+                <div className="absolute inset-0">
+                  <img
+                    src={poster.image}
+                    alt={poster.title}
+                    className="w-full h-full object-cover object-center"
+                  />
+                  {/* Rich Gradient Overlay for Crisp Legibility */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-brown via-brown/80 to-brown/40 lg:bg-gradient-to-r lg:from-brown/95 lg:via-brown/75 lg:to-transparent" />
+                </div>
+
+                {/* Poster Content */}
+                <div className="relative h-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-10 flex items-center py-14 lg:py-24">
+                  <div className="max-w-2xl space-y-4 sm:space-y-6">
+                    <div className="inline-flex items-center gap-2.5 rounded-full border border-gold bg-brown/90 backdrop-blur-md px-4 py-1.5 text-gold shadow-md">
+                      <span className="h-2.5 w-2.5 rounded-full bg-gold animate-pulse" />
+                      <span className="font-sans text-sm sm:text-base font-bold uppercase tracking-widest text-gold">
+                        {poster.eyebrow}
+                      </span>
+                    </div>
+
+                    <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-normal leading-tight text-cream drop-shadow-md">
+                      {poster.title}
+                    </h1>
+
+                    <p className="font-sans text-xl sm:text-2xl font-bold leading-relaxed text-cream tracking-wide max-w-xl drop-shadow-sm">
+                      {poster.subtitle}
+                    </p>
+
+                    <div className="pt-3 sm:pt-5 flex flex-wrap items-center gap-4 sm:gap-5">
+                      <Link to={poster.primaryLink}>
+                        <Button size="lg" variant="primary" className="bg-gold text-brown hover:bg-terracotta hover:text-white font-extrabold text-base sm:text-lg shadow-lift border border-gold/80">
+                          {poster.primaryCta}
+                        </Button>
+                      </Link>
+                      <Link to={poster.secondaryLink}>
+                        <Button size="lg" variant="secondary" className="border-2 border-gold bg-brown/70 text-gold hover:bg-gold hover:text-brown font-extrabold text-base sm:text-lg shadow-lift backdrop-blur-sm">
+                          {poster.secondaryCta}
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-        ))}
+            );
+          })}
 
-        {/* Carousel Slide Controls */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
-          {heroSlides.map((_, idx) => (
-            <button
-              key={idx}
-              onClick={() => setCurrentSlide(idx)}
-              aria-label={`Slide ${idx + 1}`}
-              className={`h-2.5 rounded-full transition-all duration-300 ${
-                idx === currentSlide ? "w-8 bg-accent" : "w-2.5 bg-cream/40"
-              }`}
-            />
-          ))}
+          {/* Carousel Arrows */}
+          <button
+            onClick={prevSlide}
+            aria-label="Previous slide"
+            className="absolute left-2 sm:left-4 z-20 p-2 sm:p-3 rounded-full border border-gold/40 bg-brown/70 text-cream hover:bg-gold hover:text-brown transition-colors cursor-pointer"
+          >
+            <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
+          </button>
+          <button
+            onClick={nextSlide}
+            aria-label="Next slide"
+            className="absolute right-2 sm:right-4 z-20 p-2 sm:p-3 rounded-full border border-gold/40 bg-brown/70 text-cream hover:bg-gold hover:text-brown transition-colors cursor-pointer"
+          >
+            <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
+          </button>
+
+          {/* Carousel Dots & Badge Indicators */}
+          <div className="absolute bottom-4 left-0 right-0 z-20 flex justify-center items-center gap-2">
+            {heroPosters.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => setCurrentSlide(idx)}
+                aria-label={`Go to slide ${idx + 1}`}
+                className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
+                  idx === currentSlide ? "w-8 bg-gold" : "w-2.5 bg-cream/40 hover:bg-cream/70"
+                }`}
+              />
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* 2. CATEGORY ICON GRID */}
-      <section className="paper py-12 px-4 sm:px-6 lg:px-8 border-b border-border">
+      {/* 2. CATEGORY HORIZONTAL SWIPE RAIL / GRID SECTION */}
+      <section className="py-8 sm:py-16 px-4 sm:px-6 lg:px-10 border-b border-brown/15 bg-cream-light/40">
         <div className="mx-auto max-w-[1400px]">
-          <div className="text-center mb-8">
-            <span className="eyebrow text-accent font-semibold">Explore Categories</span>
-            <h2 className="font-display text-2xl text-primary sm:text-3xl font-light mt-1">
-              Curated Delicacies &amp; Heritage Treats
+          <div className="text-center mb-6 sm:mb-10">
+            <h2 className="font-display text-2xl sm:text-5xl font-normal text-brown inline-block relative">
+              Shop by <span className="text-terracotta underline decoration-gold decoration-4 underline-offset-4">Category</span>
             </h2>
+            <p className="font-sans text-xs sm:text-base font-bold text-brown/70 mt-1">Jump straight to what you're looking for</p>
           </div>
 
-          <div className="grid grid-cols-3 sm:grid-cols-6 gap-4 sm:gap-6 text-center">
+          {/* Mobile Horizontal Swipe Rail / Desktop Grid */}
+          <div className="flex gap-4 overflow-x-auto pb-3 sm:pb-0 sm:grid sm:grid-cols-3 lg:grid-cols-6 snap-x text-center scrollbar-none">
             {categoryIcons.map((cat) => (
               <Link
                 key={cat.name}
                 to="/shop"
-                search={cat.category ? { category: cat.category } : undefined}
-                className="group flex flex-col items-center gap-3 p-3 rounded-2xl transition-all duration-300 hover:bg-cream hover:shadow-soft"
+                search={cat.category ? { category: cat.category } : {}}
+                className="group flex-shrink-0 w-24 sm:w-auto flex flex-col items-center gap-2 p-2 sm:p-4 rounded-xl border border-brown/15 bg-cream transition-all duration-300 hover:shadow-lift snap-start"
               >
-                <div className="relative h-20 w-20 sm:h-24 sm:w-24 rounded-full p-1 border-2 border-gold/40 group-hover:border-accent transition-colors">
+                <div className="relative h-20 w-20 sm:h-24 sm:w-24 rounded-full p-1 border-2 border-gold group-hover:border-terracotta transition-colors shadow-flat">
                   <img
                     src={cat.image}
                     alt={cat.name}
                     className="h-full w-full rounded-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                   {cat.badge && (
-                    <span className="absolute -top-1 -right-1 rounded-full bg-accent px-1.5 py-0.5 text-[9px] font-bold text-accent-foreground shadow-sm">
+                    <span className="absolute -top-1 -right-1 rounded-full bg-gold px-1.5 py-0.5 font-sans text-[9px] font-bold text-brown shadow-flat">
                       {cat.badge}
                     </span>
                   )}
                 </div>
-                <span className="text-xs sm:text-sm font-medium text-primary group-hover:text-accent transition-colors">
+                <span className="font-sans text-xs sm:text-base font-bold text-brown group-hover:text-terracotta transition-colors truncate max-w-full">
                   {cat.name}
                 </span>
               </Link>
@@ -183,17 +242,20 @@ export function Home() {
         </div>
       </section>
 
-      {/* 3. TABBED PRODUCT SHOWCASE GRID */}
-      <section className="px-5 py-20 lg:px-10" aria-labelledby="showcase-heading">
+      {/* 3. BRAND TRUST STRIP */}
+      <BrandTrustStrip />
+
+      {/* 4. TABBED PRODUCT SHOWCASE GRID (2-Column Mobile Grid) */}
+      <section className="px-4 sm:px-6 lg:px-10 py-10 sm:py-20" aria-labelledby="showcase-heading">
         <div className="mx-auto max-w-[1400px]">
           <SectionHeading
             eyebrow="Handcrafted Selection"
             title="Popular Heritage Delights"
-            subtitle="Select your preferred weight variant (250g, 500g, 1kg) and add directly to your cart."
+            subtitle="Select your preferred weight variant and add directly to your cart."
           />
 
-          {/* Interactive Showcase Tabs */}
-          <div className="mt-8 flex justify-center border-b border-border">
+          {/* Showcase Tabs */}
+          <div className="mt-6 sm:mt-8 flex justify-center border-b border-brown/15">
             <div className="flex space-x-2 sm:space-x-8 overflow-x-auto pb-px">
               {[
                 { id: "bestsellers", label: "Best Sellers" },
@@ -204,10 +266,10 @@ export function Home() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as any)}
-                  className={`py-3 px-4 text-xs sm:text-sm font-semibold transition-colors border-b-2 whitespace-nowrap ${
+                  className={`py-2.5 px-3 font-sans text-xs sm:text-base font-bold transition-colors border-b-2 whitespace-nowrap cursor-pointer ${
                     activeTab === tab.id
-                      ? "border-accent text-accent"
-                      : "border-transparent text-muted-foreground hover:text-primary"
+                      ? "border-terracotta text-terracotta"
+                      : "border-transparent text-brown/70 hover:text-brown"
                   }`}
                 >
                   {tab.label}
@@ -216,16 +278,16 @@ export function Home() {
             </div>
           </div>
 
-          {/* Product Cards Grid */}
-          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {/* 2-Column Mobile Product Cards Grid */}
+          <div className="mt-6 sm:mt-10 grid gap-3 sm:gap-6 grid-cols-2 lg:grid-cols-4">
             {showcaseProducts.map((p) => (
               <ProductCard key={p.slug} product={p} />
             ))}
           </div>
 
-          <div className="mt-12 text-center">
+          <div className="mt-8 sm:mt-12 text-center">
             <Link to="/shop">
-              <Button variant="secondary" size="lg" className="gap-2">
+              <Button variant="secondary" size="md" className="gap-2 text-xs sm:text-base">
                 View Full Catalog <ChevronRight className="h-4 w-4" />
               </Button>
             </Link>
@@ -233,38 +295,38 @@ export function Home() {
         </div>
       </section>
 
-      {/* 4. BRAND LEGACY BANNER */}
-      <section className="bg-primary text-on-dark px-5 py-20 lg:px-10" aria-labelledby="legacy-heading">
-        <div className="mx-auto grid max-w-[1400px] items-center gap-12 lg:grid-cols-2">
+      {/* 5. BRAND LEGACY BANNER */}
+      <section className="bg-brown text-cream px-4 sm:px-6 lg:px-10 py-12 sm:py-20" aria-labelledby="legacy-heading">
+        <div className="mx-auto grid max-w-[1400px] items-center gap-8 sm:gap-12 lg:grid-cols-2">
           <div className="relative">
             <img
               src={craftSheet}
               alt="Artisan lifting paper thin Putharekulu sheet"
               loading="lazy"
-              className="rounded-2xl object-cover shadow-lift border border-gold/30"
+              className="rounded-xl object-cover border border-gold/40 shadow-lift"
               width={1200}
               height={1200}
             />
-            <div className="absolute -bottom-6 -right-6 hidden sm:flex items-center gap-3 rounded-2xl border border-gold/50 bg-cream p-4 text-primary shadow-lift">
-              <ShieldCheck className="h-8 w-8 text-accent shrink-0" />
+            <div className="absolute -bottom-4 -right-4 hidden sm:flex items-center gap-3 rounded-xl border border-gold/40 bg-cream p-4 text-brown shadow-lift">
+              <ShieldCheck className="h-8 w-8 text-terracotta shrink-0" />
               <div>
-                <p className="text-xs font-bold">100% Authentic Guarantee</p>
-                <p className="text-[11px] text-muted-foreground">Pure A2 Ghee &amp; Organic Jaggery</p>
+                <p className="font-sans text-sm font-bold">100% Authentic Guarantee</p>
+                <p className="font-sans text-xs font-bold text-brown/70">Pure A2 Ghee &amp; Organic Jaggery</p>
               </div>
             </div>
           </div>
 
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             <Eyebrow tone="gold">Artisan Tradition · Nine Generations</Eyebrow>
-            <h2 id="legacy-heading" className="text-3xl sm:text-5xl font-light leading-tight text-on-dark">
+            <h2 id="legacy-heading" className="font-display text-2xl sm:text-5xl font-normal leading-tight text-cream">
               Crafted slowly, the way grandmothers made it.
             </h2>
-            <p className="text-sm sm:text-base leading-relaxed text-on-dark-muted">
+            <p className="font-sans text-sm sm:text-lg font-bold leading-relaxed text-cream/80">
               Every Putharekulu sheet is hand-swiped over a hot earthen pot in Atreyapuram village. 
               We use no artificial preservatives, zero palm oil, and only 100% natural clarified cow ghee.
             </p>
 
-            <div className="grid grid-cols-2 gap-4 pt-4 border-t border-gold/20 text-xs">
+            <div className="grid grid-cols-2 gap-3 pt-3 border-t border-cream/15 font-sans text-xs sm:text-sm font-bold">
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="h-4 w-4 text-gold shrink-0" />
                 <span>Slow-roasted ingredients</span>
@@ -283,9 +345,9 @@ export function Home() {
               </div>
             </div>
 
-            <div className="pt-4">
+            <div className="pt-2">
               <Link to="/the-craft">
-                <Button variant="onDark" size="lg">
+                <Button variant="onDark" size="md">
                   Learn About Our Craft
                 </Button>
               </Link>
@@ -294,8 +356,8 @@ export function Home() {
         </div>
       </section>
 
-      {/* 5. CUSTOMER TESTIMONIALS & REVIEWS SLIDER */}
-      <section className="px-5 py-20 lg:px-10" aria-labelledby="reviews-heading">
+      {/* 6. CUSTOMER REVIEWS */}
+      <section className="px-4 sm:px-6 lg:px-10 py-12 sm:py-20 bg-cream" aria-labelledby="reviews-heading">
         <div className="mx-auto max-w-[1400px]">
           <SectionHeading
             eyebrow="Real Buyer Reviews"
@@ -303,7 +365,7 @@ export function Home() {
             subtitle="Rated 4.9 ★★★★★ across 1,500+ verified customer ratings."
           />
 
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
+          <div className="mt-8 sm:mt-12 grid gap-4 sm:gap-6 md:grid-cols-3">
             {[
               {
                 quote: "The Dry Fruit Putharekulu melted in my mouth. Exactly like my childhood memories in Godavari district!",
@@ -327,22 +389,22 @@ export function Home() {
                 rating: 5,
               },
             ].map((rev, idx) => (
-              <figure key={idx} className="rounded-2xl border border-border bg-card p-6 shadow-soft space-y-4">
+              <figure key={idx} className="rounded-xl border border-brown/15 bg-cream-light p-5 sm:p-6 shadow-flat space-y-3">
                 <div className="flex items-center gap-1 text-gold">
                   {[...Array(rev.rating)].map((_, i) => (
                     <Star key={i} className="h-4 w-4 fill-gold text-gold" />
                   ))}
                 </div>
-                <blockquote className="text-sm leading-relaxed text-primary italic">
+                <blockquote className="font-display text-lg sm:text-xl leading-relaxed text-brown">
                   "{rev.quote}"
                 </blockquote>
-                <figcaption className="border-t border-border pt-3 flex items-center justify-between text-xs">
+                <figcaption className="border-t border-brown/15 pt-3 flex items-center justify-between font-sans text-xs font-bold">
                   <div>
-                    <p className="font-bold text-primary">{rev.author}</p>
-                    <p className="text-muted-foreground">{rev.location}</p>
+                    <p className="text-brown">{rev.author}</p>
+                    <p className="text-brown/70">{rev.location}</p>
                   </div>
                   {rev.verified && (
-                    <span className="rounded-full bg-teal/10 px-2 py-0.5 text-[10px] font-bold text-teal">
+                    <span className="rounded-full bg-green/15 px-2 py-0.5 text-green">
                       ✓ Verified Buyer
                     </span>
                   )}
@@ -352,68 +414,6 @@ export function Home() {
           </div>
         </div>
       </section>
-
-      {/* 6. FOOTER NAVIGATION COMPONENT */}
-      <footer className="border-t border-border bg-cream pt-16 pb-12 px-5 lg:px-10">
-        <div className="mx-auto max-w-[1400px] grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
-          {/* Col 1: Brand Info */}
-          <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <span className="grid h-9 w-9 place-items-center rounded-full bg-primary font-display text-gold text-base font-bold">9</span>
-              <span className="font-display text-xl text-primary font-bold">9 Stories &amp; Co.</span>
-            </div>
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              Handcrafted Andhra Putharekulu, A2 ghee sweets, savouries, and traditional spice powders made fresh in small batches.
-            </p>
-            <p className="text-xs text-primary font-medium flex items-center gap-2">
-              <Phone className="h-3.5 w-3.5 text-accent" /> Hotline: +91 44 4890 1200
-            </p>
-          </div>
-
-          {/* Col 2: Store Links */}
-          <div className="space-y-3">
-            <h4 className="font-display text-base text-primary font-semibold">Store Links</h4>
-            <ul className="space-y-2 text-xs text-muted-foreground">
-              <li><Link to="/shop" search={{ category: "Sweets" }} className="hover:text-accent">Classic Putharekulu</Link></li>
-              <li><Link to="/shop" search={{ category: "Sweets" }} className="hover:text-accent">Royal A2 Ghee Sweets</Link></li>
-              <li><Link to="/shop" search={{ category: "Savouries" }} className="hover:text-accent">Spicy Butter Murukku</Link></li>
-              <li><Link to="/shop" search={{ category: "Podi & Mixes" }} className="hover:text-accent">Artisan Gunpowder Podi</Link></li>
-              <li><Link to="/gifting" className="hover:text-accent">Festive Gift Boxes</Link></li>
-            </ul>
-          </div>
-
-          {/* Col 3: Policies & Support */}
-          <div className="space-y-3">
-            <h4 className="font-display text-base text-primary font-semibold">Customer Support</h4>
-            <ul className="space-y-2 text-xs text-muted-foreground">
-              <li><Link to="/contact" className="hover:text-accent">Track Your Order</Link></li>
-              <li><Link to="/contact" className="hover:text-accent">Shipping &amp; Delivery Policy</Link></li>
-              <li><Link to="/contact" className="hover:text-accent">Refunds &amp; Returns</Link></li>
-              <li><Link to="/journal" className="hover:text-accent">Culinary Journal</Link></li>
-            </ul>
-          </div>
-
-          {/* Col 4: Newsletter & Socials */}
-          <div className="space-y-4">
-            <h4 className="font-display text-base text-primary font-semibold">Join the Circle</h4>
-            <p className="text-xs text-muted-foreground">
-              Subscribe for exclusive festive offers, free recipes, and secret drops.
-            </p>
-            <form onSubmit={(e) => e.preventDefault()} className="flex gap-2">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="w-full rounded-lg border border-border bg-card px-3 py-2 text-xs text-primary focus:border-accent focus:outline-none"
-              />
-              <Button size="sm" className="shrink-0 text-xs">Join</Button>
-            </form>
-          </div>
-        </div>
-
-        <div className="mx-auto max-w-[1400px] mt-12 border-t border-border pt-6 text-center text-xs text-muted-foreground">
-          © {new Date().getFullYear()} 9 Stories &amp; Co. All rights reserved. Handcrafted with pride in Atreyapuram, Andhra Pradesh.
-        </div>
-      </footer>
-    </>
+    </div>
   );
 }

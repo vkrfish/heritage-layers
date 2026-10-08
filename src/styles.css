@@ -5,19 +5,29 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * 9 STORIES & CO. — Andhra heritage × contemporary luxury design system.
- * All brand colours live here as oklch tokens. Never hardcode colours in JSX.
+ * 9 STORIES & CO. — Brand Style Guide Design Tokens
+ * Colors: Story Brown (#4A2C20), Terracotta (#8B3E2F), Dry Fruit Gold (#DBA55A), Leaf Green (#546B3F), Rice Cream (#F5E9D7)
+ * Fonts: Dirtylane (headings/titles) & Chathura Bold 700 (body/UI)
  */
 
-@theme inline {
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --radius-2xl: calc(var(--radius) + 8px);
+@font-face {
+  font-family: "Dirtylane";
+  src: url("/fonts/Dirtylane.woff2") format("woff2"),
+       url("/fonts/Dirtylane.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
 
-  --font-display: "Cormorant Garamond", Georgia, serif;
-  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+@theme inline {
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+
+  --font-display: "Dirtylane", "Dancing Script", cursive;
+  --font-sans: "Chathura", sans-serif;
+  --font-script: "Dirtylane", "Dancing Script", cursive;
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -33,74 +43,69 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
-  --color-accent-hover: var(--accent-hover);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  /* Brand palette */
-  --color-teal: var(--teal);
-  --color-teal-soft: var(--teal-soft);
-  --color-orange: var(--accent);
-  --color-aqua: var(--aqua);
-  --color-cream: var(--cream);
-  --color-parchment: var(--parchment);
-  --color-gold: var(--gold);
-  --color-brown: var(--brown);
-  --color-ink: var(--foreground);
-  --color-on-dark: var(--on-dark);
-  --color-on-dark-muted: var(--on-dark-muted);
+  /* Brand 5-color palette tokens */
+  --color-brown: #4A2C20;
+  --color-terracotta: #8B3E2F;
+  --color-gold: #DBA55A;
+  --color-green: #546B3F;
+  --color-cream: #F5E9D7;
+  --color-cream-light: #FAF4EB;
 
-  --shadow-soft: 0 1px 2px oklch(0.25 0.05 220 / 0.04), 0 8px 24px oklch(0.25 0.05 220 / 0.06);
-  --shadow-lift: 0 2px 4px oklch(0.25 0.05 220 / 0.05), 0 16px 36px oklch(0.25 0.05 220 / 0.1);
+  --shadow-soft: 0 2px 8px rgba(74, 44, 32, 0.08);
+  --shadow-flat: 0 1px 3px rgba(74, 44, 32, 0.12);
+  --shadow-lift: 0 8px 24px rgba(74, 44, 32, 0.12);
 }
 
 :root {
-  --radius: 0.625rem;
+  --radius: 0.5rem; /* 8px default radius */
 
-  /* #FFF7E8 */
-  --cream: oklch(0.975 0.026 88);
-  /* #F4E5C7 */
-  --parchment: oklch(0.925 0.043 88);
-  /* #013243 */
-  --teal: oklch(0.29 0.055 227);
-  --teal-soft: oklch(0.38 0.058 224);
-  /* #F9790B */
-  --accent: oklch(0.7 0.181 51);
-  --accent-hover: oklch(0.61 0.175 47);
-  /* #97E6E8 */
-  --aqua: oklch(0.88 0.075 193);
-  /* #D6A84F */
-  --gold: oklch(0.75 0.101 84);
-  /* #4A2C20 */
-  --brown: oklch(0.32 0.049 43);
-  /* #172126 */
-  --foreground: oklch(0.23 0.014 231);
+  /* 5 Brand Colors */
+  --brown: #4A2C20;
+  --terracotta: #8B3E2F;
+  --gold: #DBA55A;
+  --green: #546B3F;
+  --cream: #F5E9D7;
+  --cream-light: #FAF4EB;
 
   --background: var(--cream);
-  --card: oklch(1 0 0);
-  --card-foreground: var(--foreground);
-  --popover: oklch(1 0 0);
-  --popover-foreground: var(--foreground);
-  --primary: var(--teal);
-  --primary-foreground: var(--cream);
-  --secondary: var(--parchment);
-  --secondary-foreground: var(--teal);
-  --muted: oklch(0.955 0.021 88);
-  --muted-foreground: oklch(0.47 0.02 231);
-  --accent-foreground: oklch(1 0 0);
-  --destructive: oklch(0.55 0.2 27);
-  --destructive-foreground: oklch(1 0 0);
-  /* #E7D9C0 */
-  --border: oklch(0.885 0.028 87);
-  --input: oklch(0.885 0.028 87);
-  --ring: var(--accent);
+  --foreground: var(--brown);
+
+  --card: #FBF7F0;
+  --card-foreground: var(--brown);
+
+  --popover: #FBF7F0;
+  --popover-foreground: var(--brown);
+
+  --primary: var(--brown);
+  --primary-foreground: #FFFFFF;
+
+  --secondary: var(--cream);
+  --secondary-foreground: var(--brown);
+
+  --accent: var(--terracotta);
+  --accent-foreground: #FFFFFF;
+
+  --muted: var(--cream-light);
+  --muted-foreground: rgba(74, 44, 32, 0.7);
+
+  --border: rgba(74, 44, 32, 0.15);
+  --input: rgba(74, 44, 32, 0.2);
+  --ring: var(--terracotta);
+
+  --destructive: var(--terracotta);
+  --destructive-foreground: #FFFFFF;
+
+  --success: var(--green);
+  --success-foreground: #FFFFFF;
 
   --on-dark: var(--cream);
-  /* #B9D0D2 */
-  --on-dark-muted: oklch(0.82 0.026 199);
+  --on-dark-muted: rgba(245, 233, 215, 0.8);
 }
 
 @layer base {
@@ -110,43 +115,83 @@
 
   html {
     scroll-behavior: smooth;
+    font-size: 16px;
   }
 
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 1.125rem; /* Chathura runs small, size up to 1.125rem */
+    line-height: 1.5;
     -webkit-font-smoothing: antialiased;
   }
 
-  h1,
-  h2,
-  h3,
-  h4,
+  h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 400;
+    line-height: 1.1;
+    color: var(--color-brown);
+  }
+
+  h2 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 400;
+    line-height: 1.15;
+    color: var(--color-brown);
+  }
+
+  h3 {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--color-brown);
+  }
+
+  h4, h5, h6 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    color: var(--color-brown);
+  }
+
   blockquote {
     font-family: var(--font-display);
-    font-weight: 300;
-    letter-spacing: -0.01em;
+    font-style: italic;
+  }
+
+  a {
+    color: var(--color-terracotta);
+    transition: color 150ms ease;
+  }
+
+  a:hover {
+    text-decoration: underline;
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-accent);
-    outline-offset: 2px;
+    outline: 2px solid var(--color-terracotta) !important;
+    outline-offset: 2px !important;
   }
 
   ::selection {
-    background: var(--color-accent);
-    color: var(--color-white, #fff);
+    background: var(--color-terracotta);
+    color: #FFFFFF;
   }
 }
 
 /* --- Utilities --------------------------------------------------------- */
 
 @utility eyebrow {
-  font-size: 0.6875rem;
-  letter-spacing: 0.24em;
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  letter-spacing: 0.25em;
   text-transform: uppercase;
-  font-weight: 500;
+  font-weight: 700;
+  color: var(--color-brown);
 }
 
 @utility rule-gold {
@@ -154,25 +199,20 @@
     content: "";
     display: block;
     width: 3.5rem;
-    height: 1px;
-    margin-top: 1.25rem;
-    background: linear-gradient(90deg, var(--color-gold), transparent);
+    height: 1.5px;
+    margin-top: 1rem;
+    background: var(--color-gold);
   }
 }
 
 @utility paper {
   background-color: var(--color-cream);
-  background-image: radial-gradient(
-      oklch(0.32 0.049 43 / 0.04) 0.5px,
-      transparent 0.5px
-    );
-  background-size: 4px 4px;
 }
 
 @utility reveal {
   opacity: 0;
-  transform: translateY(16px);
-  animation: reveal-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  transform: translateY(12px);
+  animation: reveal-in 0.5s ease forwards;
 }
 
 @keyframes reveal-in {

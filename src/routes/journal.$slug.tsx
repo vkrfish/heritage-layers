@@ -30,14 +30,6 @@ export const Route = createFileRoute("/journal/$slug")({
         { property: "og:image", content: post.featuredImage },
         { property: "og:url", content: postUrl },
         { property: "og:type", content: "article" },
-        { property: "article:published_time", content: post.publishedAt },
-        { property: "article:modified_time", content: post.updatedAt },
-        { property: "article:author", content: post.author },
-        { property: "article:section", content: post.category },
-        { name: "twitter:card", content: "summary_large_image" },
-        { name: "twitter:title", content: post.title },
-        { name: "twitter:description", content: post.excerpt },
-        { name: "twitter:image", content: post.featuredImage },
       ],
       links: [
         { rel: "canonical", href: postUrl },
@@ -72,10 +64,6 @@ function BlogPost() {
     publisher: {
       "@type": "Organization",
       name: "9 Stories & Co.",
-      logo: {
-        "@type": "ImageObject",
-        url: "https://9storiesandco.com/favicon.ico",
-      },
     },
     datePublished: post.publishedAt,
     dateModified: post.updatedAt,
@@ -86,36 +74,36 @@ function BlogPost() {
   };
 
   return (
-    <div className="px-5 py-20 lg:px-10 lg:py-28">
+    <div className="bg-cream px-5 py-16 lg:px-10 lg:py-24 font-sans">
       <StructuredData type="breadcrumb" data={breadcrumbData} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
       />
-      <div className="mx-auto max-w-[4xl]">
+      <div className="mx-auto max-w-4xl">
         {/* Article Header */}
-        <nav aria-label="Breadcrumb" className="text-xs text-muted-foreground">
-          <Link to="/" className="hover:text-accent">
+        <nav aria-label="Breadcrumb" className="font-sans text-xs font-bold text-brown/70">
+          <Link to="/" className="hover:text-terracotta">
             Home
           </Link>
           <span className="px-2">/</span>
-          <Link to="/journal" className="hover:text-accent">
+          <Link to="/journal" className="hover:text-terracotta">
             Journal
           </Link>
           <span className="px-2">/</span>
-          <span className="text-primary">{post.title}</span>
+          <span className="text-brown font-bold truncate">{post.title}</span>
         </nav>
 
         <article className="mt-8">
           <div className="flex items-center gap-3">
-            <Eyebrow>{post.category}</Eyebrow>
-            <span className="text-xs text-muted-foreground">•</span>
-            <span className="text-xs text-muted-foreground">{post.readingTime} min read</span>
+            <Eyebrow tone="terracotta">{post.category}</Eyebrow>
+            <span className="text-xs text-brown/40">•</span>
+            <span className="font-sans text-xs font-bold text-brown/70">{post.readingTime} min read</span>
           </div>
           
-          <h1 className="mt-4 text-5xl leading-tight text-primary lg:text-6xl">{post.title}</h1>
+          <h1 className="mt-3 font-display text-4xl sm:text-6xl font-normal leading-tight text-brown">{post.title}</h1>
           
-          <div className="mt-6 flex items-center gap-4 text-sm text-muted-foreground">
+          <div className="mt-4 flex items-center gap-4 font-sans text-sm font-bold text-brown/70">
             <span>By {post.author}</span>
             <span>•</span>
             <time dateTime={post.publishedAt}>
@@ -129,19 +117,19 @@ function BlogPost() {
             loading="lazy"
             width={1200}
             height={700}
-            className="mt-8 w-full rounded-[12px] object-cover"
+            className="mt-8 w-full rounded-xl border border-brown/15 object-cover shadow-lift"
           />
 
-          <div className="mt-8 prose prose-lg max-w-none">
+          <div className="mt-8 font-sans text-lg font-bold leading-relaxed text-brown/85 space-y-4">
             <div dangerouslySetInnerHTML={{ __html: post.content }} />
           </div>
 
           {/* Tags */}
-          <div className="mt-8 flex flex-wrap gap-2">
+          <div className="mt-8 flex flex-wrap gap-2 font-sans">
             {post.tags.map((tag) => (
               <span
                 key={tag}
-                className="rounded-full border border-border px-3 py-1 text-xs text-muted-foreground"
+                className="rounded-full border border-brown/20 bg-cream-light px-3.5 py-1 text-xs font-bold text-brown"
               >
                 {tag}
               </span>
@@ -151,7 +139,7 @@ function BlogPost() {
 
         {/* Related Posts */}
         {relatedPosts.length > 0 && (
-          <section className="mt-20">
+          <section className="mt-20 border-t border-brown/15 pt-12">
             <SectionHeading
               eyebrow="Related"
               title="You might also like"
@@ -160,8 +148,9 @@ function BlogPost() {
               {relatedPosts.map((relatedPost) => (
                 <Link
                   key={relatedPost.slug}
-                  to={`/journal/${relatedPost.slug}`}
-                  className="group overflow-hidden rounded-[12px] border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lift"
+                  to="/journal/$slug"
+                  params={{ slug: relatedPost.slug }}
+                  className="group overflow-hidden rounded-xl border border-brown/15 bg-cream-light transition-all duration-300 hover:shadow-lift"
                 >
                   <img
                     src={relatedPost.featuredImage}
@@ -172,9 +161,9 @@ function BlogPost() {
                     className="h-48 w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                   />
                   <div className="p-6">
-                    <Eyebrow>{relatedPost.category}</Eyebrow>
-                    <h3 className="mt-2 text-xl leading-tight text-primary">{relatedPost.title}</h3>
-                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{relatedPost.excerpt}</p>
+                    <Eyebrow tone="terracotta">{relatedPost.category}</Eyebrow>
+                    <h3 className="mt-2 font-display text-2xl text-brown">{relatedPost.title}</h3>
+                    <p className="mt-2 font-sans text-sm font-bold leading-relaxed text-brown/80">{relatedPost.excerpt}</p>
                   </div>
                 </Link>
               ))}

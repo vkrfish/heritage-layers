@@ -20,17 +20,8 @@ export const Route = createFileRoute("/journal")({
       { name: "keywords", content: "Putharekulu blog, Andhra sweets blog, Indian food blog, traditional sweets recipes, Indian festival food, heritage food stories, authentic Indian cooking" },
       { name: "robots", content: "index, follow" },
       { property: "og:title", content: "Journal — Stories from the Kitchen" },
-      {
-        property: "og:description",
-        content: "Stories from Atreyapuram on clay pots, ghee, festival tables, and the art of making Putharekulu.",
-      },
-      { property: "og:image", content: "https://9storiesandco.com/craft-sheet.jpg" },
       { property: "og:url", content: "https://9storiesandco.com/journal" },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Journal — Stories from the Kitchen" },
-      { name: "twitter:description", content: "Stories from Atreyapuram on clay pots, ghee, festival tables, and the art of making Putharekulu." },
-      { name: "twitter:image", content: "https://9storiesandco.com/craft-sheet.jpg" },
     ],
     links: [
       { rel: "canonical", href: "https://9storiesandco.com/journal" },
@@ -48,7 +39,7 @@ const displayPosts = [
 
 function Journal() {
   return (
-    <div className="px-5 py-20 lg:px-10 lg:py-28">
+    <div className="bg-cream px-5 py-16 lg:px-10 lg:py-24 font-sans">
       <StructuredData 
         type="breadcrumb" 
         data={[
@@ -62,11 +53,11 @@ function Journal() {
           title="Notes from the kitchen"
           subtitle="Slow writing about a slow sweet."
         />
-        <div className="mt-14 grid gap-8 sm:grid-cols-2">
+        <div className="mt-12 grid gap-8 sm:grid-cols-2">
           {displayPosts.map((p) => (
             <article
               key={p.title}
-              className="group overflow-hidden rounded-[12px] border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lift"
+              className="group overflow-hidden rounded-xl border border-brown/15 bg-cream-light transition-all duration-300 hover:shadow-lift"
             >
               <img
                 src={p.img}
@@ -77,10 +68,10 @@ function Journal() {
                 className="h-64 w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
               />
               <div className="p-8">
-                <Eyebrow>{p.tag}</Eyebrow>
-                <h2 className="mt-3 text-3xl leading-tight text-primary">{p.title}</h2>
-                <p className="mt-3 leading-relaxed text-muted-foreground">{p.excerpt}</p>
-                <p className="mt-5 text-xs tracking-[0.16em] text-muted-foreground uppercase">
+                <Eyebrow tone="terracotta">{p.tag}</Eyebrow>
+                <h2 className="mt-2 font-display text-3xl text-brown">{p.title}</h2>
+                <p className="mt-3 font-sans text-base font-bold leading-relaxed text-brown/80">{p.excerpt}</p>
+                <p className="mt-5 font-sans text-xs font-bold tracking-[0.2em] text-brown/60 uppercase">
                   {p.date}
                 </p>
               </div>
@@ -95,11 +86,11 @@ function Journal() {
             title="Stories from our kitchen"
             subtitle="In-depth articles about Putharekulu, Andhra heritage, and traditional sweet making."
           />
-          <div className="mt-14 grid gap-8 sm:grid-cols-2">
+          <div className="mt-12 grid gap-8 sm:grid-cols-2">
             {blogPosts.map((post) => (
               <article
                 key={post.slug}
-                className="group overflow-hidden rounded-[12px] border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lift"
+                className="group overflow-hidden rounded-xl border border-brown/15 bg-cream-light transition-all duration-300 hover:shadow-lift"
               >
                 <img
                   src={post.featuredImage}
@@ -111,19 +102,20 @@ function Journal() {
                 />
                 <div className="p-8">
                   <div className="flex items-center gap-3">
-                    <Eyebrow>{post.category}</Eyebrow>
-                    <span className="text-xs text-muted-foreground">•</span>
-                    <span className="text-xs text-muted-foreground">{post.readingTime} min read</span>
+                    <Eyebrow tone="terracotta">{post.category}</Eyebrow>
+                    <span className="text-xs text-brown/40">•</span>
+                    <span className="font-sans text-xs font-bold text-brown/70">{post.readingTime} min read</span>
                   </div>
-                  <h2 className="mt-3 text-3xl leading-tight text-primary">{post.title}</h2>
-                  <p className="mt-3 leading-relaxed text-muted-foreground">{post.excerpt}</p>
-                  <div className="mt-5 flex items-center justify-between">
-                    <p className="text-xs tracking-[0.16em] text-muted-foreground uppercase">
+                  <h2 className="mt-2 font-display text-3xl text-brown">{post.title}</h2>
+                  <p className="mt-3 font-sans text-base font-bold leading-relaxed text-brown/80">{post.excerpt}</p>
+                  <div className="mt-5 flex items-center justify-between font-sans">
+                    <p className="text-xs font-bold tracking-[0.2em] text-brown/60 uppercase">
                       {new Date(post.publishedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
                     </p>
                     <Link 
-                      to={`/journal/${post.slug}`}
-                      className="text-sm font-medium text-accent hover:text-accent-hover"
+                      to="/journal/$slug"
+                      params={{ slug: post.slug }}
+                      className="text-sm font-bold text-terracotta hover:underline"
                     >
                       Read more →
                     </Link>

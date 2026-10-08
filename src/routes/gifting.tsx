@@ -14,22 +14,13 @@ export const Route = createFileRoute("/gifting")({
       {
         name: "description",
         content:
-          "Premium Putharekulu gift boxes for weddings, festivals, and corporate gifting. Handcrafted in Andhra Pradesh with elegant teal and gold packaging. Order bulk gift boxes across India.",
+          "Premium Putharekulu gift boxes for weddings, festivals, and corporate gifting. Handcrafted in Andhra Pradesh with elegant packaging. Order bulk gift boxes across India.",
       },
       { name: "keywords", content: "Indian sweets gifts, wedding return gifts, Diwali gift boxes, corporate gifting, premium gift boxes, Indian sweet hampers, festival gifts, traditional sweets gifts, bulk sweets order" },
       { name: "robots", content: "index, follow" },
       { property: "og:title", content: "Gifting — Premium Putharekulu Boxes" },
-      {
-        property: "og:description",
-        content: "Keepsake boxes for weddings, festivals and corporate gifting.",
-      },
-      { property: "og:image", content: "https://9storiesandco.com/product-giftbox.jpg" },
       { property: "og:url", content: "https://9storiesandco.com/gifting" },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Gifting — Premium Putharekulu Boxes" },
-      { name: "twitter:description", content: "Keepsake boxes for weddings, festivals and corporate gifting." },
-      { name: "twitter:image", content: "https://9storiesandco.com/product-giftbox.jpg" },
     ],
     links: [
       { rel: "canonical", href: "https://9storiesandco.com/gifting" },
@@ -46,32 +37,25 @@ const occasions = [
 
 function Gifting() {
   return (
-    <>
-      <section className="relative isolate overflow-hidden bg-primary">
-        <img
-          src={giftbox}
-          alt="A teal and gold Putharekulu gift box"
-          className="absolute inset-0 h-full w-full object-cover opacity-40"
-          width={1920}
-          height={1080}
-        />
-        <div className="relative mx-auto max-w-[1400px] px-5 py-28 lg:px-10 lg:py-36">
+    <div className="bg-cream font-sans">
+      <section className="bg-brown text-cream px-5 py-20 lg:px-10 lg:py-28 border-b border-gold/30">
+        <div className="mx-auto max-w-[1400px]">
           <SectionHeading
             onDark
             align="left"
             eyebrow="Gifting"
             title="A box worth opening slowly"
-            subtitle="Hand-finished in teal and gold, lined with parchment, tied with silk ribbon."
+            subtitle="Hand-finished in gold parchment, lined with rice paper, tied with traditional ribbon."
           />
         </div>
       </section>
 
-      <section className="px-5 py-24 lg:px-10 lg:py-32">
+      <section className="px-5 py-20 lg:px-10 lg:py-28">
         <div className="mx-auto max-w-[1400px]">
           <SectionHeading eyebrow="Occasions" title="However you'd like to give it" />
-          <div className="mt-14 grid gap-8 md:grid-cols-3">
+          <div className="mt-12 grid gap-8 md:grid-cols-3">
             {occasions.map((o) => (
-              <article key={o.title} className="overflow-hidden rounded-[12px] border border-border bg-card">
+              <article key={o.title} className="overflow-hidden rounded-xl border border-brown/15 bg-cream-light shadow-flat">
                 <img
                   src={o.img}
                   alt={o.title}
@@ -80,9 +64,9 @@ function Gifting() {
                   height={700}
                   className="h-56 w-full object-cover"
                 />
-                <div className="p-7">
-                  <h3 className="text-2xl text-primary">{o.title}</h3>
-                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{o.copy}</p>
+                <div className="p-6">
+                  <h3 className="font-display text-3xl text-brown">{o.title}</h3>
+                  <p className="mt-3 font-sans text-base font-bold leading-relaxed text-brown/80">{o.copy}</p>
                 </div>
               </article>
             ))}
@@ -90,10 +74,10 @@ function Gifting() {
         </div>
       </section>
 
-      <section className="paper px-5 py-24 lg:px-10 lg:py-32">
+      <section className="bg-cream-light px-5 py-20 lg:px-10 lg:py-28 border-t border-brown/15">
         <div className="mx-auto max-w-[1400px]">
           <SectionHeading eyebrow="Ready to gift" title="Boxes made for giving" />
-          <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {products
               .filter((p) => p.badge === "Gifting" || p.slug === "dry-fruit-putharekulu" || p.slug === "ghee-putharekulu")
               .map((p) => (
@@ -102,13 +86,13 @@ function Gifting() {
           </div>
           <div className="mt-12 text-center">
             <Link to="/contact">
-              <Button variant="secondary" size="lg">
+              <Button variant="secondary" size="lg" className="border-brown text-brown hover:bg-brown hover:text-white">
                 Enquire about bulk orders
               </Button>
             </Link>
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 }

@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { DollarSign, ShoppingBag, Package, TrendingUp, Plus, ArrowUpRight, Clock, CheckCircle2, Truck } from "lucide-react";
+import { DollarSign, ShoppingBag, Package, TrendingUp, Plus, ArrowUpRight } from "lucide-react";
 import * as React from "react";
 
 import { useAdminStore } from "@/lib/admin-store.tsx";
@@ -11,7 +11,7 @@ export const Route = createFileRoute("/admin/")({
 });
 
 function AdminDashboard() {
-  const { products, orders, discounts, updateOrderStatus } = useAdminStore();
+  const { products, orders, updateOrderStatus } = useAdminStore();
 
   const totalRevenue = orders.reduce((sum, o) => sum + o.total, 0);
   const totalOrders = orders.length;
@@ -21,21 +21,21 @@ function AdminDashboard() {
   const recentOrders = orders.slice(0, 5);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 font-sans">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="font-display text-3xl font-light text-primary">Store Performance Dashboard</h1>
-          <p className="text-xs text-muted-foreground mt-1">Real-time overview of sales, orders, and product inventory.</p>
+          <h1 className="font-display text-4xl font-normal text-brown">Store Performance Dashboard</h1>
+          <p className="font-sans text-xs font-bold text-brown/70 mt-1">Real-time overview of sales, orders, and product inventory.</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 font-sans font-bold">
           <Link to="/admin/products">
-            <Button size="sm" className="gap-1 text-xs">
+            <Button size="sm" variant="primary" className="gap-1 text-xs bg-brown text-white hover:bg-terracotta">
               <Plus className="h-3.5 w-3.5" /> Add Product
             </Button>
           </Link>
           <Link to="/admin/discounts">
-            <Button size="sm" variant="secondary" className="gap-1 text-xs">
+            <Button size="sm" variant="secondary" className="gap-1 text-xs border-brown text-brown hover:bg-brown hover:text-white">
               <Plus className="h-3.5 w-3.5" /> New Promo Code
             </Button>
           </Link>
@@ -43,69 +43,69 @@ function AdminDashboard() {
       </div>
 
       {/* STATS CARDS GRID */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="rounded-2xl border border-border bg-card p-5 shadow-soft space-y-2">
-          <div className="flex items-center justify-between text-xs text-muted-foreground">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 font-sans font-bold">
+        <div className="rounded-xl border border-brown/15 bg-cream-light p-5 shadow-flat space-y-2">
+          <div className="flex items-center justify-between text-xs text-brown/70">
             <span>Total Revenue</span>
-            <div className="grid h-8 w-8 place-items-center rounded-full bg-accent/10 text-accent">
+            <div className="grid h-8 w-8 place-items-center rounded-full bg-gold/30 text-brown">
               <DollarSign className="h-4 w-4" />
             </div>
           </div>
-          <p className="font-display text-2xl font-bold text-primary">{formatPrice(totalRevenue)}</p>
-          <p className="text-[11px] text-accent flex items-center gap-1 font-semibold">
-            <TrendingUp className="h-3 w-3" /> +14.2% from last week
+          <p className="font-display text-3xl text-brown">{formatPrice(totalRevenue)}</p>
+          <p className="text-xs text-green flex items-center gap-1 font-bold">
+            <TrendingUp className="h-3.5 w-3.5" /> +14.2% from last week
           </p>
         </div>
 
-        <div className="rounded-2xl border border-border bg-card p-5 shadow-soft space-y-2">
-          <div className="flex items-center justify-between text-xs text-muted-foreground">
+        <div className="rounded-xl border border-brown/15 bg-cream-light p-5 shadow-flat space-y-2">
+          <div className="flex items-center justify-between text-xs text-brown/70">
             <span>Total Orders</span>
-            <div className="grid h-8 w-8 place-items-center rounded-full bg-accent/10 text-accent">
+            <div className="grid h-8 w-8 place-items-center rounded-full bg-gold/30 text-brown">
               <ShoppingBag className="h-4 w-4" />
             </div>
           </div>
-          <p className="font-display text-2xl font-bold text-primary">{totalOrders}</p>
-          <p className="text-[11px] text-muted-foreground">Across domestic &amp; global shipments</p>
+          <p className="font-display text-3xl text-brown">{totalOrders}</p>
+          <p className="text-xs text-brown/70">Across domestic &amp; global shipments</p>
         </div>
 
-        <div className="rounded-2xl border border-border bg-card p-5 shadow-soft space-y-2">
-          <div className="flex items-center justify-between text-xs text-muted-foreground">
+        <div className="rounded-xl border border-brown/15 bg-cream-light p-5 shadow-flat space-y-2">
+          <div className="flex items-center justify-between text-xs text-brown/70">
             <span>Active Products</span>
-            <div className="grid h-8 w-8 place-items-center rounded-full bg-accent/10 text-accent">
+            <div className="grid h-8 w-8 place-items-center rounded-full bg-gold/30 text-brown">
               <Package className="h-4 w-4" />
             </div>
           </div>
-          <p className="font-display text-2xl font-bold text-primary">{activeProducts}</p>
-          <p className="text-[11px] text-muted-foreground">Sweets, Savouries, Podi &amp; Gift Box catalog</p>
+          <p className="font-display text-3xl text-brown">{activeProducts}</p>
+          <p className="text-xs text-brown/70">Sweets, Savouries, Podi &amp; Gift Box catalog</p>
         </div>
 
-        <div className="rounded-2xl border border-border bg-card p-5 shadow-soft space-y-2">
-          <div className="flex items-center justify-between text-xs text-muted-foreground">
+        <div className="rounded-xl border border-brown/15 bg-cream-light p-5 shadow-flat space-y-2">
+          <div className="flex items-center justify-between text-xs text-brown/70">
             <span>Avg. Order Value</span>
-            <div className="grid h-8 w-8 place-items-center rounded-full bg-accent/10 text-accent">
+            <div className="grid h-8 w-8 place-items-center rounded-full bg-gold/30 text-brown">
               <TrendingUp className="h-4 w-4" />
             </div>
           </div>
-          <p className="font-display text-2xl font-bold text-primary">{formatPrice(avgOrderValue)}</p>
-          <p className="text-[11px] text-muted-foreground">Includes multi-pack combos</p>
+          <p className="font-display text-3xl text-brown">{formatPrice(avgOrderValue)}</p>
+          <p className="text-xs text-brown/70">Includes multi-pack combos</p>
         </div>
       </div>
 
       {/* RECENT ORDERS TABLE */}
-      <div className="rounded-2xl border border-border bg-card p-6 shadow-soft space-y-4">
-        <div className="flex items-center justify-between border-b border-border pb-3">
+      <div className="rounded-xl border border-brown/15 bg-cream-light p-6 shadow-flat space-y-4 font-sans font-bold">
+        <div className="flex items-center justify-between border-b border-brown/15 pb-3">
           <div>
-            <h2 className="font-display text-xl text-primary font-semibold">Recent Customer Orders</h2>
-            <p className="text-xs text-muted-foreground">Orders received via Express One-Click and standard checkout.</p>
+            <h2 className="font-display text-2xl text-brown">Recent Customer Orders</h2>
+            <p className="text-xs text-brown/70">Orders received via Express One-Click and standard checkout.</p>
           </div>
-          <Link to="/admin/orders" className="text-xs font-bold text-accent hover:underline flex items-center gap-1">
+          <Link to="/admin/orders" className="text-xs font-bold text-terracotta hover:underline flex items-center gap-1">
             View All Orders <ArrowUpRight className="h-3.5 w-3.5" />
           </Link>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="border-b border-border bg-parchment/50 uppercase text-[10px] text-muted-foreground font-semibold">
+          <table className="w-full text-left text-xs font-bold">
+            <thead className="border-b border-brown/15 bg-cream uppercase text-[10px] text-brown/70 font-bold">
               <tr>
                 <th className="p-3">Order ID</th>
                 <th className="p-3">Customer</th>
@@ -115,24 +115,24 @@ function AdminDashboard() {
                 <th className="p-3">Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-border/60">
+            <tbody className="divide-y divide-brown/15">
               {recentOrders.map((o) => (
-                <tr key={o.id} className="hover:bg-parchment/30">
-                  <td className="p-3 font-bold text-primary">{o.id}</td>
+                <tr key={o.id} className="hover:bg-cream/60">
+                  <td className="p-3 font-bold text-brown">{o.id}</td>
                   <td className="p-3">
-                    <p className="font-medium text-primary">{o.customerName}</p>
-                    <p className="text-[11px] text-muted-foreground">{o.city}</p>
+                    <p className="font-bold text-brown">{o.customerName}</p>
+                    <p className="text-[11px] text-brown/70">{o.city}</p>
                   </td>
                   <td className="p-3">
                     {o.items.map((item, idx) => (
-                      <span key={idx} className="block truncate max-w-xs text-muted-foreground">
+                      <span key={idx} className="block truncate max-w-xs text-brown/80">
                         {item.name} ({item.variant}) × {item.qty}
                       </span>
                     ))}
                   </td>
-                  <td className="p-3 font-bold text-accent">{formatPrice(o.total)}</td>
+                  <td className="p-3 font-bold text-terracotta">{formatPrice(o.total)}</td>
                   <td className="p-3">
-                    <span className="rounded-md bg-parchment px-2 py-0.5 text-[10px] font-semibold text-primary">
+                    <span className="rounded-md bg-gold/20 px-2 py-0.5 text-[10px] font-bold text-brown">
                       {o.paymentMethod}
                     </span>
                   </td>
@@ -140,13 +140,7 @@ function AdminDashboard() {
                     <select
                       value={o.status}
                       onChange={(e) => updateOrderStatus(o.id, e.target.value as any)}
-                      className={`rounded-lg border border-border py-1 px-2 text-[11px] font-bold focus:outline-none ${
-                        o.status === "Delivered"
-                          ? "bg-accent/10 text-accent border-accent"
-                          : o.status === "Shipped"
-                          ? "bg-teal/10 text-teal border-teal"
-                          : "bg-parchment text-primary"
-                      }`}
+                      className="rounded-lg border border-brown/20 bg-cream py-1 px-2 text-[11px] font-bold text-brown focus:outline-none focus:border-terracotta cursor-pointer"
                     >
                       <option value="Pending">Pending</option>
                       <option value="Processing">Processing</option>

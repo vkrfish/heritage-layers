@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { SectionHeading } from "@/components/ui-kit";
-import heritage from "@/assets/heritage.jpg";
 import craftLayers from "@/assets/craft-layers.jpg";
 
 export const Route = createFileRoute("/our-story")({
@@ -16,17 +15,8 @@ export const Route = createFileRoute("/our-story")({
       { name: "keywords", content: "Andhra heritage, traditional sweets, family recipe, Atreyapuram sweets, Indian sweet history, Putharekulu origin, authentic Indian food, heritage food brand" },
       { name: "robots", content: "index, follow" },
       { property: "og:title", content: "Our Story — 9 Stories & Co." },
-      {
-        property: "og:description",
-        content: "Nine generations of a family kitchen in Atreyapuram, Andhra Pradesh, preserving the art of Putharekulu.",
-      },
-      { property: "og:image", content: "https://9storiesandco.com/heritage.jpg" },
       { property: "og:url", content: "https://9storiesandco.com/our-story" },
       { property: "og:type", content: "article" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Our Story — 9 Stories & Co." },
-      { name: "twitter:description", content: "Nine generations of a family kitchen in Atreyapuram, Andhra Pradesh." },
-      { name: "twitter:image", content: "https://9storiesandco.com/heritage.jpg" },
     ],
     links: [
       { rel: "canonical", href: "https://9storiesandco.com/our-story" },
@@ -43,31 +33,62 @@ const timeline = [
   ["2024", "9 Stories & Co. is founded to carry the same nine-layer sweet beyond Andhra."],
 ];
 
+function BotanicalLeafIllustration({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 400 400"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      aria-hidden="true"
+    >
+      <path
+        d="M200 360C200 360 220 280 280 220C340 160 370 80 370 40C370 40 290 70 230 130C170 190 160 270 160 270"
+        stroke="#4A2C20"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        opacity="0.25"
+      />
+      <path
+        d="M200 360C200 360 170 290 120 240C70 190 30 140 30 90C30 90 100 100 150 150C200 200 200 270 200 270"
+        stroke="#4A2C20"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        opacity="0.2"
+      />
+    </svg>
+  );
+}
+
 function OurStory() {
   return (
-    <>
-      <section className="relative isolate overflow-hidden bg-primary">
-        <img
-          src={heritage}
-          alt="A traditional Andhra kitchen"
-          className="absolute inset-0 h-full w-full object-cover opacity-40"
-          width={1920}
-          height={1080}
-        />
-        <div className="relative mx-auto max-w-[1400px] px-5 py-28 lg:px-10 lg:py-36">
-          <SectionHeading
-            onDark
-            align="left"
-            eyebrow="Our Story"
-            title="Nine generations. One recipe."
-            subtitle="We didn't invent Putharekulu. We simply refused to let it become something faster."
-          />
+    <div className="bg-cream font-sans">
+      {/* HERO SECTION */}
+      <section className="relative isolate overflow-hidden bg-cream py-16 lg:py-24 border-b border-brown/15">
+        <div className="mx-auto grid max-w-[1400px] items-center gap-12 px-5 lg:grid-cols-2 lg:px-10">
+          <div className="max-w-2xl reveal space-y-4">
+            <SectionHeading
+              align="left"
+              eyebrow="Our Story"
+              title="Nine generations. One recipe."
+              subtitle="We didn't invent Putharekulu. We simply refused to let it become something faster."
+            />
+          </div>
+
+          <div className="relative flex items-center justify-center p-6">
+            <div className="relative w-full max-w-md aspect-square rounded-xl bg-cream-light/60 border border-brown/15 p-8 flex items-center justify-center">
+              <BotanicalLeafIllustration className="w-full h-full max-h-[280px] object-contain" />
+            </div>
+          </div>
         </div>
       </section>
 
-      <section className="px-5 py-24 lg:px-10 lg:py-32">
-        <div className="mx-auto grid max-w-[1400px] gap-14 lg:grid-cols-[1.1fr_1fr]">
-          <div className="max-w-2xl space-y-6 text-lg leading-relaxed text-muted-foreground">
+      {/* STORY BODY */}
+      <section className="px-5 py-16 lg:px-10 lg:py-24">
+        <div className="mx-auto grid max-w-[1400px] gap-14 lg:grid-cols-[1.1fr_1fr] items-center">
+          <div className="max-w-2xl space-y-6 font-sans text-lg font-bold leading-relaxed text-brown/85">
             <p>
               In Atreyapuram, a village on the banks of the Godavari, the morning begins with the
               sound of a ladle against clay. The rice has soaked overnight. The pot is warm. And a
@@ -88,25 +109,26 @@ function OurStory() {
             loading="lazy"
             width={1200}
             height={1400}
-            className="rounded-[12px] object-cover"
+            className="rounded-xl border border-brown/15 object-cover shadow-lift"
           />
         </div>
       </section>
 
-      <section className="paper px-5 py-24 lg:px-10 lg:py-32">
+      {/* TIMELINE */}
+      <section className="bg-cream-light px-5 py-16 lg:px-10 lg:py-24 border-t border-brown/15">
         <div className="mx-auto max-w-3xl">
           <SectionHeading align="left" eyebrow="Timeline" title="How we got here" />
-          <ol className="mt-12 border-l border-border">
+          <ol className="mt-12 border-l border-terracotta/40 font-sans">
             {timeline.map(([year, copy]) => (
               <li key={year} className="relative pb-10 pl-8 last:pb-0">
-                <span className="absolute top-1.5 -left-[5px] h-2.5 w-2.5 rounded-full bg-accent" />
-                <p className="font-display text-3xl text-primary">{year}</p>
-                <p className="mt-2 leading-relaxed text-muted-foreground">{copy}</p>
+                <span className="absolute top-1.5 -left-[5px] h-2.5 w-2.5 rounded-full bg-terracotta" />
+                <p className="font-display text-4xl text-brown">{year}</p>
+                <p className="mt-2 font-sans text-base font-bold leading-relaxed text-brown/80">{copy}</p>
               </li>
             ))}
           </ol>
         </div>
       </section>
-    </>
+    </div>
   );
 }

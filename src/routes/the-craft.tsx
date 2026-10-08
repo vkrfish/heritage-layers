@@ -18,17 +18,8 @@ export const Route = createFileRoute("/the-craft")({
       { name: "keywords", content: "how Putharekulu is made, Putharekulu recipe, Indian sweet making, traditional food craft, Andhra cuisine, handmade sweets, authentic Indian cooking, food heritage" },
       { name: "robots", content: "index, follow" },
       { property: "og:title", content: "The Craft — How Putharekulu Is Made" },
-      {
-        property: "og:description",
-        content: "Soaking, lifting, brushing, folding — the four steps behind every sheet.",
-      },
-      { property: "og:image", content: "https://9storiesandco.com/craft-sheet.jpg" },
       { property: "og:url", content: "https://9storiesandco.com/the-craft" },
       { property: "og:type", content: "article" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "The Craft — How Putharekulu Is Made" },
-      { name: "twitter:description", content: "Soaking, lifting, brushing, folding — the four steps behind every sheet." },
-      { name: "twitter:image", content: "https://9storiesandco.com/craft-sheet.jpg" },
     ],
     links: [
       { rel: "canonical", href: "https://9storiesandco.com/the-craft" },
@@ -66,8 +57,8 @@ const steps = [
 
 function TheCraft() {
   return (
-    <>
-      <section className="bg-primary px-5 py-24 lg:px-10 lg:py-32">
+    <div className="bg-cream font-sans">
+      <section className="bg-brown px-5 py-20 lg:px-10 lg:py-28 border-b border-gold/30">
         <div className="mx-auto max-w-[1400px]">
           <SectionHeading
             onDark
@@ -78,8 +69,8 @@ function TheCraft() {
         </div>
       </section>
 
-      <section className="px-5 py-24 lg:px-10 lg:py-32">
-        <div className="mx-auto flex max-w-[1400px] flex-col gap-20">
+      <section className="px-5 py-20 lg:px-10 lg:py-28">
+        <div className="mx-auto flex max-w-[1400px] flex-col gap-16">
           {steps.map((s, i) => (
             <article
               key={s.n}
@@ -91,28 +82,30 @@ function TheCraft() {
                 loading="lazy"
                 width={1200}
                 height={900}
-                className={`rounded-[12px] object-cover ${i % 2 ? "lg:order-2" : ""}`}
+                className={`rounded-xl border border-brown/15 object-cover shadow-lift ${i % 2 ? "lg:order-2" : ""}`}
               />
               <div>
                 <p className="font-display text-6xl text-gold">{s.n}</p>
-                <h2 className="mt-4 text-4xl text-primary">{s.title}</h2>
-                <p className="mt-4 text-lg leading-relaxed text-muted-foreground">{s.copy}</p>
+                <h2 className="mt-2 font-display text-4xl text-brown">{s.title}</h2>
+                <p className="mt-4 font-sans text-lg font-bold leading-relaxed text-brown/80">{s.copy}</p>
               </div>
             </article>
           ))}
         </div>
       </section>
 
-      <section className="paper px-5 py-24 text-center lg:px-10">
-        <div className="mx-auto max-w-2xl">
-          <h2 className="text-4xl text-primary">Taste the difference eight seconds makes</h2>
-          <div className="mt-8">
+      <section className="bg-cream-light px-5 py-20 text-center lg:px-10 border-t border-brown/15">
+        <div className="mx-auto max-w-2xl space-y-6">
+          <h2 className="font-display text-4xl sm:text-5xl text-brown">Taste the difference eight seconds makes</h2>
+          <div>
             <Link to="/shop">
-              <Button size="lg">Shop the collection</Button>
+              <Button size="lg" variant="primary" className="bg-brown text-white hover:bg-terracotta">
+                Explore Stories
+              </Button>
             </Link>
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 }

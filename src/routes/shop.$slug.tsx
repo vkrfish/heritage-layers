@@ -51,9 +51,9 @@ function ProductDetail() {
 
   if (!product) {
     return (
-      <div className="py-20 text-center">
-        <h1 className="font-display text-2xl text-primary">Product Not Found</h1>
-        <Link to="/shop" className="text-accent underline mt-4 inline-block text-sm">
+      <div className="py-20 text-center bg-cream font-sans">
+        <h1 className="font-display text-4xl text-brown">Product Not Found</h1>
+        <Link to="/shop" className="text-terracotta underline mt-4 inline-block font-bold">
           Return to Shop
         </Link>
       </div>
@@ -61,7 +61,7 @@ function ProductDetail() {
   }
 
   const weights = product.weights || [{ label: "250g", weightGrams: 250, price: 349 }];
-  const selectedVariant = weights[selectedVariantIndex] ?? weights[0];
+  const selectedVariant = weights[selectedVariantIndex] ?? weights[0] ?? { label: "250g", weightGrams: 250, price: 349 };
   const reviewsCount = product.reviewsCount ?? (product as any).reviews ?? 128;
   const ratingHisto = product.ratingHistogram ?? { 5: 100, 4: 20, 3: 5, 2: 2, 1: 1 };
   const customerReviews = product.customerReviews ?? [];
@@ -75,27 +75,27 @@ function ProductDetail() {
   ];
 
   return (
-    <div className="bg-background min-h-screen pb-28 lg:pb-20">
+    <div className="bg-cream min-h-screen pb-28 lg:pb-20 font-sans">
       <StructuredData type="product" data={product} />
       <StructuredData type="breadcrumb" data={breadcrumbData} />
 
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-10 py-6 sm:py-10">
         {/* Breadcrumb Navigation */}
-        <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-muted-foreground mb-6">
-          <Link to="/" className="hover:text-accent">Home</Link>
-          <ChevronRight className="h-3 w-3" />
-          <Link to="/shop" className="hover:text-accent">Shop</Link>
-          <ChevronRight className="h-3 w-3" />
-          <Link to="/shop" search={{ category: product.category }} className="hover:text-accent">{product.category}</Link>
-          <ChevronRight className="h-3 w-3" />
-          <span className="text-primary font-medium truncate">{product.name}</span>
+        <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 font-sans text-xs font-bold text-brown/70 mb-6">
+          <Link to="/" className="hover:text-terracotta">Home</Link>
+          <ChevronRight className="h-3.5 w-3.5 text-brown/50" />
+          <Link to="/shop" className="hover:text-terracotta">Shop</Link>
+          <ChevronRight className="h-3.5 w-3.5 text-brown/50" />
+          <Link to="/shop" search={{ category: product.category }} className="hover:text-terracotta">{product.category}</Link>
+          <ChevronRight className="h-3.5 w-3.5 text-brown/50" />
+          <span className="text-brown truncate font-bold">{product.name}</span>
         </nav>
 
         {/* MAIN PDP GRID */}
         <div className="grid gap-8 lg:grid-cols-12">
           {/* LEFT COLUMN: Gallery */}
           <div className="lg:col-span-6 space-y-4">
-            <div className="relative overflow-hidden rounded-2xl border border-border bg-parchment/30 group">
+            <div className="relative overflow-hidden rounded-xl border border-brown/15 bg-cream-light group">
               <img
                 src={product.image}
                 alt={product.name}
@@ -106,13 +106,15 @@ function ProductDetail() {
               />
               <button
                 onClick={() => setLightboxOpen(true)}
-                className="absolute bottom-3 right-3 flex items-center gap-1 rounded-full bg-cream/90 backdrop-blur px-3 py-1.5 text-xs font-semibold text-primary shadow-sm hover:bg-accent hover:text-accent-foreground"
+                className="absolute bottom-3 right-3 flex items-center gap-1 rounded-full bg-cream/90 backdrop-blur px-3 py-1.5 font-sans text-xs font-bold text-brown shadow-flat hover:bg-gold hover:text-brown cursor-pointer"
               >
-                <ZoomIn className="h-3.5 w-3.5" /> Lightbox Zoom
+                <ZoomIn className="h-4 w-4" /> Lightbox Zoom
               </button>
               {product.badge && (
                 <span className="absolute top-3 left-3">
-                  <Badge>{product.badge}</Badge>
+                  <Badge variant={product.badge.toLowerCase().includes("pure") || product.badge.toLowerCase().includes("natural") ? "green" : "gold"}>
+                    {product.badge}
+                  </Badge>
                 </span>
               )}
             </div>
@@ -122,9 +124,9 @@ function ProductDetail() {
                 <button
                   key={idx}
                   onClick={() => setLightboxOpen(true)}
-                  className="h-20 w-20 shrink-0 rounded-xl border-2 border-accent p-0.5 overflow-hidden"
+                  className="h-20 w-20 shrink-0 rounded-lg border-2 border-terracotta p-0.5 overflow-hidden cursor-pointer"
                 >
-                  <img src={img} alt="Thumbnail" className="h-full w-full object-cover rounded-lg" />
+                  <img src={img} alt="Thumbnail" className="h-full w-full object-cover rounded-md" />
                 </button>
               ))}
             </div>
@@ -133,53 +135,53 @@ function ProductDetail() {
           {/* RIGHT COLUMN: Specs */}
           <div className="lg:col-span-6 space-y-6">
             <div>
-              <span className="eyebrow text-accent font-bold uppercase tracking-wider">{product.category}</span>
-              <h1 className="font-display text-3xl font-light text-primary sm:text-4xl lg:text-5xl mt-1">
+              <span className="eyebrow text-terracotta font-bold uppercase tracking-widest">{product.category}</span>
+              <h1 className="font-display text-4xl sm:text-5xl font-normal leading-tight text-brown mt-1">
                 {product.name}
               </h1>
-              <p className="mt-1 text-sm text-muted-foreground italic">{product.tagline}</p>
+              <p className="mt-1 font-sans text-base font-bold text-brown/70 italic">{product.tagline}</p>
 
               <div className="mt-3 flex items-center gap-3">
                 <Rating value={product.rating || 4.9} count={reviewsCount} />
-                <span className="text-xs text-muted-foreground">({reviewsCount} verified customer reviews)</span>
+                <span className="font-sans text-xs font-bold text-brown/70">({reviewsCount} verified customer reviews)</span>
               </div>
             </div>
 
             {/* Price Display */}
-            <div className="flex items-baseline gap-3 border-y border-border py-4">
-              <span className="text-3xl font-bold text-primary">
+            <div className="flex items-baseline gap-3 border-y border-brown/15 py-4">
+              <span className="font-sans text-3xl font-bold text-terracotta">
                 {formatPrice(selectedVariant.price * qty)}
               </span>
               {selectedVariant.msrp && selectedVariant.msrp > selectedVariant.price && (
                 <>
-                  <span className="text-base text-muted-foreground line-through tabular-nums">
+                  <span className="font-sans text-lg font-bold text-brown/50 line-through tabular-nums">
                     {formatPrice(selectedVariant.msrp * qty)}
                   </span>
-                  <span className="rounded-md bg-accent/10 px-2 py-0.5 text-xs font-bold text-accent">
+                  <span className="rounded bg-gold/20 px-2.5 py-0.5 font-sans text-xs font-bold text-brown">
                     Save {Math.round(((selectedVariant.msrp - selectedVariant.price) / selectedVariant.msrp) * 100)}%
                   </span>
                 </>
               )}
-              <span className="text-xs text-muted-foreground ml-auto">Inclusive of all taxes</span>
+              <span className="font-sans text-xs font-bold text-brown/60 ml-auto">Inclusive of all taxes</span>
             </div>
 
             {/* Weight Variant Selector Pills */}
             <div>
-              <p className="eyebrow text-primary font-semibold mb-2">Select Weight Variant:</p>
+              <p className="eyebrow text-brown font-bold mb-2">Select Weight Variant:</p>
               <div className="flex flex-wrap gap-2.5">
                 {weights.map((w, i) => (
                   <button
                     key={w.label}
                     onClick={() => setSelectedVariantIndex(i)}
                     className={cn(
-                      "flex items-center gap-2 rounded-xl border px-4 py-2.5 text-xs font-semibold transition-all duration-200",
+                      "flex items-center gap-2 rounded-lg border px-4 py-2.5 font-sans text-xs font-bold transition-all duration-200 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terracotta",
                       i === selectedVariantIndex
-                        ? "border-accent bg-accent/10 text-accent ring-1 ring-accent shadow-sm"
-                        : "border-border bg-card text-muted-foreground hover:border-primary/40 hover:bg-parchment/50",
+                        ? "border-terracotta bg-terracotta/15 text-terracotta"
+                        : "border-brown/20 bg-cream-light text-brown/70 hover:border-brown hover:bg-cream",
                     )}
                   >
                     <span>{w.label}</span>
-                    <span className="font-bold text-primary">{formatPrice(w.price)}</span>
+                    <span className="font-bold text-brown">{formatPrice(w.price)}</span>
                   </button>
                 ))}
               </div>
@@ -187,7 +189,7 @@ function ProductDetail() {
 
             {/* Quantity Selector */}
             <div className="flex items-center gap-4">
-              <span className="eyebrow text-primary font-semibold">Quantity:</span>
+              <span className="eyebrow text-brown font-bold">Quantity:</span>
               <QuantitySelector value={qty} onChange={setQty} />
             </div>
 
@@ -206,39 +208,40 @@ function ProductDetail() {
                     qty,
                   })
                 }
-                className="justify-center gap-2"
+                className="justify-center gap-2 border-brown text-brown hover:bg-brown hover:text-white"
               >
                 <ShoppingBag className="h-4 w-4" /> Add to Cart
               </Button>
 
               <Button
                 size="lg"
+                variant="accent"
                 onClick={() => openExpress(product.name, selectedVariant.label, selectedVariant.price, qty)}
-                className="justify-center gap-2 bg-accent text-accent-foreground hover:bg-accent-hover shadow-lift"
+                className="justify-center gap-2 bg-terracotta text-white hover:bg-brown shadow-lift"
               >
-                <Zap className="h-4 w-4 fill-current" /> Buy Now (Express)
+                <Zap className="h-4 w-4 fill-current" /> Express Buy Now
               </Button>
             </div>
 
-            {/* Badges */}
-            <div className="grid grid-cols-3 gap-2 rounded-xl border border-gold/30 bg-parchment/40 p-3 text-center text-xs">
+            {/* Trust Badges */}
+            <div className="grid grid-cols-3 gap-2 rounded-lg border border-brown/15 bg-cream-light p-3 text-center font-sans text-xs font-bold">
               <div className="flex flex-col items-center gap-1">
-                <ShieldCheck className="h-4 w-4 text-accent" />
-                <span className="font-medium text-primary">100% Authentic</span>
+                <ShieldCheck className="h-5 w-5 text-terracotta" />
+                <span className="text-brown">100% Authentic</span>
               </div>
               <div className="flex flex-col items-center gap-1">
-                <PackageCheck className="h-4 w-4 text-accent" />
-                <span className="font-medium text-primary">Freshly Packed</span>
+                <PackageCheck className="h-5 w-5 text-terracotta" />
+                <span className="text-brown">Freshly Packed</span>
               </div>
               <div className="flex flex-col items-center gap-1">
-                <Truck className="h-4 w-4 text-accent" />
-                <span className="font-medium text-primary">Express Shipping</span>
+                <Truck className="h-5 w-5 text-terracotta" />
+                <span className="text-brown">Express Shipping</span>
               </div>
             </div>
 
-            {/* Tabs */}
-            <div className="border-t border-border pt-4">
-              <div className="flex border-b border-border text-xs font-semibold">
+            {/* Information Tabs */}
+            <div className="border-t border-brown/15 pt-4">
+              <div className="flex border-b border-brown/15 font-sans text-xs font-bold">
                 {[
                   { id: "desc", label: "Description" },
                   { id: "ing", label: "Ingredients & Nutrition" },
@@ -248,10 +251,10 @@ function ProductDetail() {
                   <button
                     key={tab.id}
                     onClick={() => setActiveAccordion(tab.id as any)}
-                    className={`py-2 px-3 border-b-2 transition-colors ${
+                    className={`py-2 px-3 border-b-2 transition-colors cursor-pointer ${
                       activeAccordion === tab.id
-                        ? "border-accent text-accent"
-                        : "border-transparent text-muted-foreground hover:text-primary"
+                        ? "border-terracotta text-terracotta"
+                        : "border-transparent text-brown/70 hover:text-brown"
                     }`}
                   >
                     {tab.label}
@@ -259,18 +262,18 @@ function ProductDetail() {
                 ))}
               </div>
 
-              <div className="py-4 text-xs leading-relaxed text-muted-foreground">
+              <div className="py-4 font-sans text-sm font-bold leading-relaxed text-brown/80">
                 {activeAccordion === "desc" && <p>{product.description}</p>}
                 {activeAccordion === "ing" && (
                   <div className="space-y-2">
-                    <p><strong className="text-primary">Ingredients:</strong> {product.ingredients || "N/A"}</p>
-                    <p><strong className="text-primary">Allergens:</strong> {product.allergens || "N/A"}</p>
+                    <p><strong className="text-brown">Ingredients:</strong> {product.ingredients || "N/A"}</p>
+                    <p><strong className="text-brown">Allergens:</strong> {product.allergens || "N/A"}</p>
                   </div>
                 )}
                 {activeAccordion === "shelf" && (
                   <div className="space-y-2">
-                    <p><strong className="text-primary">Storage:</strong> {product.storage || "N/A"}</p>
-                    <p><strong className="text-primary">Shelf Life:</strong> {product.shelfLife || "N/A"}</p>
+                    <p><strong className="text-brown">Storage:</strong> {product.storage || "N/A"}</p>
+                    <p><strong className="text-brown">Shelf Life:</strong> {product.shelfLife || "N/A"}</p>
                   </div>
                 )}
                 {activeAccordion === "ship" && (
@@ -282,34 +285,34 @@ function ProductDetail() {
         </div>
 
         {/* REVIEWS SECTION */}
-        <section className="mt-16 border-t border-border pt-12">
-          <h2 className="font-display text-2xl font-light text-primary sm:text-3xl mb-8">
+        <section className="mt-16 border-t border-brown/15 pt-12">
+          <h2 className="font-display text-3xl sm:text-4xl text-brown font-normal mb-8">
             Customer Reviews &amp; Ratings
           </h2>
 
           <div className="grid gap-8 md:grid-cols-12">
-            <div className="md:col-span-4 rounded-2xl border border-border bg-card p-6 shadow-soft space-y-4">
+            <div className="md:col-span-4 rounded-xl border border-brown/15 bg-cream-light p-6 shadow-flat space-y-4">
               <div className="text-center">
-                <span className="font-display text-5xl font-bold text-primary">{product.rating || 4.9}</span>
+                <span className="font-display text-5xl text-brown">{product.rating || 4.9}</span>
                 <div className="flex justify-center gap-1 text-gold my-1">
                   {[...Array(5)].map((_, i) => (
                     <Star key={i} className="h-4 w-4 fill-gold text-gold" />
                   ))}
                 </div>
-                <p className="text-xs text-muted-foreground">Based on {reviewsCount} verified ratings</p>
+                <p className="font-sans text-xs font-bold text-brown/70">Based on {reviewsCount} verified ratings</p>
               </div>
 
-              <div className="space-y-2 text-xs">
+              <div className="space-y-2 font-sans text-xs font-bold">
                 {[5, 4, 3, 2, 1].map((star) => {
                   const count = (ratingHisto as any)[star] || 0;
                   const pct = Math.round((count / reviewsCount) * 100) || 10;
                   return (
                     <div key={star} className="flex items-center gap-2">
-                      <span className="w-8 text-right font-medium">{star} ★</span>
-                      <div className="h-2 flex-1 rounded-full bg-border overflow-hidden">
-                        <div className="h-full bg-accent rounded-full" style={{ width: `${pct}%` }} />
+                      <span className="w-8 text-right font-bold text-brown">{star} ★</span>
+                      <div className="h-2 flex-1 rounded-full bg-brown/10 overflow-hidden">
+                        <div className="h-full bg-terracotta rounded-full" style={{ width: `${pct}%` }} />
                       </div>
-                      <span className="w-8 text-muted-foreground">{pct}%</span>
+                      <span className="w-8 text-brown/70">{pct}%</span>
                     </div>
                   );
                 })}
@@ -319,37 +322,37 @@ function ProductDetail() {
             <div className="md:col-span-8 space-y-4">
               {customerReviews.length > 0 ? (
                 customerReviews.map((rev) => (
-                  <div key={rev.id} className="rounded-xl border border-border bg-card p-5 space-y-2">
-                    <div className="flex items-center justify-between text-xs">
+                  <div key={rev.id} className="rounded-xl border border-brown/15 bg-cream-light p-5 space-y-2 font-sans">
+                    <div className="flex items-center justify-between text-xs font-bold">
                       <div className="flex items-center gap-2">
-                        <span className="font-bold text-primary">{rev.author}</span>
-                        {rev.location && <span className="text-muted-foreground">• {rev.location}</span>}
+                        <span className="text-brown">{rev.author}</span>
+                        {rev.location && <span className="text-brown/70">• {rev.location}</span>}
                         {rev.verified && (
-                          <span className="rounded-full bg-accent/10 px-2 py-0.5 text-[10px] font-bold text-accent">
+                          <span className="rounded-full bg-green/15 px-2 py-0.5 text-green">
                             Verified Buyer
                           </span>
                         )}
                       </div>
-                      <span className="text-muted-foreground">{rev.date}</span>
+                      <span className="text-brown/60">{rev.date}</span>
                     </div>
                     <div className="flex gap-1 text-gold">
                       {[...Array(rev.rating)].map((_, i) => (
                         <Star key={i} className="h-3.5 w-3.5 fill-gold text-gold" />
                       ))}
                     </div>
-                    <p className="text-xs text-primary leading-relaxed">{rev.comment}</p>
+                    <p className="font-display text-lg text-brown leading-relaxed">{rev.comment}</p>
                   </div>
                 ))
               ) : (
-                <p className="text-xs text-muted-foreground">No customer reviews yet. Be the first to leave a review!</p>
+                <p className="font-sans text-sm font-bold text-brown/70">No customer reviews yet. Be the first to leave a review!</p>
               )}
             </div>
           </div>
         </section>
 
         {/* RELATED PRODUCTS */}
-        <section className="mt-16 border-t border-border pt-12">
-          <h2 className="font-display text-2xl text-primary font-light mb-6">You May Also Like</h2>
+        <section className="mt-16 border-t border-brown/15 pt-12">
+          <h2 className="font-display text-3xl text-brown font-normal mb-6">You May Also Like</h2>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {related.map((p) => (
               <ProductCard key={p.slug} product={p} />
@@ -359,11 +362,11 @@ function ProductDetail() {
       </div>
 
       {/* MOBILE STICKY BOTTOM BAR */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 lg:hidden border-t border-border bg-cream/95 backdrop-blur-md p-3 shadow-lift">
+      <div className="fixed bottom-0 left-0 right-0 z-40 lg:hidden border-t border-brown/15 bg-cream/95 backdrop-blur-md p-3 shadow-lift font-sans">
         <div className="flex items-center justify-between gap-3">
           <div>
-            <span className="text-xs text-muted-foreground">{selectedVariant.label}</span>
-            <p className="text-lg font-bold text-primary">{formatPrice(selectedVariant.price * qty)}</p>
+            <span className="font-sans text-xs font-bold text-brown/70">{selectedVariant.label}</span>
+            <p className="font-sans text-lg font-bold text-terracotta">{formatPrice(selectedVariant.price * qty)}</p>
           </div>
 
           <div className="flex items-center gap-2">
@@ -380,14 +383,15 @@ function ProductDetail() {
                   qty,
                 })
               }
-              className="text-xs px-3"
+              className="text-xs px-3 border-brown text-brown"
             >
               Add
             </Button>
             <Button
               size="sm"
+              variant="accent"
               onClick={() => openExpress(product.name, selectedVariant.label, selectedVariant.price, qty)}
-              className="text-xs px-3 bg-accent text-accent-foreground hover:bg-accent-hover"
+              className="text-xs px-3 bg-terracotta text-white"
             >
               Express Buy
             </Button>
@@ -399,9 +403,9 @@ function ProductDetail() {
       {lightboxOpen && (
         <div
           onClick={() => setLightboxOpen(false)}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-primary/80 backdrop-blur-md p-4 animate-in fade-in"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-brown/80 backdrop-blur-md p-4 animate-in fade-in"
         >
-          <img src={product.image} alt={product.name} className="max-h-[90vh] max-w-[90vw] object-contain rounded-2xl shadow-lift" />
+          <img src={product.image} alt={product.name} className="max-h-[90vh] max-w-[90vw] object-contain rounded-xl shadow-lift" />
         </div>
       )}
     </div>

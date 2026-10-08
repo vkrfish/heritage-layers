@@ -1,6 +1,7 @@
 import { createFileRoute, Outlet, Link, useNavigate, useLocation } from "@tanstack/react-router";
-import { LayoutDashboard, Package, ShoppingCart, Tag, Megaphone, ExternalLink, LogOut, Shield } from "lucide-react";
+import { LayoutDashboard, Package, ShoppingCart, Tag, Megaphone, ExternalLink, LogOut } from "lucide-react";
 import * as React from "react";
+import logoFull from "@/assets/logo-full.png";
 
 import { useAdminStore } from "@/lib/admin-store.tsx";
 import { cn } from "@/lib/utils";
@@ -38,27 +39,24 @@ function AdminLayout() {
   ];
 
   return (
-    <div className="min-h-screen bg-background flex flex-col md:flex-row">
+    <div className="min-h-screen bg-cream flex flex-col md:flex-row font-sans">
       {/* ADMIN SIDEBAR */}
-      <aside className="w-full md:w-64 bg-primary text-on-dark flex-shrink-0 border-r border-gold/20 flex flex-col justify-between p-4 md:p-6">
+      <aside className="w-full md:w-64 bg-brown text-cream flex-shrink-0 border-r border-gold/30 flex flex-col justify-between p-4 md:p-6">
         <div>
           {/* Header & Logo */}
-          <div className="flex items-center gap-3 pb-6 border-b border-gold/20">
-            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-cream text-primary font-display text-lg font-bold">
-              9
+          <div className="pb-6 border-b border-gold/30">
+            <img
+              src={logoFull}
+              alt="Stories Admin"
+              className="h-10 w-auto object-contain brightness-200 invert-[0.1]"
+            />
+            <span className="eyebrow text-xs text-gold mt-2 block">
+              Store Control Center
             </span>
-            <div>
-              <span className="block font-display text-lg font-bold text-on-dark leading-none">
-                9 Stories Admin
-              </span>
-              <span className="eyebrow text-[10px] text-gold mt-1 block">
-                Store Control Center
-              </span>
-            </div>
           </div>
 
           {/* Nav Items */}
-          <nav aria-label="Admin Navigation" className="mt-6 space-y-1.5">
+          <nav aria-label="Admin Navigation" className="mt-6 space-y-1.5 font-sans">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = item.exact
@@ -70,10 +68,10 @@ function AdminLayout() {
                   key={item.to}
                   to={item.to}
                   className={cn(
-                    "flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-xs font-semibold transition-all duration-200",
+                    "flex items-center gap-3 rounded-lg px-3.5 py-2.5 font-sans text-sm font-bold transition-all duration-200",
                     isActive
-                      ? "bg-accent text-accent-foreground shadow-sm"
-                      : "text-on-dark-muted hover:bg-teal-soft/30 hover:text-on-dark",
+                      ? "bg-terracotta text-white shadow-flat"
+                      : "text-cream/80 hover:bg-brown/80 hover:text-gold",
                   )}
                 >
                   <Icon className="h-4 w-4 shrink-0" />
@@ -85,11 +83,11 @@ function AdminLayout() {
         </div>
 
         {/* Footer Actions */}
-        <div className="pt-6 border-t border-gold/20 space-y-2">
+        <div className="pt-6 border-t border-gold/30 space-y-2 font-sans font-bold">
           <Link
             to="/"
             target="_blank"
-            className="flex items-center gap-2 rounded-xl bg-teal-soft/20 px-3.5 py-2 text-xs font-medium text-gold hover:bg-teal-soft/40 transition-colors"
+            className="flex items-center gap-2 rounded-lg bg-gold/20 px-3.5 py-2 text-xs text-gold hover:bg-gold hover:text-brown transition-colors"
           >
             <ExternalLink className="h-3.5 w-3.5" /> View Live Storefront
           </Link>
@@ -98,7 +96,7 @@ function AdminLayout() {
               logout();
               navigate({ to: "/admin/login" });
             }}
-            className="flex w-full items-center gap-2 rounded-xl px-3.5 py-2 text-xs font-medium text-destructive hover:bg-destructive/10 transition-colors"
+            className="flex w-full items-center gap-2 rounded-lg px-3.5 py-2 text-xs text-cream/70 hover:bg-terracotta hover:text-white transition-colors cursor-pointer"
           >
             <LogOut className="h-3.5 w-3.5" /> Sign Out
           </button>
@@ -106,7 +104,7 @@ function AdminLayout() {
       </aside>
 
       {/* MAIN CONTENT AREA */}
-      <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-10">
+      <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-10 bg-cream">
         <Outlet />
       </main>
     </div>

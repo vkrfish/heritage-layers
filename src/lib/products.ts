@@ -8,7 +8,7 @@ export type WeightVariant = {
   label: string;
   weightGrams: number;
   price: number;
-  msrp?: number;
+  msrp?: number | undefined;
 };
 
 export type Review = {
@@ -18,7 +18,7 @@ export type Review = {
   date: string;
   comment: string;
   verified: boolean;
-  location?: string;
+  location?: string | undefined;
 };
 
 export type ProductCategory = "Sweets" | "Savouries" | "Podi & Mixes" | "Gift Boxes" | "Special Offers";
@@ -30,7 +30,7 @@ export type Product = {
   category: ProductCategory;
   description: string;
   image: string;
-  badge?: string;
+  badge?: string | undefined;
   rating: number;
   reviewsCount: number;
   weights: WeightVariant[];
@@ -40,14 +40,14 @@ export type Product = {
   shelfLife: string;
   dietaryTags: string[];
   flavorProfile: string;
-  isBestSeller?: boolean;
-  isNewArrival?: boolean;
-  isGiftingFavorite?: boolean;
-  isSpecialOffer?: boolean;
-  isUnder99?: boolean;
+  isBestSeller?: boolean | undefined;
+  isNewArrival?: boolean | undefined;
+  isGiftingFavorite?: boolean | undefined;
+  isSpecialOffer?: boolean | undefined;
+  isUnder99?: boolean | undefined;
   ratingHistogram: { 5: number; 4: number; 3: number; 2: number; 1: number };
   customerReviews: Review[];
-  frequentlyBoughtWithSlugs?: string[];
+  frequentlyBoughtWithSlugs?: string[] | undefined;
 };
 
 export const products: Product[] = [

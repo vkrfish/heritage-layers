@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Search, User, Heart, ShoppingBag, Menu, X, Sparkles } from "lucide-react";
+import { Search, User, Heart, ShoppingBag, Menu, X, Sparkles, Home, Package } from "lucide-react";
 import * as React from "react";
 
 import { useCart } from "@/components/cart";
@@ -7,14 +7,15 @@ import { useAdminStore } from "@/lib/admin-store.tsx";
 import { IconButton } from "@/components/ui-kit";
 import { formatPrice, products } from "@/lib/products";
 import { cn } from "@/lib/utils";
+import logoFull from "@/assets/logo-full.png";
 
 const links = [
   { to: "/", label: "Home" },
-  { to: "/shop", label: "Shop" },
+  { to: "/shop", label: "Products" },
   { to: "/our-story", label: "Our Story" },
   { to: "/the-craft", label: "The Craft" },
   { to: "/gifting", label: "Gifting" },
-  { to: "/journal", label: "Journal" },
+  { to: "/contact", label: "Contact" },
 ] as const;
 
 export function MarqueeBanner() {
@@ -33,11 +34,11 @@ export function MarqueeBanner() {
   }, [list.length]);
 
   return (
-    <div className="bg-primary text-on-dark px-4 py-2 text-center text-xs font-medium tracking-wide overflow-hidden border-b border-gold/20">
+    <div className="bg-brown text-cream px-3 py-1.5 text-center font-sans text-xs font-bold tracking-wider overflow-hidden border-b border-gold/30">
       <div className="flex items-center justify-center gap-2 transition-all duration-500">
-        <Sparkles className="h-3.5 w-3.5 text-gold shrink-0 animate-pulse" />
-        <span className="truncate">{list[index % list.length]}</span>
-        <Sparkles className="h-3.5 w-3.5 text-gold shrink-0 animate-pulse" />
+        <Sparkles className="h-3 w-3 text-gold shrink-0 animate-pulse" />
+        <span className="truncate uppercase text-[11px] sm:text-xs">{list[index % list.length]}</span>
+        <Sparkles className="h-3 w-3 text-gold shrink-0 animate-pulse" />
       </div>
     </div>
   );
@@ -68,162 +69,307 @@ export function Navbar() {
     : [];
 
   return (
-    <header className="sticky top-0 z-40">
-      <MarqueeBanner />
-      <div
-        className={cn(
-          "border-b border-border/70 transition-all duration-300",
-          scrolled ? "bg-cream/95 shadow-soft backdrop-blur" : "bg-cream",
-        )}
-      >
-        <nav
-          aria-label="Primary"
+    <>
+      <header className="sticky top-0 z-40 bg-cream">
+        <MarqueeBanner />
+        <div
           className={cn(
-            "mx-auto grid max-w-[1400px] grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-5 transition-all duration-300 lg:grid-cols-[1fr_auto_1fr] lg:px-10",
-            scrolled ? "h-16" : "h-20",
+            "border-b border-brown/15 bg-cream transition-all duration-300 px-3 py-2 sm:px-6 lg:px-10",
+            scrolled ? "shadow-flat" : "",
           )}
         >
-          {/* Logo */}
-          <Link to="/" className="flex min-w-0 items-center gap-3">
-            <span
-              aria-hidden="true"
-              className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-gold/70 font-display text-base text-accent"
+          {/* Mobile Top Row (< 768px): Hamburger (Left) - Logo (Center) - Icons (Right) */}
+          <div className="flex items-center justify-between gap-2 lg:hidden h-12">
+            {/* Left: Hamburger */}
+            <button
+              aria-label="Open navigation menu"
+              onClick={() => setMenuOpen(true)}
+              className="grid h-10 w-10 place-items-center text-brown hover:text-terracotta cursor-pointer"
             >
-              9
-            </span>
-            <span className="min-w-0">
-              <span className="block truncate font-display text-lg leading-none text-primary sm:text-xl">
-                9 Stories &amp; Co.
-              </span>
-              <span className="eyebrow hidden text-[0.5625rem] text-muted-foreground sm:block">
-                Handcrafted Sweets
-              </span>
-            </span>
-          </Link>
+              <Menu className="h-6 w-6" />
+            </button>
 
-          {/* Desktop Nav Links */}
-          <ul className="hidden items-center gap-8 lg:flex">
-            {links.map((l) => (
-              <li key={l.to}>
-                <Link
-                  to={l.to}
-                  className="relative text-[0.8125rem] tracking-wide text-primary transition-colors duration-200 hover:text-accent after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-0 after:bg-accent after:transition-all after:duration-200 hover:after:w-full"
-                  activeProps={{ className: "text-accent after:w-full" }}
-                  activeOptions={{ exact: l.to === "/" }}
-                >
-                  {l.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
+            {/* Center: Logo */}
+            <Link to="/" className="flex items-center justify-center shrink-0">
+              <img
+                src={logoFull}
+                alt="9 Stories & Co. — The Essence For Every Occasion"
+                className="h-8 sm:h-10 w-auto object-contain mix-blend-multiply"
+              />
+            </Link>
 
-          {/* Icons & Actions */}
-          <div className="flex items-center justify-end gap-1 relative">
-            <IconButton label="Search" onClick={() => setSearchOpen((v) => !v)}>
-              <Search className="h-[18px] w-[18px]" />
-            </IconButton>
-            <IconButton label="Account" className="hidden sm:grid">
-              <User className="h-[18px] w-[18px]" />
-            </IconButton>
-            <IconButton label="Wishlist" className="hidden sm:grid">
-              <Heart className="h-[18px] w-[18px]" />
-            </IconButton>
-            <IconButton label="Cart" onClick={() => setOpen(true)} className="relative">
-              <ShoppingBag className="h-[18px] w-[18px]" />
-              {count > 0 ? (
-                <span className="absolute top-1 right-1 grid h-4 min-w-4 place-items-center rounded-full bg-accent px-1 text-[0.625rem] font-medium text-accent-foreground">
-                  {count}
-                </span>
-              ) : null}
-            </IconButton>
+            {/* Right: Icons */}
+            <div className="flex items-center gap-1">
+              <button
+                aria-label="Account"
+                className="grid h-9 w-9 place-items-center text-brown hover:text-terracotta"
+              >
+                <User className="h-5 w-5" />
+              </button>
+              <button
+                aria-label="Cart"
+                onClick={() => setOpen(true)}
+                className="relative grid h-9 w-9 place-items-center text-brown hover:text-terracotta"
+              >
+                <ShoppingBag className="h-5 w-5" />
+                {count > 0 && (
+                  <span className="absolute top-0 right-0 grid h-4 min-w-4 place-items-center rounded-full bg-gold px-1 font-sans text-[10px] font-bold text-brown">
+                    {count}
+                  </span>
+                )}
+              </button>
+            </div>
+          </div>
 
-            <IconButton
-              label={menuOpen ? "Close menu" : "Open menu"}
-              className="lg:hidden"
-              onClick={() => setMenuOpen((v) => !v)}
-            >
-              {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            </IconButton>
+          {/* Mobile Second Row (< 768px): Pill Search Bar */}
+          <div className="mt-1 pb-1 lg:hidden">
+            <div className="relative flex items-center w-full">
+              <input
+                type="text"
+                value={searchQuery}
+                onFocus={() => setSearchOpen(true)}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="A2 Ghee, Putharekulu, and Fresh Sweets...."
+                className="w-full h-10 rounded-full border border-brown/20 bg-cream-light pl-4 pr-10 font-sans text-xs font-bold text-brown placeholder:text-brown/50 focus:border-terracotta focus:outline-none"
+              />
+              <Search className="absolute right-3.5 h-4 w-4 text-brown/60 pointer-events-none" />
+            </div>
 
-            {/* Live Search Overlay */}
-            {searchOpen && (
-              <div className="absolute right-0 top-full mt-2 w-80 sm:w-96 rounded-xl border border-border bg-cream p-4 shadow-lift z-50 animate-in fade-in slide-in-from-top-2">
-                <div className="flex items-center justify-between mb-3">
-                  <input
-                    type="text"
-                    autoFocus
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search sweets, murukku, podi..."
-                    className="w-full rounded-lg border border-border bg-card py-2 px-3 text-xs text-primary placeholder:text-muted-foreground focus:border-accent focus:outline-none"
-                  />
-                  <button onClick={() => setSearchOpen(false)} className="ml-2 text-muted-foreground hover:text-primary">
+            {/* Mobile Search Results Overlay */}
+            {searchOpen && searchQuery.trim() !== "" && (
+              <div className="absolute left-3 right-3 top-full mt-1 rounded-xl border border-brown/20 bg-cream p-3 shadow-lift z-50 max-h-64 overflow-y-auto">
+                <div className="flex items-center justify-between mb-2 pb-2 border-b border-brown/15">
+                  <span className="font-sans text-xs font-bold text-brown">Search Results</span>
+                  <button onClick={() => setSearchOpen(false)} className="text-brown/60 hover:text-brown">
                     <X className="h-4 w-4" />
                   </button>
                 </div>
-
-                {searchQuery.trim() !== "" ? (
-                  searchResults.length > 0 ? (
-                    <div className="max-h-64 overflow-y-auto space-y-2">
-                      {searchResults.map((item) => (
-                        <Link
-                          key={item.slug}
-                          to="/shop/$slug"
-                          params={{ slug: item.slug }}
-                          onClick={() => setSearchOpen(false)}
-                          className="flex items-center gap-3 rounded-lg p-2 hover:bg-parchment transition-colors"
-                        >
-                          <img src={item.image} alt={item.name} className="h-10 w-10 rounded-md object-cover border border-border" />
-                          <div>
-                            <p className="text-xs font-semibold text-primary">{item.name}</p>
-                            <p className="text-[11px] text-accent">{formatPrice(item.weights[0].price)}</p>
-                          </div>
-                        </Link>
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="text-xs text-center text-muted-foreground py-4">No matching products found.</p>
-                  )
-                ) : (
-                  <div className="text-[11px] text-muted-foreground">
-                    <p className="font-semibold text-primary mb-1 font-display text-xs">Popular Searches:</p>
-                    <div className="flex flex-wrap gap-1.5">
-                      {["Ghee Putharekulu", "Jaggery Sweet", "Butter Murukku", "Kandi Podi"].map((tag) => (
-                        <button
-                          key={tag}
-                          onClick={() => setSearchQuery(tag)}
-                          className="rounded-full bg-parchment px-2.5 py-1 text-xs text-primary hover:bg-accent hover:text-accent-foreground"
-                        >
-                          {tag}
-                        </button>
-                      ))}
-                    </div>
+                {searchResults.length > 0 ? (
+                  <div className="space-y-2">
+                    {searchResults.map((item) => (
+                      <Link
+                        key={item.slug}
+                        to="/shop/$slug"
+                        params={{ slug: item.slug }}
+                        onClick={() => setSearchOpen(false)}
+                        className="flex items-center gap-3 rounded-lg p-2 hover:bg-cream-light"
+                      >
+                        <img src={item.image} alt={item.name} className="h-10 w-10 rounded object-cover border border-brown/15" />
+                        <div>
+                          <p className="font-display text-base text-brown">{item.name}</p>
+                          <p className="font-sans text-xs font-bold text-terracotta">{formatPrice(item.weights[0]?.price ?? 0)}</p>
+                        </div>
+                      </Link>
+                    ))}
                   </div>
+                ) : (
+                  <p className="font-sans text-xs text-center text-brown/60 py-3">No matching products found.</p>
                 )}
               </div>
             )}
           </div>
-        </nav>
 
-        {/* Mobile Nav Menu */}
-        {menuOpen ? (
-          <ul className="border-t border-border bg-cream px-5 pb-4 lg:hidden">
-            {links.map((l) => (
-              <li key={l.to}>
-                <Link
-                  to={l.to}
+          {/* Desktop Navigation Layout (lg:flex) — Untouched desktop design */}
+          <nav
+            aria-label="Primary Desktop"
+            className={cn(
+              "hidden lg:flex mx-auto max-w-[1400px] items-center justify-between gap-6 transition-all duration-300",
+              scrolled ? "h-16" : "h-20",
+            )}
+          >
+            {/* Logo */}
+            <Link to="/" className="flex items-center gap-2 group shrink-0">
+              <img
+                src={logoFull}
+                alt="9 Stories & Co. — The Essence For Every Occasion"
+                className={cn(
+                  "object-contain mix-blend-multiply transition-all duration-300",
+                  scrolled ? "h-10" : "h-13",
+                )}
+              />
+            </Link>
+
+            {/* Desktop Nav Links */}
+            <ul className="flex items-center gap-8">
+              {links.map((l) => (
+                <li key={l.to}>
+                  <Link
+                    to={l.to}
+                    className="relative font-sans text-lg font-bold tracking-wide text-brown transition-colors duration-200 hover:text-terracotta py-1 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-terracotta after:transition-all after:duration-200 hover:after:w-full"
+                    activeProps={{ className: "text-brown font-bold after:w-full" }}
+                    activeOptions={{ exact: l.to === "/" }}
+                  >
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+
+            {/* Desktop Icons */}
+            <div className="flex items-center gap-1.5 relative">
+              <IconButton label="Search" onClick={() => setSearchOpen((v) => !v)}>
+                <Search className="h-5 w-5 text-brown" />
+              </IconButton>
+              <IconButton label="Account">
+                <User className="h-5 w-5 text-brown" />
+              </IconButton>
+              <IconButton label="Wishlist">
+                <Heart className="h-5 w-5 text-brown" />
+              </IconButton>
+              <IconButton label="Cart" onClick={() => setOpen(true)} className="relative">
+                <ShoppingBag className="h-5 w-5 text-brown" />
+                {count > 0 ? (
+                  <span className="absolute top-1 right-1 grid h-5 min-w-5 place-items-center rounded-full bg-gold px-1 font-sans text-xs font-bold text-brown shadow-sm">
+                    {count}
+                  </span>
+                ) : null}
+              </IconButton>
+
+              {/* Desktop Live Search Overlay */}
+              {searchOpen && (
+                <div className="absolute right-0 top-full mt-2 w-96 rounded-xl border border-brown/20 bg-cream p-4 shadow-lift z-50">
+                  <div className="flex items-center justify-between mb-3">
+                    <input
+                      type="text"
+                      autoFocus
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      placeholder="Search sweets, murukku, podi..."
+                      className="w-full rounded-lg border border-brown/30 bg-cream-light py-2 px-3 font-sans text-base font-bold text-brown placeholder:text-brown/50 focus:border-terracotta focus:outline-none"
+                    />
+                    <button onClick={() => setSearchOpen(false)} className="ml-2 text-brown/70 hover:text-brown">
+                      <X className="h-5 w-5" />
+                    </button>
+                  </div>
+
+                  {searchQuery.trim() !== "" ? (
+                    searchResults.length > 0 ? (
+                      <div className="max-h-64 overflow-y-auto space-y-2">
+                        {searchResults.map((item) => (
+                          <Link
+                            key={item.slug}
+                            to="/shop/$slug"
+                            params={{ slug: item.slug }}
+                            onClick={() => setSearchOpen(false)}
+                            className="flex items-center gap-3 rounded-lg p-2 hover:bg-cream-light transition-colors"
+                          >
+                            <img src={item.image} alt={item.name} className="h-10 w-10 rounded-md object-cover border border-brown/20" />
+                            <div>
+                              <p className="font-display text-lg font-normal text-brown">{item.name}</p>
+                              <p className="font-sans text-sm font-bold text-terracotta">{formatPrice(item.weights[0]?.price ?? 0)}</p>
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="font-sans text-sm text-center text-brown/60 py-4">No matching products found.</p>
+                    )
+                  ) : (
+                    <div className="font-sans text-xs text-brown/70">
+                      <p className="font-bold text-brown mb-1 text-sm">Popular Searches:</p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {["Ghee Putharekulu", "Jaggery Sweet", "Butter Murukku", "Kandi Podi"].map((tag) => (
+                          <button
+                            key={tag}
+                            onClick={() => setSearchQuery(tag)}
+                            className="rounded-full bg-cream-light px-3 py-1 font-sans text-xs font-bold text-brown hover:bg-gold hover:text-brown transition-colors cursor-pointer"
+                          >
+                            {tag}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </nav>
+        </div>
+      </header>
+
+      {/* Slide-in Mobile Drawer Navigation */}
+      {menuOpen && (
+        <div className="fixed inset-0 z-50 flex lg:hidden bg-brown/60 backdrop-blur-sm animate-in fade-in">
+          <div className="w-[80%] max-w-[320px] h-full bg-cream p-5 shadow-lift border-r border-brown/20 flex flex-col justify-between animate-in slide-in-from-left">
+            <div>
+              <div className="flex items-center justify-between border-b border-brown/15 pb-4">
+                <img src={logoFull} alt="9 Stories & Co." className="h-8 w-auto mix-blend-multiply" />
+                <button
                   onClick={() => setMenuOpen(false)}
-                  className="flex min-h-12 items-center border-b border-border/60 text-sm text-primary"
-                  activeProps={{ className: "text-accent" }}
-                  activeOptions={{ exact: l.to === "/" }}
+                  className="grid h-9 w-9 place-items-center rounded-full text-brown hover:bg-cream-light"
                 >
-                  {l.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        ) : null}
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+
+              <ul className="mt-4 space-y-1 font-sans">
+                {links.map((l) => (
+                  <li key={l.to}>
+                    <Link
+                      to={l.to}
+                      onClick={() => setMenuOpen(false)}
+                      className="flex min-h-11 items-center rounded-lg px-3 text-base font-bold text-brown hover:bg-cream-light hover:text-terracotta"
+                      activeProps={{ className: "bg-terracotta/15 text-terracotta" }}
+                      activeOptions={{ exact: l.to === "/" }}
+                    >
+                      {l.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="border-t border-brown/15 pt-4 font-sans text-xs font-bold text-brown/70 space-y-2">
+              <p>Handcrafted Andhra Sweets</p>
+              <p className="text-[11px] text-terracotta">Atreyapuram, Andhra Pradesh</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Fixed Mobile Bottom Navigation Bar (< 768px) */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 h-[60px] bg-brown text-cream flex items-center justify-around border-t border-gold/30 shadow-lift lg:hidden">
+        <Link
+          to="/"
+          className="flex flex-col items-center justify-center gap-0.5 text-cream hover:text-gold"
+          activeProps={{ className: "text-gold font-bold" }}
+          activeOptions={{ exact: true }}
+        >
+          <Home className="h-5 w-5" />
+          <span className="font-sans text-[11px] font-bold uppercase tracking-wide">Home</span>
+        </Link>
+
+        <Link
+          to="/shop"
+          className="flex flex-col items-center justify-center gap-0.5 text-cream hover:text-gold"
+          activeProps={{ className: "text-gold font-bold" }}
+        >
+          <Package className="h-5 w-5" />
+          <span className="font-sans text-[11px] font-bold uppercase tracking-wide">Shop</span>
+        </Link>
+
+        <button
+          onClick={() => setOpen(true)}
+          className="relative flex flex-col items-center justify-center gap-0.5 text-cream hover:text-gold cursor-pointer"
+        >
+          <ShoppingBag className="h-5 w-5" />
+          {count > 0 && (
+            <span className="absolute -top-1 right-2 grid h-4 min-w-4 place-items-center rounded-full bg-gold px-1 font-sans text-[10px] font-bold text-brown">
+              {count}
+            </span>
+          )}
+          <span className="font-sans text-[11px] font-bold uppercase tracking-wide">Cart</span>
+        </button>
+
+        <Link
+          to="/contact"
+          className="flex flex-col items-center justify-center gap-0.5 text-cream hover:text-gold"
+          activeProps={{ className: "text-gold font-bold" }}
+        >
+          <User className="h-5 w-5" />
+          <span className="font-sans text-[11px] font-bold uppercase tracking-wide">Account</span>
+        </Link>
       </div>
-    </header>
+    </>
   );
 }
