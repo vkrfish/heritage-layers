@@ -79,7 +79,6 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminRoute,
 } as any)
-<<<<<<< HEAD
 const AdminAnnouncementsRoute = AdminAnnouncementsRouteImport.update({
   id: '/announcements',
   path: '/announcements',
@@ -110,8 +109,6 @@ const JournalSlugRoute = JournalSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => JournalRoute,
 } as any)
-=======
->>>>>>> aa092fc179c481fa211d3702b40170f6e6027725
 const ShopIndexRoute = ShopIndexRouteImport.update({
   id: '/shop/',
   path: '/shop/',
@@ -145,10 +142,7 @@ export interface FileRoutesByFullPath {
   '/admin/products': typeof AdminProductsRoute
   '/journal/$slug': typeof JournalSlugRoute
   '/shop/$slug': typeof ShopSlugRoute
-<<<<<<< HEAD
   '/sitemap/xml': typeof SitemapXmlRoute
-=======
->>>>>>> aa092fc179c481fa211d3702b40170f6e6027725
   '/admin/': typeof AdminIndexRoute
   '/shop/': typeof ShopIndexRoute
 }
@@ -168,10 +162,7 @@ export interface FileRoutesByTo {
   '/admin/products': typeof AdminProductsRoute
   '/journal/$slug': typeof JournalSlugRoute
   '/shop/$slug': typeof ShopSlugRoute
-<<<<<<< HEAD
   '/sitemap/xml': typeof SitemapXmlRoute
-=======
->>>>>>> aa092fc179c481fa211d3702b40170f6e6027725
   '/admin': typeof AdminIndexRoute
   '/shop': typeof ShopIndexRoute
 }
@@ -193,10 +184,7 @@ export interface FileRoutesById {
   '/admin/products': typeof AdminProductsRoute
   '/journal/$slug': typeof JournalSlugRoute
   '/shop/$slug': typeof ShopSlugRoute
-<<<<<<< HEAD
   '/sitemap/xml': typeof SitemapXmlRoute
-=======
->>>>>>> aa092fc179c481fa211d3702b40170f6e6027725
   '/admin/': typeof AdminIndexRoute
   '/shop/': typeof ShopIndexRoute
 }
@@ -219,10 +207,7 @@ export interface FileRouteTypes {
     | '/admin/products'
     | '/journal/$slug'
     | '/shop/$slug'
-<<<<<<< HEAD
     | '/sitemap/xml'
-=======
->>>>>>> aa092fc179c481fa211d3702b40170f6e6027725
     | '/admin/'
     | '/shop/'
   fileRoutesByTo: FileRoutesByTo
@@ -242,10 +227,7 @@ export interface FileRouteTypes {
     | '/admin/products'
     | '/journal/$slug'
     | '/shop/$slug'
-<<<<<<< HEAD
     | '/sitemap/xml'
-=======
->>>>>>> aa092fc179c481fa211d3702b40170f6e6027725
     | '/admin'
     | '/shop'
   id:
@@ -266,10 +248,7 @@ export interface FileRouteTypes {
     | '/admin/products'
     | '/journal/$slug'
     | '/shop/$slug'
-<<<<<<< HEAD
     | '/sitemap/xml'
-=======
->>>>>>> aa092fc179c481fa211d3702b40170f6e6027725
     | '/admin/'
     | '/shop/'
   fileRoutesById: FileRoutesById
@@ -361,7 +340,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
     }
-<<<<<<< HEAD
     '/admin/announcements': {
       id: '/admin/announcements'
       path: '/announcements'
@@ -404,8 +382,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof JournalSlugRouteImport
       parentRoute: typeof JournalRoute
     }
-=======
->>>>>>> aa092fc179c481fa211d3702b40170f6e6027725
     '/shop/': {
       id: '/shop/'
       path: '/shop'
@@ -431,32 +407,25 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteChildren {
-<<<<<<< HEAD
   AdminAnnouncementsRoute: typeof AdminAnnouncementsRoute
   AdminDiscountsRoute: typeof AdminDiscountsRoute
   AdminLoginRoute: typeof AdminLoginRoute
   AdminOrdersRoute: typeof AdminOrdersRoute
   AdminProductsRoute: typeof AdminProductsRoute
-=======
->>>>>>> aa092fc179c481fa211d3702b40170f6e6027725
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
-<<<<<<< HEAD
   AdminAnnouncementsRoute: AdminAnnouncementsRoute,
   AdminDiscountsRoute: AdminDiscountsRoute,
   AdminLoginRoute: AdminLoginRoute,
   AdminOrdersRoute: AdminOrdersRoute,
   AdminProductsRoute: AdminProductsRoute,
-=======
->>>>>>> aa092fc179c481fa211d3702b40170f6e6027725
   AdminIndexRoute: AdminIndexRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
-<<<<<<< HEAD
 interface JournalRouteChildren {
   JournalSlugRoute: typeof JournalSlugRoute
 }
@@ -468,8 +437,6 @@ const JournalRouteChildren: JournalRouteChildren = {
 const JournalRouteWithChildren =
   JournalRoute._addFileChildren(JournalRouteChildren)
 
-=======
->>>>>>> aa092fc179c481fa211d3702b40170f6e6027725
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,

@@ -109,6 +109,4 @@ function AdminLayout() {
       </main>
     </div>
   );
-}7725
-  );
 }
