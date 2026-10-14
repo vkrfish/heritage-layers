@@ -37,3 +37,6 @@ dist-ssr
 # Agent Skills
 .agents/skills/
 skills-lock.json
+
+# Vercel
+.vercel/
