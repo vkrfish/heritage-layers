@@ -7,11 +7,20 @@ import { ProductCard } from "@/components/product-card";
 import { Badge, Button, QuantitySelector, Rating } from "@/components/ui-kit";
 import { StructuredData } from "@/components/seo";
 import { formatPrice, getProduct, products } from "@/lib/products";
+import { fetchProductBySlug } from "@/lib/db";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/shop/$slug")({
-  loader: ({ params }) => {
-    const product = getProduct(params.slug);
+  loader: async ({ params }) => {
+    let product = getProduct(params.slug);
+    if (!product) {
+      try {
+        const dbProduct = await fetchProductBySlug(params.slug);
+        if (dbProduct) product = dbProduct;
+      } catch (e) {
+        // fallback
+      }
+    }
     if (!product) throw notFound();
     return { product };
   },

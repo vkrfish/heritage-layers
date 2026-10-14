@@ -98,7 +98,7 @@ export const seedProducts: AdminProduct[] = products.map((p, i) => ({
   ...p,
   status: i === 4 ? "Draft" : "Active",
   stock: [48, 120, 36, 64, 18][i] ?? 40,
-  category: p.slug.includes("gift") ? "Gifting" : "Putharekulu",
+  category: p.slug.includes("gift") ? "Gift Boxes" : "Sweets",
 }));
 
 export const seedOrders: Order[] = [

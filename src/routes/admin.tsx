@@ -11,23 +11,34 @@ export const Route = createFileRoute("/admin")({
 });
 
 function AdminLayout() {
-  const { isAuthenticated, logout } = useAdminStore();
+  const { isAuthenticated, isLoading, logout } = useAdminStore();
   const navigate = useNavigate();
   const location = useLocation();
 
   React.useEffect(() => {
-    if (!isAuthenticated && location.pathname !== "/admin/login") {
+    if (!isLoading && !isAuthenticated && location.pathname !== "/admin/login") {
       navigate({ to: "/admin/login" });
     }
-  }, [isAuthenticated, location.pathname, navigate]);
-
-  if (!isAuthenticated && location.pathname !== "/admin/login") {
-    return null;
-  }
+  }, [isAuthenticated, isLoading, location.pathname, navigate]);
 
   // If on login route, render login child
   if (location.pathname === "/admin/login") {
     return <Outlet />;
+  }
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-cream flex items-center justify-center font-sans">
+        <div className="text-center space-y-3">
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-brown border-t-transparent mx-auto" />
+          <p className="text-xs font-bold text-brown/70">Connecting to 9 Stories &amp; Co. Database...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return null;
   }
 
   const navItems = [

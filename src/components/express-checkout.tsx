@@ -1,9 +1,10 @@
 import * as Dialog from "@radix-ui/react-dialog";
-import { X, ShieldCheck, Smartphone, CheckCircle, ArrowRight, CreditCard, Sparkles } from "lucide-react";
+import { X, ShieldCheck, Smartphone, CheckCircle, ArrowRight, CreditCard, Sparkles, Loader2 } from "lucide-react";
 import * as React from "react";
 
 import { Button } from "@/components/ui-kit";
 import { formatPrice } from "@/lib/products";
+import { placeOrder } from "@/lib/db";
 
 type ExpressCheckoutProps = {
   open: boolean;
@@ -27,6 +28,8 @@ export function ExpressCheckoutModal({
   const [otp, setOtp] = React.useState("");
   const [paymentMethod, setPaymentMethod] = React.useState<"upi" | "card" | "cod">("upi");
   const [upiId, setUpiId] = React.useState("");
+  const [confirmedOrderId, setConfirmedOrderId] = React.useState("");
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   const totalAmount = price * qty;
 
@@ -42,8 +45,34 @@ export function ExpressCheckoutModal({
     setStep("payment");
   };
 
-  const handleCompleteOrder = (e: React.FormEvent) => {
+  const handleCompleteOrder = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
+
+    const slug = productName.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+    const result = await placeOrder({
+      customerName: "Express Customer",
+      customerPhone: phone,
+      address: "Express Checkout Delivery",
+      city: "Express",
+      items: [
+        {
+          slug,
+          name: productName,
+          variant: variantLabel,
+          price,
+          qty,
+        },
+      ],
+      subtotal: totalAmount,
+      shipping: 0,
+      total: totalAmount,
+      paymentMethod: paymentMethod === "upi" ? "UPI" : paymentMethod === "card" ? "Card" : "COD",
+      status: "Pending",
+    });
+
+    setIsSubmitting(false);
+    setConfirmedOrderId(result.orderId || `ORD-9S-${Math.floor(10000 + Math.random() * 90000)}`);
     setStep("success");
   };
 
@@ -51,6 +80,7 @@ export function ExpressCheckoutModal({
     setStep("mobile");
     setPhone("");
     setOtp("");
+    setConfirmedOrderId("");
     onOpenChange(false);
   };
 
@@ -208,8 +238,19 @@ export function ExpressCheckoutModal({
                 </div>
               )}
 
-              <Button type="submit" variant="primary" className="w-full justify-center gap-2 bg-brown text-white hover:bg-terracotta">
-                Pay {formatPrice(totalAmount)} &amp; Complete Order
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                variant="primary"
+                className="w-full justify-center gap-2 bg-brown text-white hover:bg-terracotta disabled:opacity-60 cursor-pointer"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin mr-1 inline" /> Completing Order...
+                  </>
+                ) : (
+                  <>Pay {formatPrice(totalAmount)} &amp; Complete Order</>
+                )}
               </Button>
             </form>
           )}
@@ -221,7 +262,7 @@ export function ExpressCheckoutModal({
               </div>
               <h3 className="font-display text-3xl text-brown">Order Confirmed!</h3>
               <p className="font-sans text-sm font-bold text-brown/70 max-w-xs mx-auto">
-                Thank you for ordering with 9 Stories &amp; Co. We have dispatched your fresh heritage treats! Order ID: #9S-{Math.floor(100000 + Math.random() * 900000)}
+                Thank you for ordering with 9 Stories &amp; Co. We have dispatched your fresh heritage treats! Order ID: #{confirmedOrderId || "9S-SUCCESS"}
               </p>
               <Button onClick={handleReset} variant="primary" className="w-full justify-center bg-brown text-white hover:bg-terracotta">
                 Back to Shopping

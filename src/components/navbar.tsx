@@ -52,7 +52,7 @@ export function Navbar() {
   const { count, setOpen } = useCart();
   const { products: dynamicProducts } = useAdminStore();
 
-  const productList = dynamicProducts || products;
+  const productList = dynamicProducts && dynamicProducts.length > 0 ? dynamicProducts : products;
 
   React.useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);

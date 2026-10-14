@@ -80,7 +80,12 @@ const heroPosters = [
   },
 ];
 
+import { useAdminStore } from "@/lib/admin-store.tsx";
+
 export function Home() {
+  const { products: dynamicProducts } = useAdminStore();
+  const allProducts = dynamicProducts && dynamicProducts.length > 0 ? dynamicProducts : products;
+
   const [activeTab, setActiveTab] = React.useState<"bestsellers" | "new" | "gifting" | "offers">("bestsellers");
   const [currentSlide, setCurrentSlide] = React.useState(0);
 
@@ -97,17 +102,17 @@ export function Home() {
   const showcaseProducts = React.useMemo(() => {
     switch (activeTab) {
       case "bestsellers":
-        return products.filter((p) => p.isBestSeller).slice(0, 4);
+        return allProducts.filter((p) => p.isBestSeller).slice(0, 4);
       case "new":
-        return products.filter((p) => p.isNewArrival || p.badge === "Must Try" || p.isBestSeller).slice(0, 4);
+        return allProducts.filter((p) => p.isNewArrival || p.badge === "Must Try" || p.isBestSeller).slice(0, 4);
       case "gifting":
-        return products.filter((p) => p.isGiftingFavorite || p.category === "Gift Boxes").slice(0, 4);
+        return allProducts.filter((p) => p.isGiftingFavorite || p.category === "Gift Boxes").slice(0, 4);
       case "offers":
-        return products.filter((p) => p.isSpecialOffer || p.isUnder99).concat(products.slice(0, 2)).slice(0, 4);
+        return allProducts.filter((p) => p.isSpecialOffer || p.isUnder99).concat(allProducts.slice(0, 2)).slice(0, 4);
       default:
-        return products.slice(0, 4);
+        return allProducts.slice(0, 4);
     }
-  }, [activeTab]);
+  }, [activeTab, allProducts]);
 
   return (
     <div className="pb-16 lg:pb-0">

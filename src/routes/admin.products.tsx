@@ -1,10 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Plus, Edit2, Trash2, Search, X, Check } from "lucide-react";
+import { Plus, Edit2, Trash2, Search, X, Check, Upload, Loader2, Image as ImageIcon } from "lucide-react";
 import * as React from "react";
 
 import { useAdminStore } from "@/lib/admin-store.tsx";
 import { formatPrice, type Product, type ProductCategory, type WeightVariant } from "@/lib/products";
 import { Button } from "@/components/ui-kit";
+import { uploadProductImage } from "@/lib/db";
 
 export const Route = createFileRoute("/admin/products")({
   component: AdminProducts,
@@ -16,6 +17,9 @@ function AdminProducts() {
   const [selectedCategory, setSelectedCategory] = React.useState("All");
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [editingProduct, setEditingProduct] = React.useState<Product | null>(null);
+  const [isSaving, setIsSaving] = React.useState(false);
+  const [isUploadingImage, setIsUploadingImage] = React.useState(false);
+  const [imageUploadError, setImageUploadError] = React.useState<string | null>(null);
 
   // Form State
   const [formName, setFormName] = React.useState("");
@@ -23,6 +27,7 @@ function AdminProducts() {
   const [formTagline, setFormTagline] = React.useState("");
   const [formCategory, setFormCategory] = React.useState<ProductCategory>("Sweets");
   const [formDescription, setFormDescription] = React.useState("");
+  const [formImage, setFormImage] = React.useState("");
   const [formBadge, setFormBadge] = React.useState("");
   const [formIngredients, setFormIngredients] = React.useState("");
   const [formAllergens, setFormAllergens] = React.useState("");
@@ -46,6 +51,7 @@ function AdminProducts() {
     setFormTagline("");
     setFormCategory("Sweets");
     setFormDescription("");
+    setFormImage("");
     setFormBadge("");
     setFormIngredients("Rice starch sheets, organic sugar, pure cow ghee.");
     setFormAllergens("Contains dairy.");
@@ -53,6 +59,7 @@ function AdminProducts() {
     setFormShelfLife("15 days from preparation date.");
     setFormDietaryTags("Vegetarian, Traditional");
     setFormWeights([{ label: "250g (6 pcs)", weightGrams: 250, price: 349, msrp: 399 }]);
+    setImageUploadError(null);
     setIsModalOpen(true);
   };
 
@@ -63,6 +70,7 @@ function AdminProducts() {
     setFormTagline(p.tagline);
     setFormCategory(p.category);
     setFormDescription(p.description);
+    setFormImage(p.image || "");
     setFormBadge(p.badge || "");
     setFormIngredients(p.ingredients);
     setFormAllergens(p.allergens);
@@ -70,10 +78,29 @@ function AdminProducts() {
     setFormShelfLife(p.shelfLife);
     setFormDietaryTags((p.dietaryTags || []).join(", "));
     setFormWeights(p.weights || [{ label: "250g", weightGrams: 250, price: 349 }]);
+    setImageUploadError(null);
     setIsModalOpen(true);
   };
 
-  const handleSaveProduct = (e: React.FormEvent) => {
+  const handleImageFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const slug = formSlug || formName.toLowerCase().replace(/[^a-z0-9]+/g, "-") || "product";
+    setIsUploadingImage(true);
+    setImageUploadError(null);
+
+    const res = await uploadProductImage(file, slug);
+    setIsUploadingImage(false);
+
+    if (res.error) {
+      setImageUploadError(res.error);
+    } else if (res.url) {
+      setFormImage(res.url);
+    }
+  };
+
+  const handleSaveProduct = async (e: React.FormEvent) => {
     e.preventDefault();
     const slug = formSlug || formName.toLowerCase().replace(/[^a-z0-9]+/g, "-");
 
@@ -83,7 +110,7 @@ function AdminProducts() {
       tagline: formTagline,
       category: formCategory,
       description: formDescription,
-      image: editingProduct?.image || products[0]?.image || "",
+      image: formImage || editingProduct?.image || products[0]?.image || "",
       badge: formBadge || undefined,
       rating: editingProduct?.rating || 4.9,
       reviewsCount: editingProduct?.reviewsCount || 100,
@@ -98,13 +125,19 @@ function AdminProducts() {
       customerReviews: editingProduct?.customerReviews || [],
     };
 
-    if (editingProduct) {
-      updateProduct(productData);
-    } else {
-      addProduct(productData);
+    setIsSaving(true);
+    try {
+      if (editingProduct) {
+        await updateProduct(productData);
+      } else {
+        await addProduct(productData);
+      }
+      setIsModalOpen(false);
+    } catch (err: any) {
+      console.error("Save product error:", err);
+    } finally {
+      setIsSaving(false);
     }
-
-    setIsModalOpen(false);
   };
 
   const handleAddWeightRow = () => {
@@ -304,6 +337,56 @@ function AdminProducts() {
                 />
               </div>
 
+              {/* Product Image Upload / URL */}
+              <div className="border-t border-brown/15 pt-3">
+                <label className="block font-bold text-brown mb-1">Product Image (Supabase Storage)</label>
+                <div className="flex flex-col sm:flex-row items-center gap-3">
+                  {formImage ? (
+                    <img
+                      src={formImage}
+                      alt="Preview"
+                      className="h-16 w-16 rounded-lg object-cover border border-brown/30 bg-cream shrink-0"
+                    />
+                  ) : (
+                    <div className="h-16 w-16 rounded-lg border border-dashed border-brown/40 bg-cream flex items-center justify-center text-brown/40 shrink-0">
+                      <ImageIcon className="h-6 w-6" />
+                    </div>
+                  )}
+                  <div className="w-full space-y-1.5">
+                    <label className="flex items-center justify-center gap-2 rounded-lg border border-brown/30 bg-cream-light py-2 px-3 text-xs font-bold text-brown hover:bg-brown/10 cursor-pointer transition-colors">
+                      {isUploadingImage ? (
+                        <>
+                          <Loader2 className="h-4 w-4 animate-spin text-terracotta" />
+                          <span>Uploading to Supabase Storage...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Upload className="h-4 w-4 text-terracotta" />
+                          <span>Upload Image from Device</span>
+                        </>
+                      )}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        disabled={isUploadingImage}
+                        onChange={handleImageFileChange}
+                        className="hidden"
+                      />
+                    </label>
+                    <input
+                      type="url"
+                      value={formImage}
+                      onChange={(e) => setFormImage(e.target.value)}
+                      placeholder="Or paste external image URL..."
+                      className="w-full rounded-lg border border-brown/30 bg-cream-light p-2 text-[11px] text-brown placeholder:text-brown/50 focus:border-terracotta focus:outline-none"
+                    />
+                    {imageUploadError && (
+                      <p className="text-[10px] text-terracotta font-bold">{imageUploadError}</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+
               <div>
                 <label className="block font-bold text-brown mb-1">Description</label>
                 <textarea
@@ -399,8 +482,21 @@ function AdminProducts() {
                 <Button type="button" variant="secondary" onClick={() => setIsModalOpen(false)}>
                   Cancel
                 </Button>
-                <Button type="submit" variant="primary" className="gap-1 bg-brown text-white hover:bg-terracotta">
-                  <Check className="h-4 w-4" /> Save Product
+                <Button
+                  type="submit"
+                  disabled={isSaving || isUploadingImage}
+                  variant="primary"
+                  className="gap-1 bg-brown text-white hover:bg-terracotta disabled:opacity-60 cursor-pointer"
+                >
+                  {isSaving ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" /> Saving to Database...
+                    </>
+                  ) : (
+                    <>
+                      <Check className="h-4 w-4" /> Save Product
+                    </>
+                  )}
                 </Button>
               </div>
             </form>

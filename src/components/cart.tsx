@@ -22,6 +22,7 @@ type CartContextValue = {
   add: (line: Omit<CartLine, "id">) => void;
   remove: (id: string) => void;
   setQty: (id: string, qty: number) => void;
+  clear: () => void;
   count: number;
   subtotal: number;
   open: boolean;
@@ -71,12 +72,14 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setExpressOpen(true);
   }, []);
 
+  const clear = React.useCallback(() => setLines([]), []);
+
   const subtotal = lines.reduce((sum, l) => sum + l.price * l.qty, 0);
   const count = lines.reduce((sum, l) => sum + l.qty, 0);
 
   const value = React.useMemo(
-    () => ({ lines, add, remove, setQty, count, subtotal, open, setOpen, openExpress }),
-    [lines, add, remove, setQty, count, subtotal, open, openExpress],
+    () => ({ lines, add, remove, setQty, clear, count, subtotal, open, setOpen, openExpress }),
+    [lines, add, remove, setQty, clear, count, subtotal, open, openExpress],
   );
 
   return (

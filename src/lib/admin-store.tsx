@@ -1,5 +1,32 @@
+/**
+ * admin-store.tsx — Real-time Supabase-backed admin state
+ * Replaces the previous localStorage mock store.
+ */
+
 import * as React from "react";
-import { products as initialProducts, type Product } from "@/lib/products";
+import { supabase } from "@/lib/supabase";
+import {
+  adminFetchProducts,
+  adminFetchOrders,
+  adminFetchPromoCodes,
+  adminFetchAnnouncements,
+  adminAddProduct,
+  adminUpdateProduct as dbUpdateProduct,
+  adminDeleteProduct,
+  adminUpdateOrderStatus,
+  adminAddPromoCode,
+  adminTogglePromoCode,
+  adminSetAnnouncements,
+  signInAdmin,
+  signOutAdmin,
+  getAdminSession,
+  placeOrder,
+} from "@/lib/db";
+import type { Product } from "@/lib/products";
+
+// ─────────────────────────────────────────────────────────
+// TYPES (kept compatible with existing admin route imports)
+// ─────────────────────────────────────────────────────────
 
 export type OrderStatus = "Pending" | "Processing" | "Shipped" | "Delivered" | "Cancelled";
 
@@ -7,7 +34,7 @@ export type AdminOrder = {
   id: string;
   customerName: string;
   customerPhone: string;
-  customerEmail?: string;
+  customerEmail?: string | undefined;
   address: string;
   city: string;
   items: {
@@ -34,63 +61,9 @@ export type PromoCode = {
   isActive: boolean;
 };
 
-const STORAGE_KEYS = {
-  PRODUCTS: "9s_admin_products_v1",
-  ORDERS: "9s_admin_orders_v1",
-  DISCOUNTS: "9s_admin_discounts_v1",
-  ANNOUNCEMENTS: "9s_admin_announcements_v1",
-  AUTH: "9s_admin_auth_v1",
-};
-
-const defaultAnnouncements = [
-  "✨ Special Festive Offer: Get 10% OFF on Gift Boxes with code FESTIVE10",
-  "🚚 FREE Shipping on all Orders Above ₹999 across India!",
-  "✈️ International Diaspora Express Shipping to USA, UK, UAE & Australia",
-  "🌿 100% Pure Organic Ingredients & Fresh Artisanal A2 Ghee Sweets",
-];
-
-const defaultDiscounts: PromoCode[] = [
-  { id: "d1", code: "FESTIVE10", discountType: "percentage", discountValue: 10, minSubtotal: 499, isActive: true },
-  { id: "d2", code: "FREESHIP", discountType: "flat", discountValue: 79, minSubtotal: 999, isActive: true },
-];
-
-const defaultOrders: AdminOrder[] = [
-  {
-    id: "ORD-9S-89101",
-    customerName: "Lakshmi Rao",
-    customerPhone: "9876543210",
-    customerEmail: "lakshmi@example.com",
-    address: "B-402, Jubilee Hills",
-    city: "Hyderabad",
-    items: [
-      { slug: "classic-putharekulu", name: "Classic Putharekulu", variant: "500g (12 pcs)", price: 649, qty: 2 },
-      { slug: "artisan-gunpowder-podi", name: "Artisan Gunpowder Podi", variant: "250g jar", price: 249, qty: 1 },
-    ],
-    subtotal: 1547,
-    shipping: 0,
-    total: 1547,
-    paymentMethod: "UPI",
-    status: "Processing",
-    createdAt: "2026-09-07T10:30:00Z",
-  },
-  {
-    id: "ORD-9S-89102",
-    customerName: "Siddharth Verma",
-    customerPhone: "9812345678",
-    customerEmail: "siddharth@example.com",
-    address: "12th Main Road, Indiranagar",
-    city: "Bengaluru",
-    items: [
-      { slug: "premium-gift-box", name: "Royal Heritage Gift Box", variant: "1kg (24 pcs)", price: 1999, qty: 1 },
-    ],
-    subtotal: 1999,
-    shipping: 0,
-    total: 1999,
-    paymentMethod: "Card",
-    status: "Shipped",
-    createdAt: "2026-09-06T15:20:00Z",
-  },
-];
+// ─────────────────────────────────────────────────────────
+// CONTEXT TYPE
+// ─────────────────────────────────────────────────────────
 
 type AdminStoreContextType = {
   products: Product[];
@@ -98,163 +71,217 @@ type AdminStoreContextType = {
   discounts: PromoCode[];
   announcements: string[];
   isAuthenticated: boolean;
-  login: (passcode: string) => boolean;
-  logout: () => void;
-  addProduct: (product: Product) => void;
-  updateProduct: (product: Product) => void;
-  deleteProduct: (slug: string) => void;
-  updateOrderStatus: (orderId: string, status: OrderStatus) => void;
-  addOrder: (order: Omit<AdminOrder, "id" | "createdAt">) => AdminOrder;
-  addDiscount: (discount: Omit<PromoCode, "id">) => void;
-  toggleDiscount: (id: string) => void;
-  setAnnouncements: (list: string[]) => void;
+  isLoading: boolean;
+  loginError: string | null;
+  login: (email: string, password: string) => Promise<boolean>;
+  logout: () => Promise<void>;
+  refreshProducts: () => Promise<void>;
+  refreshOrders: () => Promise<void>;
+  addProduct: (product: Omit<Product, "customerReviews">) => Promise<void>;
+  updateProduct: (product: Omit<Product, "customerReviews">) => Promise<void>;
+  deleteProduct: (slug: string) => Promise<void>;
+  updateOrderStatus: (orderId: string, status: OrderStatus) => Promise<void>;
+  addOrder: (order: Omit<AdminOrder, "id" | "createdAt">) => Promise<AdminOrder>;
+  addDiscount: (discount: Omit<PromoCode, "id">) => Promise<void>;
+  toggleDiscount: (id: string) => Promise<void>;
+  setAnnouncements: (list: string[]) => Promise<void>;
 };
+
+// ─────────────────────────────────────────────────────────
+// CONTEXT
+// ─────────────────────────────────────────────────────────
 
 const AdminStoreContext = React.createContext<AdminStoreContextType | null>(null);
 
+// ─────────────────────────────────────────────────────────
+// PROVIDER
+// ─────────────────────────────────────────────────────────
+
 export function AdminStoreProvider({ children }: { children: React.ReactNode }) {
-  const [productsState, setProductsState] = React.useState<Product[]>(() => {
-    if (typeof window === "undefined") return initialProducts;
-    try {
-      const saved = localStorage.getItem(STORAGE_KEYS.PRODUCTS);
-      return saved ? JSON.parse(saved) : initialProducts;
-    } catch {
-      return initialProducts;
-    }
-  });
+  const [isAuthenticated, setIsAuthenticated] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [loginError, setLoginError] = React.useState<string | null>(null);
 
-  const [ordersState, setOrdersState] = React.useState<AdminOrder[]>(() => {
-    if (typeof window === "undefined") return defaultOrders;
-    try {
-      const saved = localStorage.getItem(STORAGE_KEYS.ORDERS);
-      return saved ? JSON.parse(saved) : defaultOrders;
-    } catch {
-      return defaultOrders;
-    }
-  });
+  const [products, setProducts] = React.useState<Product[]>([]);
+  const [orders, setOrders] = React.useState<AdminOrder[]>([]);
+  const [discounts, setDiscounts] = React.useState<PromoCode[]>([]);
+  const [announcements, setAnnouncementsState] = React.useState<string[]>([]);
 
-  const [discountsState, setDiscountsState] = React.useState<PromoCode[]>(() => {
-    if (typeof window === "undefined") return defaultDiscounts;
-    try {
-      const saved = localStorage.getItem(STORAGE_KEYS.DISCOUNTS);
-      return saved ? JSON.parse(saved) : defaultDiscounts;
-    } catch {
-      return defaultDiscounts;
-    }
-  });
+  // ── Auth state listener ──────────────────────────────
+  React.useEffect(() => {
+    // Check existing session on mount
+    getAdminSession().then((session) => {
+      setIsAuthenticated(!!session);
+      setIsLoading(false);
+    });
 
-  const [announcementsState, setAnnouncementsState] = React.useState<string[]>(() => {
-    if (typeof window === "undefined") return defaultAnnouncements;
-    try {
-      const saved = localStorage.getItem(STORAGE_KEYS.ANNOUNCEMENTS);
-      return saved ? JSON.parse(saved) : defaultAnnouncements;
-    } catch {
-      return defaultAnnouncements;
-    }
-  });
+    // Listen for auth changes
+    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsAuthenticated(!!session);
+    });
 
-  const [isAuthenticated, setIsAuthenticated] = React.useState<boolean>(() => {
-    if (typeof window === "undefined") return false;
-    try {
-      return localStorage.getItem(STORAGE_KEYS.AUTH) === "true";
-    } catch {
+    return () => authListener.subscription.unsubscribe();
+  }, []);
+
+  // ── Load data when authenticated ────────────────────
+  React.useEffect(() => {
+    if (!isAuthenticated) return;
+
+    void Promise.all([
+      adminFetchProducts().then(setProducts),
+      adminFetchOrders().then(setOrders),
+      adminFetchPromoCodes().then(setDiscounts),
+      adminFetchAnnouncements().then((rows) =>
+        setAnnouncementsState(rows.map((r) => r.text))
+      ),
+    ]);
+  }, [isAuthenticated]);
+
+  // ── Auth ─────────────────────────────────────────────
+  const login = React.useCallback(async (email: string, password: string): Promise<boolean> => {
+    setLoginError(null);
+    const result = await signInAdmin(email, password);
+    if (!result.success) {
+      setLoginError(result.error ?? "Login failed");
       return false;
     }
-  });
+    return true;
+  }, []);
 
-  React.useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEYS.PRODUCTS, JSON.stringify(productsState));
-    } catch {}
-  }, [productsState]);
+  const logout = React.useCallback(async () => {
+    await signOutAdmin();
+    setProducts([]);
+    setOrders([]);
+    setDiscounts([]);
+    setAnnouncementsState([]);
+  }, []);
 
-  React.useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEYS.ORDERS, JSON.stringify(ordersState));
-    } catch {}
-  }, [ordersState]);
+  // ── Data refresh ──────────────────────────────────────
+  const refreshProducts = React.useCallback(async () => {
+    const data = await adminFetchProducts();
+    setProducts(data);
+  }, []);
 
-  React.useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEYS.DISCOUNTS, JSON.stringify(discountsState));
-    } catch {}
-  }, [discountsState]);
+  const refreshOrders = React.useCallback(async () => {
+    const data = await adminFetchOrders();
+    setOrders(data);
+  }, []);
 
-  React.useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEYS.ANNOUNCEMENTS, JSON.stringify(announcementsState));
-    } catch {}
-  }, [announcementsState]);
+  // ── Product CRUD ──────────────────────────────────────
+  const addProduct = React.useCallback(async (p: Omit<Product, "customerReviews">) => {
+    await adminAddProduct({
+      slug: p.slug,
+      name: p.name,
+      tagline: p.tagline,
+      category: p.category,
+      description: p.description,
+      image_url: p.image,
+      badge: p.badge ?? null,
+      rating: p.rating,
+      reviews_count: p.reviewsCount,
+      is_best_seller: p.isBestSeller ?? false,
+      is_new_arrival: p.isNewArrival ?? false,
+      is_gifting_favorite: p.isGiftingFavorite ?? false,
+      is_special_offer: p.isSpecialOffer ?? false,
+      is_under_99: p.isUnder99 ?? false,
+      dietary_tags: p.dietaryTags,
+      flavor_profile: p.flavorProfile,
+      ingredients: p.ingredients,
+      allergens: p.allergens,
+      storage: p.storage,
+      shelf_life: p.shelfLife,
+      rating_histogram: p.ratingHistogram,
+      weights: p.weights,
+      frequently_bought_with_slugs: p.frequentlyBoughtWithSlugs ?? [],
+      status: "Active",
+      stock: 0,
+    });
+    await refreshProducts();
+  }, [refreshProducts]);
 
-  const login = (passcode: string) => {
-    if (passcode === "admin123" || passcode === "admin") {
-      setIsAuthenticated(true);
-      try {
-        localStorage.setItem(STORAGE_KEYS.AUTH, "true");
-      } catch {}
-      return true;
-    }
-    return false;
-  };
+  const updateProduct = React.useCallback(async (p: Omit<Product, "customerReviews">) => {
+    await dbUpdateProduct(p.slug, {
+      name: p.name,
+      tagline: p.tagline,
+      category: p.category,
+      description: p.description,
+      image_url: p.image,
+      badge: p.badge ?? null,
+      rating: p.rating,
+      reviews_count: p.reviewsCount,
+      is_best_seller: p.isBestSeller ?? false,
+      is_new_arrival: p.isNewArrival ?? false,
+      is_gifting_favorite: p.isGiftingFavorite ?? false,
+      is_special_offer: p.isSpecialOffer ?? false,
+      is_under_99: p.isUnder99 ?? false,
+      dietary_tags: p.dietaryTags,
+      flavor_profile: p.flavorProfile,
+      ingredients: p.ingredients,
+      allergens: p.allergens,
+      storage: p.storage,
+      shelf_life: p.shelfLife,
+      weights: p.weights,
+      frequently_bought_with_slugs: p.frequentlyBoughtWithSlugs ?? [],
+    });
+    await refreshProducts();
+  }, [refreshProducts]);
 
-  const logout = () => {
-    setIsAuthenticated(false);
-    try {
-      localStorage.removeItem(STORAGE_KEYS.AUTH);
-    } catch {}
-  };
+  const deleteProduct = React.useCallback(async (slug: string) => {
+    await adminDeleteProduct(slug);
+    await refreshProducts();
+  }, [refreshProducts]);
 
-  const addProduct = (p: Product) => {
-    setProductsState((prev) => [p, ...prev]);
-  };
+  // ── Order management ──────────────────────────────────
+  const updateOrderStatus = React.useCallback(async (orderId: string, status: OrderStatus) => {
+    await adminUpdateOrderStatus(orderId, status);
+    setOrders((prev) => prev.map((o) => (o.id === orderId ? { ...o, status } : o)));
+  }, []);
 
-  const updateProduct = (p: Product) => {
-    setProductsState((prev) => prev.map((item) => (item.slug === p.slug ? p : item)));
-  };
-
-  const deleteProduct = (slug: string) => {
-    setProductsState((prev) => prev.filter((item) => item.slug !== slug));
-  };
-
-  const updateOrderStatus = (orderId: string, status: OrderStatus) => {
-    setOrdersState((prev) =>
-      prev.map((o) => (o.id === orderId ? { ...o, status } : o))
-    );
-  };
-
-  const addOrder = (orderData: Omit<AdminOrder, "id" | "createdAt">): AdminOrder => {
+  const addOrder = React.useCallback(async (orderData: Omit<AdminOrder, "id" | "createdAt">): Promise<AdminOrder> => {
+    const result = await placeOrder(orderData);
     const newOrder: AdminOrder = {
       ...orderData,
-      id: `ORD-9S-${Math.floor(10000 + Math.random() * 90000)}`,
+      id: result.orderId ?? `ORD-9S-${Math.floor(10000 + Math.random() * 90000)}`,
       createdAt: new Date().toISOString(),
     };
-    setOrdersState((prev) => [newOrder, ...prev]);
+    setOrders((prev) => [newOrder, ...prev]);
     return newOrder;
-  };
+  }, []);
 
-  const addDiscount = (d: Omit<PromoCode, "id">) => {
-    const newDiscount: PromoCode = {
-      ...d,
-      id: `d_${Date.now()}`,
-    };
-    setDiscountsState((prev) => [newDiscount, ...prev]);
-  };
+  // ── Discounts ─────────────────────────────────────────
+  const addDiscount = React.useCallback(async (d: Omit<PromoCode, "id">) => {
+    await adminAddPromoCode(d);
+    const updated = await adminFetchPromoCodes();
+    setDiscounts(updated);
+  }, []);
 
-  const toggleDiscount = (id: string) => {
-    setDiscountsState((prev) =>
-      prev.map((d) => (d.id === id ? { ...d, isActive: !d.isActive } : d))
-    );
-  };
+  const toggleDiscount = React.useCallback(async (id: string) => {
+    const promo = discounts.find((d) => d.id === id);
+    if (!promo) return;
+    await adminTogglePromoCode(id, !promo.isActive);
+    setDiscounts((prev) => prev.map((d) => (d.id === id ? { ...d, isActive: !d.isActive } : d)));
+  }, [discounts]);
 
+  // ── Announcements ─────────────────────────────────────
+  const setAnnouncements = React.useCallback(async (list: string[]) => {
+    await adminSetAnnouncements(list);
+    setAnnouncementsState(list);
+  }, []);
+
+  // ── Context value ─────────────────────────────────────
   const value = React.useMemo(
     () => ({
-      products: productsState,
-      orders: ordersState,
-      discounts: discountsState,
-      announcements: announcementsState,
+      products,
+      orders,
+      discounts,
+      announcements,
       isAuthenticated,
+      isLoading,
+      loginError,
       login,
       logout,
+      refreshProducts,
+      refreshOrders,
       addProduct,
       updateProduct,
       deleteProduct,
@@ -262,13 +289,23 @@ export function AdminStoreProvider({ children }: { children: React.ReactNode }) 
       addOrder,
       addDiscount,
       toggleDiscount,
-      setAnnouncements: setAnnouncementsState,
+      setAnnouncements,
     }),
-    [productsState, ordersState, discountsState, announcementsState, isAuthenticated]
+    [
+      products, orders, discounts, announcements,
+      isAuthenticated, isLoading, loginError,
+      login, logout, refreshProducts, refreshOrders,
+      addProduct, updateProduct, deleteProduct,
+      updateOrderStatus, addOrder, addDiscount, toggleDiscount, setAnnouncements,
+    ]
   );
 
   return <AdminStoreContext.Provider value={value}>{children}</AdminStoreContext.Provider>;
 }
+
+// ─────────────────────────────────────────────────────────
+// HOOK
+// ─────────────────────────────────────────────────────────
 
 export function useAdminStore() {
   const ctx = React.useContext(AdminStoreContext);

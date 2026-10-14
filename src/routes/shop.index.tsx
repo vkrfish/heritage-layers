@@ -47,7 +47,7 @@ const dietaryList = ["Pure A2 Ghee", "Jaggery Based", "Refined Sugar Free", "Veg
 function Shop() {
   const searchParams = useSearch({ from: "/shop/" });
   const { products: dynamicProducts } = useAdminStore();
-  const catalogProducts = dynamicProducts || initialProducts;
+  const catalogProducts = dynamicProducts && dynamicProducts.length > 0 ? dynamicProducts : initialProducts;
 
   const [selectedCategory, setSelectedCategory] = React.useState<string>(searchParams.category || "All");
   const [selectedTag, setSelectedTag] = React.useState<string>(searchParams.tag || "All");
