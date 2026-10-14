@@ -3,14 +3,16 @@ import { Heart, ShoppingBag } from "lucide-react";
 import * as React from "react";
 
 import { useCart } from "@/components/cart";
+import { useCustomerAuth } from "@/lib/customer-auth";
 import { Badge, Button, Rating } from "@/components/ui-kit";
 import { formatPrice, type Product } from "@/lib/products";
 import { cn } from "@/lib/utils";
 
 export function ProductCard({ product }: { product: Product }) {
   const { add } = useCart();
+  const { isInWishlist, toggleWishlist } = useCustomerAuth();
   const [weightIndex, setWeightIndex] = React.useState(0);
-  const [wished, setWished] = React.useState(false);
+  const wished = isInWishlist(product.slug);
   const weight = product.weights[weightIndex] ?? product.weights[0]!;
 
   const reviews = product.reviewsCount ?? (product as any).reviews ?? 100;
@@ -44,7 +46,7 @@ export function ProductCard({ product }: { product: Product }) {
           type="button"
           aria-pressed={wished}
           aria-label={wished ? `Remove ${product.name} from wishlist` : `Add ${product.name} to wishlist`}
-          onClick={() => setWished((v) => !v)}
+          onClick={() => toggleWishlist(product.slug)}
           className="absolute top-2 right-2 grid h-8 w-8 sm:h-9 sm:w-9 place-items-center rounded-full bg-cream/90 text-brown transition-colors duration-200 hover:text-terracotta shadow-flat cursor-pointer"
         >
           <Heart className={cn("h-4 w-4 stroke-[2]", wished && "fill-terracotta text-terracotta")} />

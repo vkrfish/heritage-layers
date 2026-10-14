@@ -126,7 +126,7 @@ function BlogPost() {
 
           {/* Tags */}
           <div className="mt-8 flex flex-wrap gap-2 font-sans">
-            {post.tags.map((tag) => (
+            {post.tags.map((tag: string) => (
               <span
                 key={tag}
                 className="rounded-full border border-brown/20 bg-cream-light px-3.5 py-1 text-xs font-bold text-brown"

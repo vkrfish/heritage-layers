@@ -1,9 +1,10 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { Search, User, Heart, ShoppingBag, Menu, X, Sparkles, Home, Package } from "lucide-react";
 import * as React from "react";
 
 import { useCart } from "@/components/cart";
 import { useAdminStore } from "@/lib/admin-store.tsx";
+import { useCustomerAuth } from "@/lib/customer-auth.tsx";
 import { IconButton } from "@/components/ui-kit";
 import { formatPrice, products } from "@/lib/products";
 import { cn } from "@/lib/utils";
@@ -51,6 +52,16 @@ export function Navbar() {
   const [searchQuery, setSearchQuery] = React.useState("");
   const { count, setOpen } = useCart();
   const { products: dynamicProducts } = useAdminStore();
+  const { user, wishlist, setIsWishlistOpen, openAuthModal } = useCustomerAuth();
+  const navigate = useNavigate();
+
+  const handleAccountClick = () => {
+    if (user) {
+      navigate({ to: "/account" });
+    } else {
+      openAuthModal({ mode: "signin" });
+    }
+  };
 
   const productList = dynamicProducts && dynamicProducts.length > 0 ? dynamicProducts : products;
 
@@ -101,15 +112,30 @@ export function Navbar() {
             {/* Right: Icons */}
             <div className="flex items-center gap-1">
               <button
+                aria-label="Wishlist"
+                onClick={() => setIsWishlistOpen(true)}
+                className="relative grid h-9 w-9 place-items-center text-brown hover:text-terracotta cursor-pointer"
+              >
+                <Heart className="h-5 w-5" />
+                {wishlist.length > 0 && (
+                  <span className="absolute top-0 right-0 grid h-4 min-w-4 place-items-center rounded-full bg-gold px-1 font-sans text-[10px] font-bold text-brown">
+                    {wishlist.length}
+                  </span>
+                )}
+              </button>
+
+              <button
                 aria-label="Account"
-                className="grid h-9 w-9 place-items-center text-brown hover:text-terracotta"
+                onClick={handleAccountClick}
+                className="grid h-9 w-9 place-items-center text-brown hover:text-terracotta cursor-pointer"
               >
                 <User className="h-5 w-5" />
               </button>
+
               <button
                 aria-label="Cart"
                 onClick={() => setOpen(true)}
-                className="relative grid h-9 w-9 place-items-center text-brown hover:text-terracotta"
+                className="relative grid h-9 w-9 place-items-center text-brown hover:text-terracotta cursor-pointer"
               >
                 <ShoppingBag className="h-5 w-5" />
                 {count > 0 && (
@@ -210,11 +236,16 @@ export function Navbar() {
               <IconButton label="Search" onClick={() => setSearchOpen((v) => !v)}>
                 <Search className="h-5 w-5 text-brown" />
               </IconButton>
-              <IconButton label="Account">
+              <IconButton label="Account" onClick={handleAccountClick}>
                 <User className="h-5 w-5 text-brown" />
               </IconButton>
-              <IconButton label="Wishlist">
+              <IconButton label="Wishlist" onClick={() => setIsWishlistOpen(true)} className="relative">
                 <Heart className="h-5 w-5 text-brown" />
+                {wishlist.length > 0 && (
+                  <span className="absolute top-1 right-1 grid h-4 min-w-4 place-items-center rounded-full bg-gold px-1 font-sans text-[10px] font-bold text-brown shadow-sm">
+                    {wishlist.length}
+                  </span>
+                )}
               </IconButton>
               <IconButton label="Cart" onClick={() => setOpen(true)} className="relative">
                 <ShoppingBag className="h-5 w-5 text-brown" />
@@ -361,14 +392,14 @@ export function Navbar() {
           <span className="font-sans text-[11px] font-bold uppercase tracking-wide">Cart</span>
         </button>
 
-        <Link
-          to="/contact"
-          className="flex flex-col items-center justify-center gap-0.5 text-cream hover:text-gold"
-          activeProps={{ className: "text-gold font-bold" }}
+        <button
+          type="button"
+          onClick={handleAccountClick}
+          className="flex flex-col items-center justify-center gap-0.5 text-cream hover:text-gold cursor-pointer"
         >
           <User className="h-5 w-5" />
           <span className="font-sans text-[11px] font-bold uppercase tracking-wide">Account</span>
-        </Link>
+        </button>
       </div>
     </>
   );

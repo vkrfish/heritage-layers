@@ -6,6 +6,7 @@ import * as React from "react";
 import { Button, QuantitySelector } from "@/components/ui-kit";
 import { ExpressCheckoutModal } from "@/components/express-checkout";
 import { formatPrice, products } from "@/lib/products";
+import { useCustomerAuth } from "@/lib/customer-auth";
 
 export type CartLine = {
   id: string;
@@ -39,12 +40,13 @@ export function useCart() {
 }
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
+  const { user, openAuthModal } = useCustomerAuth();
   const [lines, setLines] = React.useState<CartLine[]>([]);
   const [open, setOpen] = React.useState(false);
   const [expressOpen, setExpressOpen] = React.useState(false);
   const [expressItem, setExpressItem] = React.useState<{ name?: string | undefined; variant?: string | undefined; price?: number | undefined; qty?: number | undefined }>({});
 
-  const add = React.useCallback((line: Omit<CartLine, "id">) => {
+  const addDirect = React.useCallback((line: Omit<CartLine, "id">) => {
     const id = `${line.slug}__${line.variant}`;
     setLines((prev) => {
       const existing = prev.find((l) => l.id === id);
@@ -55,6 +57,20 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     });
     setOpen(true);
   }, []);
+
+  const add = React.useCallback(
+    (line: Omit<CartLine, "id">) => {
+      if (!user) {
+        openAuthModal({
+          mode: "signin",
+          onAuthenticated: () => addDirect(line),
+        });
+        return;
+      }
+      addDirect(line);
+    },
+    [user, openAuthModal, addDirect]
+  );
 
   const remove = React.useCallback(
     (id: string) => setLines((prev) => prev.filter((l) => l.id !== id)),
@@ -67,10 +83,23 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     [],
   );
 
-  const openExpress = React.useCallback((name?: string, variant?: string, price?: number, qty?: number) => {
-    setExpressItem({ name, variant, price, qty });
-    setExpressOpen(true);
-  }, []);
+  const openExpress = React.useCallback(
+    (name?: string, variant?: string, price?: number, qty?: number) => {
+      if (!user) {
+        openAuthModal({
+          mode: "signin",
+          onAuthenticated: () => {
+            setExpressItem({ name, variant, price, qty });
+            setExpressOpen(true);
+          },
+        });
+        return;
+      }
+      setExpressItem({ name, variant, price, qty });
+      setExpressOpen(true);
+    },
+    [user, openAuthModal]
+  );
 
   const clear = React.useCallback(() => setLines([]), []);
 

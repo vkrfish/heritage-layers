@@ -14,6 +14,9 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { CartProvider } from "@/components/cart";
 import { AdminStoreProvider } from "@/lib/admin-store.tsx";
+import { CustomerAuthProvider } from "@/lib/customer-auth.tsx";
+import { AuthModal } from "@/components/auth-modal.tsx";
+import { WishlistDrawer } from "@/components/wishlist-drawer.tsx";
 import { Navbar } from "@/components/navbar";
 import { Footer, Newsletter } from "@/components/footer";
 import { StructuredData } from "@/components/seo";
@@ -138,24 +141,28 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <AdminStoreProvider>
-        <CartProvider>
-          <GoogleAnalytics measurementId="G-XXXXXXXXXX" />
-          <StructuredData type="organization" data={{}} />
-          
-          {/* Hide public header/footer on admin routes */}
-          {!isAdminRoute && <Navbar />}
+        <CustomerAuthProvider>
+          <CartProvider>
+            <GoogleAnalytics measurementId="G-XXXXXXXXXX" />
+            <StructuredData type="organization" data={{}} />
+            
+            {/* Hide public header/footer on admin routes */}
+            {!isAdminRoute && <Navbar />}
 
-          <main>
-            <Outlet />
-          </main>
+            <main>
+              <Outlet />
+            </main>
 
-          {!isAdminRoute && (
-            <>
-              <Newsletter />
-              <Footer />
-            </>
-          )}
-        </CartProvider>
+            {!isAdminRoute && (
+              <>
+                <Newsletter />
+                <Footer />
+                <AuthModal />
+                <WishlistDrawer />
+              </>
+            )}
+          </CartProvider>
+        </CustomerAuthProvider>
       </AdminStoreProvider>
     </QueryClientProvider>
   );

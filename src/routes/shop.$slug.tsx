@@ -1,8 +1,9 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { Star, ShieldCheck, Truck, PackageCheck, Zap, ShoppingBag, ChevronRight, ZoomIn } from "lucide-react";
+import { Star, ShieldCheck, Truck, PackageCheck, Zap, ShoppingBag, ChevronRight, ZoomIn, Heart } from "lucide-react";
 import * as React from "react";
 
 import { useCart } from "@/components/cart";
+import { useCustomerAuth } from "@/lib/customer-auth";
 import { ProductCard } from "@/components/product-card";
 import { Badge, Button, QuantitySelector, Rating } from "@/components/ui-kit";
 import { StructuredData } from "@/components/seo";
@@ -52,6 +53,7 @@ function ProductDetail() {
   const loaderData = Route.useLoaderData();
   const product = loaderData?.product;
   const { add, openExpress } = useCart();
+  const { isInWishlist, toggleWishlist } = useCustomerAuth();
 
   const [selectedVariantIndex, setSelectedVariantIndex] = React.useState(0);
   const [qty, setQty] = React.useState(1);
@@ -72,6 +74,7 @@ function ProductDetail() {
   const weights = product.weights || [{ label: "250g", weightGrams: 250, price: 349 }];
   const selectedVariant = weights[selectedVariantIndex] ?? weights[0] ?? { label: "250g", weightGrams: 250, price: 349 };
   const reviewsCount = product.reviewsCount ?? (product as any).reviews ?? 128;
+  const isWished = isInWishlist(product.slug);
   const ratingHisto = product.ratingHistogram ?? { 5: 100, 4: 20, 3: 5, 2: 2, 1: 1 };
   const customerReviews = product.customerReviews ?? [];
   const related = products.filter((p) => p.slug !== product.slug).slice(0, 4);
@@ -118,6 +121,15 @@ function ProductDetail() {
                 className="absolute bottom-3 right-3 flex items-center gap-1 rounded-full bg-cream/90 backdrop-blur px-3 py-1.5 font-sans text-xs font-bold text-brown shadow-flat hover:bg-gold hover:text-brown cursor-pointer"
               >
                 <ZoomIn className="h-4 w-4" /> Lightbox Zoom
+              </button>
+              <button
+                type="button"
+                aria-pressed={isWished}
+                aria-label={isWished ? `Remove ${product.name} from wishlist` : `Add ${product.name} to wishlist`}
+                onClick={() => toggleWishlist(product.slug)}
+                className="absolute top-3 right-3 z-10 grid h-10 w-10 place-items-center rounded-full bg-cream/90 backdrop-blur text-brown transition-colors duration-200 hover:text-terracotta shadow-flat cursor-pointer"
+              >
+                <Heart className={cn("h-5 w-5 stroke-[2]", isWished && "fill-terracotta text-terracotta")} />
               </button>
               {product.badge && (
                 <span className="absolute top-3 left-3">
@@ -178,7 +190,7 @@ function ProductDetail() {
             <div>
               <p className="eyebrow text-brown font-bold mb-2">Select Weight Variant:</p>
               <div className="flex flex-wrap gap-2.5">
-                {weights.map((w, i) => (
+                {weights.map((w: any, i: number) => (
                   <button
                     key={w.label}
                     onClick={() => setSelectedVariantIndex(i)}
@@ -203,32 +215,44 @@ function ProductDetail() {
             </div>
 
             {/* Actions */}
-            <div className="grid grid-cols-2 gap-3 pt-2">
-              <Button
-                size="lg"
-                variant="secondary"
-                onClick={() =>
-                  add({
-                    slug: product.slug,
-                    name: product.name,
-                    variant: selectedVariant.label,
-                    price: selectedVariant.price,
-                    image: product.image,
-                    qty,
-                  })
-                }
-                className="justify-center gap-2 border-brown text-brown hover:bg-brown hover:text-white"
-              >
-                <ShoppingBag className="h-4 w-4" /> Add to Cart
-              </Button>
+            <div className="space-y-3 pt-2">
+              <div className="grid grid-cols-2 gap-3">
+                <Button
+                  size="lg"
+                  variant="secondary"
+                  onClick={() =>
+                    add({
+                      slug: product.slug,
+                      name: product.name,
+                      variant: selectedVariant.label,
+                      price: selectedVariant.price,
+                      image: product.image,
+                      qty,
+                    })
+                  }
+                  className="justify-center gap-2 border-brown text-brown hover:bg-brown hover:text-white"
+                >
+                  <ShoppingBag className="h-4 w-4" /> Add to Cart
+                </Button>
+
+                <Button
+                  size="lg"
+                  variant="accent"
+                  onClick={() => openExpress(product.name, selectedVariant.label, selectedVariant.price, qty)}
+                  className="justify-center gap-2 bg-terracotta text-white hover:bg-brown shadow-lift"
+                >
+                  <Zap className="h-4 w-4 fill-current" /> Express Buy Now
+                </Button>
+              </div>
 
               <Button
-                size="lg"
-                variant="accent"
-                onClick={() => openExpress(product.name, selectedVariant.label, selectedVariant.price, qty)}
-                className="justify-center gap-2 bg-terracotta text-white hover:bg-brown shadow-lift"
+                size="md"
+                variant="secondary"
+                onClick={() => toggleWishlist(product.slug)}
+                className="w-full justify-center gap-2 border-brown/20 bg-cream/40 text-brown hover:border-terracotta hover:text-terracotta transition-colors"
               >
-                <Zap className="h-4 w-4 fill-current" /> Express Buy Now
+                <Heart className={cn("h-4 w-4 stroke-[2]", isWished && "fill-terracotta text-terracotta")} />
+                {isWished ? "Saved in Your Wishlist (Click to remove)" : "Save to Wishlist"}
               </Button>
             </div>
 
@@ -330,7 +354,7 @@ function ProductDetail() {
 
             <div className="md:col-span-8 space-y-4">
               {customerReviews.length > 0 ? (
-                customerReviews.map((rev) => (
+                customerReviews.map((rev: any) => (
                   <div key={rev.id} className="rounded-xl border border-brown/15 bg-cream-light p-5 space-y-2 font-sans">
                     <div className="flex items-center justify-between text-xs font-bold">
                       <div className="flex items-center gap-2">
