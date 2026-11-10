@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { CheckCircle, Loader2, PackageCheck, ShieldCheck } from "lucide-react";
+import { CheckCircle2, Loader2, ShieldCheck, CreditCard, Banknote, Smartphone, ArrowRight, Lock } from "lucide-react";
 import * as React from "react";
 
 import { useCart } from "@/components/cart";
@@ -10,7 +10,7 @@ import { placeOrder } from "@/lib/db";
 export const Route = createFileRoute("/checkout")({
   head: () => ({
     meta: [
-      { title: "Checkout — 9 Stories & Co." },
+      { title: "Secure Checkout — 9 Stories & Co." },
       {
         name: "description",
         content: "Review your handcrafted Putharekulu order and complete your delivery details.",
@@ -81,28 +81,33 @@ function Checkout() {
 
   if (placedOrder) {
     return (
-      <div className="bg-cream px-5 py-24 text-center lg:px-10 font-sans">
-        <div className="mx-auto max-w-lg bg-cream-light border border-gold/40 rounded-2xl p-8 shadow-lift space-y-5">
-          <div className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-green/20 text-green">
-            <CheckCircle className="h-10 w-10 text-green" />
+      <div className="bg-[#FAF7F2] min-h-screen px-4 py-16 sm:py-24 text-center font-sans text-stone-900 pb-[calc(5rem+env(safe-area-inset-bottom))]">
+        <div className="mx-auto max-w-lg bg-white border border-stone-200 rounded-2xl p-6 sm:p-10 shadow-2xs space-y-6">
+          <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+            <CheckCircle2 className="h-8 w-8" />
           </div>
-          <SectionHeading
-            eyebrow="Order Confirmed"
-            title="Your order is with our kitchen"
-            subtitle="We prepare every box fresh on the day of dispatch. Handcrafted in Atreyapuram, delivered with care."
-          />
-          <div className="rounded-xl bg-gold/15 border border-gold/40 p-4 text-center">
-            <p className="text-xs font-bold text-brown/70 uppercase tracking-widest">Order Reference</p>
-            <p className="font-display text-2xl text-brown font-bold mt-1">{placedOrder.id}</p>
+          <div className="space-y-2">
+            <p className="text-[11px] font-semibold uppercase tracking-wider text-[#C88A36]">Order Confirmed</p>
+            <h1 className="font-serif text-3xl text-[#241814]">Your order is with our kitchen</h1>
+            <p className="text-xs sm:text-sm text-stone-600 max-w-sm mx-auto leading-relaxed">
+              Every box is freshly rolled the morning of dispatch in Atreyapuram and packed in airtight protective casing.
+            </p>
           </div>
-          <div className="flex items-center justify-center gap-2 text-xs font-bold text-brown/70">
-            <ShieldCheck className="h-4 w-4 text-terracotta" />
-            <span>Saved to 9 Stories live database &amp; kitchen queue</span>
+
+          <div className="rounded-xl bg-[#FAF7F2] border border-stone-200 p-4 text-center">
+            <p className="text-[10px] font-semibold text-stone-500 uppercase tracking-widest">Order Reference</p>
+            <p className="font-serif text-2xl text-[#241814] font-medium mt-0.5 tracking-tight">{placedOrder.id}</p>
           </div>
-          <div className="pt-4">
+
+          <div className="flex items-center justify-center gap-2 text-xs text-stone-500">
+            <ShieldCheck className="h-4 w-4 text-[#C88A36]" />
+            <span>Recorded in 9 Stories &amp; Co. culinary queue</span>
+          </div>
+
+          <div className="pt-2">
             <Link to="/shop">
-              <Button size="lg" variant="primary" className="bg-brown text-white hover:bg-terracotta">
-                Continue Shopping
+              <Button size="md" variant="primary" className="w-full sm:w-auto">
+                Continue Exploring <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
           </div>
@@ -112,184 +117,236 @@ function Checkout() {
   }
 
   return (
-    <div className="bg-cream px-5 py-16 lg:px-10 lg:py-24 font-sans">
+    <div className="bg-[#FAF7F2] min-h-screen px-4 py-10 sm:py-16 lg:px-10 font-sans text-stone-900 pb-[calc(5rem+env(safe-area-inset-bottom))]">
       <div className="mx-auto max-w-[1200px]">
-        <SectionHeading align="left" eyebrow="Checkout" title="Almost there" />
+        <div className="flex items-center justify-between border-b border-stone-200/80 pb-4 mb-8">
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-wider text-[#C88A36]">Final Step</p>
+            <h1 className="font-serif text-2xl sm:text-4xl text-[#241814]">Delivery &amp; Payment</h1>
+          </div>
+          <div className="flex items-center gap-1.5 text-xs text-stone-500">
+            <Lock className="h-3.5 w-3.5 text-stone-400" />
+            <span className="hidden sm:inline">256-Bit SSL Encrypted</span>
+          </div>
+        </div>
 
-        <div className="mt-14 grid gap-14 lg:grid-cols-[1.2fr_1fr]">
-          <form className="space-y-5" onSubmit={handleSubmit}>
-            <div>
-              <label htmlFor="co-name" className="eyebrow block text-brown mb-1">
-                Full name
-              </label>
-              <input
-                id="co-name"
-                type="text"
-                required
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Lakshmi Rao"
-                className="w-full rounded-lg border border-brown/30 bg-cream-light px-4 py-3 font-sans text-base font-bold text-brown placeholder:text-brown/50 focus:border-terracotta focus:outline-none"
-              />
-            </div>
+        <div className="grid gap-10 lg:grid-cols-[1.3fr_1fr]">
+          {/* Checkout Form */}
+          <form className="space-y-4 text-xs" onSubmit={handleSubmit}>
+            <div className="bg-white p-5 sm:p-7 rounded-2xl border border-stone-200 shadow-2xs space-y-4">
+              <h2 className="font-serif text-lg text-[#241814] border-b border-stone-100 pb-2.5">
+                1. Customer Details
+              </h2>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="co-email" className="eyebrow block text-brown mb-1">
-                  Email
+                <label htmlFor="co-name" className="block font-medium text-stone-700 mb-1">
+                  Full name
                 </label>
                 <input
-                  id="co-email"
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="name@example.com"
-                  className="w-full rounded-lg border border-brown/30 bg-cream-light px-4 py-3 font-sans text-base font-bold text-brown placeholder:text-brown/50 focus:border-terracotta focus:outline-none"
-                />
-              </div>
-              <div>
-                <label htmlFor="co-phone" className="eyebrow block text-brown mb-1">
-                  Phone
-                </label>
-                <input
-                  id="co-phone"
-                  type="tel"
-                  required
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder="9876543210"
-                  className="w-full rounded-lg border border-brown/30 bg-cream-light px-4 py-3 font-sans text-base font-bold text-brown placeholder:text-brown/50 focus:border-terracotta focus:outline-none"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor="co-address" className="eyebrow block text-brown mb-1">
-                Delivery address
-              </label>
-              <input
-                id="co-address"
-                type="text"
-                required
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                placeholder="House / Flat No, Street, Landmark"
-                className="w-full rounded-lg border border-brown/30 bg-cream-light px-4 py-3 font-sans text-base font-bold text-brown placeholder:text-brown/50 focus:border-terracotta focus:outline-none"
-              />
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label htmlFor="co-city" className="eyebrow block text-brown mb-1">
-                  City
-                </label>
-                <input
-                  id="co-city"
+                  id="co-name"
                   type="text"
                   required
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
-                  placeholder="Hyderabad"
-                  className="w-full rounded-lg border border-brown/30 bg-cream-light px-4 py-3 font-sans text-base font-bold text-brown placeholder:text-brown/50 focus:border-terracotta focus:outline-none"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="e.g. Lakshmi Rao"
+                  className="w-full rounded-lg border border-stone-200 bg-stone-50/50 px-3.5 py-2.5 text-xs text-stone-900 placeholder:text-stone-400 focus:border-stone-400 focus:outline-none"
                 />
               </div>
-              <div>
-                <label htmlFor="co-pin" className="eyebrow block text-brown mb-1">
-                  PIN code
-                </label>
-                <input
-                  id="co-pin"
-                  type="text"
-                  required
-                  value={pin}
-                  onChange={(e) => setPin(e.target.value)}
-                  placeholder="500033"
-                  className="w-full rounded-lg border border-brown/30 bg-cream-light px-4 py-3 font-sans text-base font-bold text-brown placeholder:text-brown/50 focus:border-terracotta focus:outline-none"
-                />
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                <div>
+                  <label htmlFor="co-email" className="block font-medium text-stone-700 mb-1">
+                    Email address (for dispatch updates)
+                  </label>
+                  <input
+                    id="co-email"
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="lakshmi@example.com"
+                    className="w-full rounded-lg border border-stone-200 bg-stone-50/50 px-3.5 py-2.5 text-xs text-stone-900 placeholder:text-stone-400 focus:border-stone-400 focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="co-phone" className="block font-medium text-stone-700 mb-1">
+                    Phone / WhatsApp (for courier delivery)
+                  </label>
+                  <input
+                    id="co-phone"
+                    type="tel"
+                    required
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="98765 43210"
+                    className="w-full rounded-lg border border-stone-200 bg-stone-50/50 px-3.5 py-2.5 text-xs text-stone-900 placeholder:text-stone-400 focus:border-stone-400 focus:outline-none"
+                  />
+                </div>
               </div>
             </div>
 
-            <div>
-              <label className="eyebrow block text-brown mb-2">Payment Method</label>
-              <div className="grid grid-cols-3 gap-3">
-                {(["UPI", "Card", "COD"] as const).map((method) => (
-                  <button
-                    key={method}
-                    type="button"
-                    onClick={() => setPaymentMethod(method)}
-                    className={`rounded-lg border p-3 font-sans text-xs font-bold transition-all cursor-pointer ${
-                      paymentMethod === method
-                        ? "border-terracotta bg-terracotta/15 text-terracotta"
-                        : "border-brown/20 bg-cream-light text-brown/70 hover:bg-cream"
-                    }`}
-                  >
-                    {method === "COD" ? "Cash on Delivery" : method}
-                  </button>
-                ))}
+            <div className="bg-white p-5 sm:p-7 rounded-2xl border border-stone-200 shadow-2xs space-y-4">
+              <h2 className="font-serif text-lg text-[#241814] border-b border-stone-100 pb-2.5">
+                2. Shipping Address
+              </h2>
+
+              <div>
+                <label htmlFor="co-address" className="block font-medium text-stone-700 mb-1">
+                  Street address &amp; apartment / house no.
+                </label>
+                <input
+                  id="co-address"
+                  type="text"
+                  required
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  placeholder="Flat 402, Sai Vihar, Jubilee Hills"
+                  className="w-full rounded-lg border border-stone-200 bg-stone-50/50 px-3.5 py-2.5 text-xs text-stone-900 placeholder:text-stone-400 focus:border-stone-400 focus:outline-none"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                <div>
+                  <label htmlFor="co-city" className="block font-medium text-stone-700 mb-1">
+                    City
+                  </label>
+                  <input
+                    id="co-city"
+                    type="text"
+                    required
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                    placeholder="Hyderabad"
+                    className="w-full rounded-lg border border-stone-200 bg-stone-50/50 px-3.5 py-2.5 text-xs text-stone-900 placeholder:text-stone-400 focus:border-stone-400 focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="co-pin" className="block font-medium text-stone-700 mb-1">
+                    Postal PIN Code
+                  </label>
+                  <input
+                    id="co-pin"
+                    type="text"
+                    required
+                    value={pin}
+                    onChange={(e) => setPin(e.target.value)}
+                    placeholder="500033"
+                    className="w-full rounded-lg border border-stone-200 bg-stone-50/50 px-3.5 py-2.5 text-xs text-stone-900 placeholder:text-stone-400 focus:border-stone-400 focus:outline-none"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white p-5 sm:p-7 rounded-2xl border border-stone-200 shadow-2xs space-y-4">
+              <h2 className="font-serif text-lg text-[#241814] border-b border-stone-100 pb-2.5">
+                3. Payment Method
+              </h2>
+              <div className="grid grid-cols-3 gap-2.5">
+                {(
+                  [
+                    { id: "UPI", label: "Instant UPI", icon: Smartphone },
+                    { id: "Card", label: "Debit / Card", icon: CreditCard },
+                    { id: "COD", label: "Cash on Delivery", icon: Banknote },
+                  ] as const
+                ).map((method) => {
+                  const Icon = method.icon;
+                  const isSelected = paymentMethod === method.id;
+                  return (
+                    <button
+                      key={method.id}
+                      type="button"
+                      onClick={() => setPaymentMethod(method.id)}
+                      className={`rounded-xl border p-3 flex flex-col items-center justify-center gap-1.5 transition-all cursor-pointer active:scale-95 ${
+                        isSelected
+                          ? "border-[#241814] bg-[#241814] text-white shadow-2xs"
+                          : "border-stone-200 bg-white text-stone-700 hover:bg-stone-50"
+                      }`}
+                    >
+                      <Icon className="h-4 w-4" />
+                      <span className="font-medium text-[11px] text-center leading-tight">{method.label}</span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
             <Button
               type="submit"
               size="lg"
-              variant="primary"
+              variant="gold"
               disabled={isSubmitting || lines.length === 0}
-              className="w-full bg-brown text-white hover:bg-terracotta disabled:opacity-60 cursor-pointer"
+              className="w-full h-11 text-sm font-medium shadow-xs"
             >
               {isSubmitting ? (
                 <>
-                  <Loader2 className="h-5 w-5 animate-spin mr-2 inline" /> Placing Order...
+                  <Loader2 className="h-4 w-4 animate-spin mr-2 inline" /> Finalizing Order...
                 </>
               ) : (
-                `Place Order • ${formatPrice(total)}`
+                `Complete Order • ${formatPrice(total)}`
               )}
             </Button>
           </form>
 
-          <aside className="h-fit rounded-xl border border-brown/15 bg-cream-light p-8 shadow-flat">
-            <h2 className="font-display text-3xl text-brown">Order summary</h2>
+          {/* Order Summary Aside */}
+          <aside className="h-fit rounded-2xl border border-stone-200 bg-white p-5 sm:p-6 shadow-2xs font-sans">
+            <h2 className="font-serif text-xl text-[#241814]">Order Summary</h2>
             {lines.length === 0 ? (
-              <p className="mt-4 font-sans text-sm font-bold text-brown/70">
+              <p className="mt-3 text-xs text-stone-500">
                 Your cart is empty.{" "}
-                <Link to="/shop" className="text-terracotta underline-offset-4 hover:underline">
+                <Link to="/shop" className="text-[#C88A36] underline-offset-4 hover:underline font-medium">
                   Browse the collection
                 </Link>
                 .
               </p>
             ) : (
               <>
-                <ul className="mt-5 divide-y divide-brown/15 font-sans">
+                <ul className="mt-4 divide-y divide-stone-100 text-xs">
                   {lines.map((l) => (
-                    <li key={l.id} className="flex justify-between gap-4 py-3 text-sm font-bold">
-                      <span className="min-w-0 text-brown">
-                        {l.name}
-                        <span className="block text-xs text-brown/60 font-bold">
+                    <li key={l.id} className="flex justify-between gap-3 py-3">
+                      <div className="min-w-0">
+                        <span className="font-medium text-stone-900 block truncate">{l.name}</span>
+                        <span className="text-[11px] text-stone-500 block mt-0.5">
                           {l.variant} × {l.qty}
                         </span>
-                      </span>
-                      <span className="tabular-nums text-terracotta font-bold">
+                      </div>
+                      <span className="tabular-nums font-semibold text-stone-900 shrink-0">
                         {formatPrice(l.price * l.qty)}
                       </span>
                     </li>
                   ))}
                 </ul>
-                <dl className="mt-5 space-y-2 border-t border-brown/15 pt-5 font-sans text-sm font-bold">
-                  <div className="flex justify-between text-brown/70">
+
+                <dl className="mt-4 space-y-2 border-t border-stone-200/80 pt-4 text-xs">
+                  <div className="flex justify-between text-stone-600">
                     <dt>Subtotal</dt>
-                    <dd className="tabular-nums">{formatPrice(subtotal)}</dd>
+                    <dd className="tabular-nums font-medium text-stone-900">{formatPrice(subtotal)}</dd>
                   </div>
-                  <div className="flex justify-between text-brown/70">
-                    <dt>Shipping</dt>
+                  <div className="flex justify-between text-stone-600">
+                    <dt>Express Shipping</dt>
                     <dd className="tabular-nums">
-                      {shipping === 0 ? <span className="text-green">Complimentary</span> : formatPrice(shipping)}
+                      {shipping === 0 ? (
+                        <span className="text-emerald-700 font-medium">Complimentary</span>
+                      ) : (
+                        formatPrice(shipping)
+                      )}
                     </dd>
                   </div>
-                  <div className="flex justify-between border-t border-brown/15 pt-3 font-sans text-lg font-bold text-brown">
+                  <div className="flex justify-between border-t border-stone-200/80 pt-3 text-sm font-semibold text-[#241814]">
                     <dt>Total</dt>
-                    <dd className="tabular-nums text-terracotta">{formatPrice(total)}</dd>
+                    <dd className="tabular-nums text-base">{formatPrice(total)}</dd>
                   </div>
                 </dl>
+
+                <div className="mt-5 pt-4 border-t border-stone-100 text-[11px] text-stone-500 space-y-2">
+                  <div className="flex items-center gap-2">
+                    <ShieldCheck className="h-3.5 w-3.5 text-[#C88A36] shrink-0" />
+                    <span>Prepared fresh on the morning of dispatch</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <PackageCheck className="h-3.5 w-3.5 text-[#C88A36] shrink-0" />
+                    <span>Airtight seal preserves authentic wafer crunch</span>
+                  </div>
+                </div>
               </>
             )}
           </aside>

@@ -37,6 +37,9 @@ dist-ssr
 # Agent Skills
 .agents/skills/
 skills-lock.json
+unslop/
+emil-skills/
+figma-sds/
 
 # Vercel
 .vercel/

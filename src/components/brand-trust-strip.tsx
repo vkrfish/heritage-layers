@@ -26,19 +26,19 @@ const trustItems = [
 
 export function BrandTrustStrip({ className }: { className?: string }) {
   return (
-    <section className={cn("border-y border-brown/15 bg-cream py-10 px-5 lg:px-10", className)}>
-      <div className="mx-auto grid max-w-[1400px] grid-cols-2 gap-6 sm:grid-cols-4">
+    <section className={cn("border-y border-brown/10 bg-[#FAF7F2] py-8 px-5 lg:px-10", className)}>
+      <div className="mx-auto grid max-w-[1200px] grid-cols-2 gap-6 sm:grid-cols-4">
         {trustItems.map((item) => {
           const Icon = item.icon;
           return (
-            <div key={item.label} className="flex flex-col items-center text-center group">
-              <div className="grid h-16 w-16 place-items-center rounded-full border border-brown text-brown transition-transform duration-300 group-hover:scale-105 group-hover:border-terracotta group-hover:text-terracotta bg-cream-light/60">
-                <Icon className="h-7 w-7 stroke-[1.5]" />
+            <div key={item.label} className="flex flex-col items-center text-center">
+              <div className="grid h-11 w-11 place-items-center rounded-full border border-brown/15 text-brown/80 bg-white mb-2.5">
+                <Icon className="h-5 w-5 stroke-[1.5]" />
               </div>
-              <h4 className="mt-3 font-sans text-base font-bold text-brown tracking-wide">
+              <h4 className="font-sans text-sm font-medium text-brown">
                 {item.label}
               </h4>
-              <p className="mt-0.5 font-sans text-xs text-brown/70 max-w-[180px]">
+              <p className="mt-1 font-sans text-xs font-normal text-brown/60 max-w-[190px] leading-relaxed">
                 {item.subtext}
               </p>
             </div>

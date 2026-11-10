@@ -139,90 +139,90 @@ function CartDrawer() {
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-50 bg-brown/50 backdrop-blur-[2px] data-[state=open]:animate-in data-[state=open]:fade-in" />
-        <Dialog.Content className="fixed top-0 right-0 z-50 flex h-full w-full max-w-md flex-col bg-cream shadow-lift duration-300 data-[state=closed]:animate-out data-[state=closed]:slide-out-to-right data-[state=open]:animate-in data-[state=open]:slide-in-from-right">
+        <Dialog.Overlay className="fixed inset-0 z-50 bg-black/40 backdrop-blur-[2px] transition-opacity duration-250 ease-out data-[state=closed]:opacity-0 data-[state=open]:opacity-100" />
+        <Dialog.Content className="fixed top-0 right-0 z-50 flex h-full w-full max-w-md flex-col bg-[#FAF7F2] shadow-2xl transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] data-[state=closed]:translate-x-full data-[state=open]:translate-x-0">
           
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-brown/15 px-6 py-4 bg-cream">
+          <div className="flex items-center justify-between border-b border-brown/10 px-5 py-4 bg-[#FAF7F2]">
             <div className="flex items-center gap-2">
-              <ShoppingBag className="h-5 w-5 text-terracotta" />
-              <Dialog.Title className="font-display text-2xl text-brown font-normal">Your Cart</Dialog.Title>
+              <ShoppingBag className="h-4 w-4 text-brown" />
+              <Dialog.Title className="font-display text-2xl text-brown font-normal tracking-tight">Your Selection</Dialog.Title>
             </div>
             <Dialog.Close
               aria-label="Close cart"
-              className="grid h-10 w-10 place-items-center rounded-full text-brown transition-colors hover:text-terracotta focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terracotta"
+              className="grid h-8 w-8 place-items-center rounded-full text-brown/70 transition-colors hover:text-brown border border-brown/10"
             >
-              <X className="h-5 w-5" />
+              <X className="h-4 w-4" />
             </Dialog.Close>
           </div>
 
           {/* Free Shipping Progress Bar */}
-          <div className="bg-cream-light px-6 py-3 border-b border-brown/15 border-l-4 border-l-gold">
-            <div className="flex items-center justify-between font-sans text-xs font-bold text-brown mb-1.5">
+          <div className="bg-white px-5 py-3 border-b border-brown/10">
+            <div className="flex items-center justify-between font-sans text-xs font-normal text-brown/80 mb-1.5">
               <span className="flex items-center gap-1.5">
-                <Truck className="h-4 w-4 text-terracotta" />
+                <Truck className="h-3.5 w-3.5 text-gold" />
                 {remainingForFreeShipping > 0
-                  ? `Add ${formatPrice(remainingForFreeShipping)} more for FREE Express Shipping!`
-                  : "🎉 You unlocked FREE Express Shipping!"}
+                  ? `Add ${formatPrice(remainingForFreeShipping)} more for Free Shipping`
+                  : "Complimentary Express Delivery unlocked"}
               </span>
-              <span className="text-terracotta font-bold">{progressPercent}%</span>
+              <span className="font-medium text-brown tabular-nums">{progressPercent}%</span>
             </div>
-            <div className="h-2 w-full rounded-full bg-brown/10 overflow-hidden">
+            <div className="h-1.5 w-full rounded-full bg-brown/10 overflow-hidden">
               <div
-                className="h-full bg-terracotta transition-all duration-500 rounded-full"
+                className="h-full bg-gold transition-all duration-300 rounded-full"
                 style={{ width: `${progressPercent}%` }}
               />
             </div>
           </div>
 
           {lines.length === 0 ? (
-            <div className="flex flex-1 flex-col items-center justify-center gap-4 px-8 text-center">
-              <ShoppingBag className="h-12 w-12 text-gold stroke-1" />
-              <p className="font-display text-2xl text-brown">Your cart is empty</p>
-              <p className="font-sans text-sm font-bold text-brown/70 max-w-xs">
-                Explore our authentic handcrafted Putharekulu, Savouries, Podi mixes, and Gift boxes.
+            <div className="flex flex-1 flex-col items-center justify-center gap-3 px-8 text-center">
+              <ShoppingBag className="h-10 w-10 text-brown/30 stroke-1" />
+              <p className="font-display text-2xl text-brown font-normal">Your bag is empty</p>
+              <p className="font-sans text-xs font-normal text-brown/60 max-w-xs leading-relaxed">
+                Handcrafted Putharekulu, A2 ghee sweets, savouries, and heritage gift hampers made fresh daily.
               </p>
-              <Button variant="secondary" onClick={() => setOpen(false)}>
+              <Button variant="secondary" size="sm" onClick={() => setOpen(false)}>
                 Explore Catalog
               </Button>
             </div>
           ) : (
             <>
               {/* Line Items List */}
-              <ul className="flex-1 divide-y divide-brown/15 overflow-y-auto px-6">
+              <ul className="flex-1 divide-y divide-brown/10 overflow-y-auto px-5">
                 {lines.map((line) => (
-                  <li key={line.id} className="grid grid-cols-[72px_minmax(0,1fr)] gap-4 py-4">
+                  <li key={line.id} className="grid grid-cols-[64px_minmax(0,1fr)] gap-3.5 py-4">
                     <img
                       src={line.image}
                       alt={line.name}
                       loading="lazy"
-                      width={72}
-                      height={72}
-                      className="h-18 w-18 rounded-lg border border-brown/15 object-cover"
+                      width={64}
+                      height={64}
+                      className="h-16 w-16 rounded border border-brown/10 object-cover bg-white"
                     />
                     <div className="min-w-0">
                       <div className="flex items-start justify-between gap-2">
                         <div className="min-w-0">
-                          <p className="truncate font-display text-lg font-normal text-brown">{line.name}</p>
-                          <span className="inline-block mt-0.5 rounded bg-gold/20 px-2 py-0.5 font-sans text-xs font-bold text-brown">
+                          <p className="truncate font-display text-base font-normal text-brown">{line.name}</p>
+                          <span className="inline-block mt-0.5 rounded border border-brown/15 bg-white px-1.5 py-0.2 font-sans text-[10px] font-medium text-brown/70">
                             {line.variant}
                           </span>
                         </div>
                         <button
                           onClick={() => remove(line.id)}
                           aria-label={`Remove ${line.name}`}
-                          className="shrink-0 text-brown/60 transition-colors hover:text-terracotta p-1"
+                          className="shrink-0 text-brown/40 transition-colors hover:text-brown p-1"
                         >
-                          <Trash2 className="h-4 w-4" />
+                          <Trash2 className="h-3.5 w-3.5" />
                         </button>
                       </div>
-                      <div className="mt-3 flex items-center justify-between gap-3">
+                      <div className="mt-2.5 flex items-center justify-between gap-3">
                         <QuantitySelector
                           compact
                           value={line.qty}
                           onChange={(n) => setQty(line.id, n)}
                         />
-                        <span className="font-sans text-base font-bold tabular-nums text-terracotta">
+                        <span className="font-sans text-sm font-semibold tabular-nums text-brown">
                           {formatPrice(line.price * line.qty)}
                         </span>
                       </div>
@@ -233,24 +233,24 @@ function CartDrawer() {
                 {/* Cart Upsell Items */}
                 {upsellItems.length > 0 && (
                   <li className="py-4">
-                    <p className="font-sans text-xs font-bold uppercase tracking-wider text-brown/70 mb-3">
-                      Frequently Added Together
+                    <p className="font-sans text-[11px] font-medium uppercase tracking-wider text-brown/60 mb-2.5">
+                      Frequently Paired Together
                     </p>
                     <div className="space-y-2">
                       {upsellItems.map((item) => (
                         <div
                           key={item.slug}
-                          className="flex items-center justify-between rounded-lg border border-brown/15 bg-cream-light p-2.5"
+                          className="flex items-center justify-between rounded border border-brown/10 bg-white p-2.5"
                         >
-                          <div className="flex items-center gap-3 min-w-0">
+                          <div className="flex items-center gap-2.5 min-w-0">
                             <img
                               src={item.image}
                               alt={item.name}
-                              className="h-10 w-10 rounded-md object-cover border border-brown/15"
+                              className="h-9 w-9 rounded object-cover border border-brown/10"
                             />
                             <div className="min-w-0">
-                              <p className="truncate font-sans text-sm font-bold text-brown">{item.name}</p>
-                              <p className="font-sans text-xs font-bold text-terracotta">
+                              <p className="truncate font-sans text-xs font-medium text-brown">{item.name}</p>
+                              <p className="font-sans text-[11px] font-normal text-brown/60 tabular-nums">
                                 {formatPrice(item.weights[0]?.price ?? 0)}
                               </p>
                             </div>
@@ -266,7 +266,7 @@ function CartDrawer() {
                                 qty: 1,
                               })
                             }
-                            className="flex items-center gap-1 rounded-md border border-terracotta bg-terracotta/10 px-2.5 py-1 font-sans text-xs font-bold text-terracotta hover:bg-terracotta hover:text-white transition-colors cursor-pointer"
+                            className="flex items-center gap-1 rounded border border-brown/20 bg-white px-2 py-0.5 font-sans text-xs font-medium text-brown hover:bg-brown hover:text-white transition-colors cursor-pointer"
                           >
                             <Plus className="h-3 w-3" /> Add
                           </button>
@@ -278,31 +278,31 @@ function CartDrawer() {
               </ul>
 
               {/* Drawer Footer & Checkout */}
-              <div className="border-t border-brown/15 bg-cream-light px-6 py-4 space-y-3">
-                <dl className="space-y-1.5 font-sans text-sm font-bold">
+              <div className="border-t border-brown/10 bg-white px-5 py-4 space-y-3">
+                <dl className="space-y-1.5 font-sans text-xs">
                   <div className="flex justify-between text-brown/70">
                     <dt>Subtotal</dt>
-                    <dd className="tabular-nums">{formatPrice(subtotal)}</dd>
+                    <dd className="tabular-nums font-medium text-brown">{formatPrice(subtotal)}</dd>
                   </div>
                   <div className="flex justify-between text-brown/70">
-                    <dt>Estimated Delivery</dt>
+                    <dt>Shipping</dt>
                     <dd className="tabular-nums">
                       {shipping === 0 ? (
-                        <span className="text-green font-bold">FREE</span>
+                        <span className="text-green font-medium">Free</span>
                       ) : (
                         formatPrice(shipping)
                       )}
                     </dd>
                   </div>
-                  <div className="flex justify-between border-t border-brown/15 pt-2 font-sans text-lg font-bold text-brown">
+                  <div className="flex justify-between border-t border-brown/10 pt-2 font-sans text-base font-semibold text-brown">
                     <dt>Total Amount</dt>
-                    <dd className="tabular-nums text-terracotta">{formatPrice(subtotal + shipping)}</dd>
+                    <dd className="tabular-nums">{formatPrice(subtotal + shipping)}</dd>
                   </div>
                 </dl>
 
                 <div className="grid grid-cols-2 gap-2 pt-1">
                   <Link to="/checkout" onClick={() => setOpen(false)}>
-                    <Button variant="secondary" className="w-full text-sm justify-center py-2.5">
+                    <Button variant="secondary" className="w-full text-xs justify-center h-10">
                       Standard Checkout
                     </Button>
                   </Link>
@@ -311,10 +311,10 @@ function CartDrawer() {
                       setOpen(false);
                       openExpress();
                     }}
-                    variant="accent"
-                    className="w-full text-sm justify-center gap-1 py-2.5 bg-terracotta text-white hover:bg-brown"
+                    variant="gold"
+                    className="w-full text-xs justify-center gap-1 h-10"
                   >
-                    <Zap className="h-4 w-4 fill-current" /> Express Buy
+                    <Zap className="h-3.5 w-3.5 fill-current" /> Express Buy
                   </Button>
                 </div>
               </div>

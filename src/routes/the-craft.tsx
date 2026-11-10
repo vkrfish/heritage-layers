@@ -57,24 +57,24 @@ const steps = [
 
 function TheCraft() {
   return (
-    <div className="bg-cream font-sans">
-      <section className="bg-brown px-5 py-20 lg:px-10 lg:py-28 border-b border-gold/30">
-        <div className="mx-auto max-w-[1400px]">
+    <div className="bg-[#FAF7F2] font-sans">
+      <section className="bg-[#1B120E] text-[#FAF7F2] px-5 py-16 lg:px-10 lg:py-24 border-b border-white/10">
+        <div className="mx-auto max-w-[1200px]">
           <SectionHeading
             onDark
-            eyebrow="The Craft"
+            eyebrow="The Technique"
             title="Nothing here can be rushed"
-            subtitle="A sheet takes eight seconds to set and fifteen years to master."
+            subtitle="A gossamer sheet takes eight seconds to set and fifteen years to master."
           />
         </div>
       </section>
 
-      <section className="px-5 py-20 lg:px-10 lg:py-28">
-        <div className="mx-auto flex max-w-[1400px] flex-col gap-16">
+      <section className="px-5 py-16 lg:px-10 lg:py-24">
+        <div className="mx-auto flex max-w-[1200px] flex-col gap-16">
           {steps.map((s, i) => (
             <article
               key={s.n}
-              className="grid items-center gap-12 lg:grid-cols-2"
+              className="grid items-center gap-10 lg:grid-cols-2"
             >
               <img
                 src={s.img}
@@ -82,25 +82,28 @@ function TheCraft() {
                 loading="lazy"
                 width={1200}
                 height={900}
-                className={`rounded-xl border border-brown/15 object-cover shadow-lift ${i % 2 ? "lg:order-2" : ""}`}
+                className={`rounded-lg border border-brown/10 object-cover shadow-soft ${i % 2 ? "lg:order-2" : ""}`}
               />
-              <div>
-                <p className="font-display text-6xl text-gold">{s.n}</p>
-                <h2 className="mt-2 font-display text-4xl text-brown">{s.title}</h2>
-                <p className="mt-4 font-sans text-lg font-bold leading-relaxed text-brown/80">{s.copy}</p>
+              <div className="max-w-md">
+                <p className="font-display text-4xl sm:text-5xl text-gold/80 font-normal">{s.n}</p>
+                <h2 className="mt-1 font-display text-3xl sm:text-4xl text-brown font-normal tracking-tight">{s.title}</h2>
+                <p className="mt-3 font-sans text-sm sm:text-base font-normal leading-relaxed text-brown/70">{s.copy}</p>
               </div>
             </article>
           ))}
         </div>
       </section>
 
-      <section className="bg-cream-light px-5 py-20 text-center lg:px-10 border-t border-brown/15">
-        <div className="mx-auto max-w-2xl space-y-6">
-          <h2 className="font-display text-4xl sm:text-5xl text-brown">Taste the difference eight seconds makes</h2>
-          <div>
+      <section className="bg-white px-5 py-16 text-center lg:px-10 border-t border-brown/10">
+        <div className="mx-auto max-w-2xl space-y-4">
+          <h2 className="font-display text-3xl sm:text-4xl font-normal text-brown tracking-tight">Taste the difference eight seconds makes</h2>
+          <p className="font-sans text-sm font-normal text-brown/60 max-w-md mx-auto">
+            Order fresh small-batch Putharekulu delivered straight from Godavari pot kilns.
+          </p>
+          <div className="pt-2">
             <Link to="/shop">
-              <Button size="lg" variant="primary" className="bg-brown text-white hover:bg-terracotta">
-                Explore Stories
+              <Button size="lg" variant="primary" className="bg-[#C88A36] text-white hover:bg-[#B4782B] text-sm font-medium">
+                Explore the Confectionery
               </Button>
             </Link>
           </div>

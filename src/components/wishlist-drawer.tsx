@@ -32,60 +32,70 @@ export function WishlistDrawer() {
       qty: 1,
     });
     void toggleWishlist(product.slug);
-    setIsWishlistOpen(false);
   };
 
   return (
     <Dialog.Root open={isWishlistOpen} onOpenChange={setIsWishlistOpen}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-50 bg-brown/60 backdrop-blur-sm data-[state=open]:animate-in data-[state=open]:fade-in" />
-        <Dialog.Content className="fixed right-0 top-0 z-50 flex h-full w-full max-w-md flex-col bg-cream shadow-2xl duration-300 data-[state=open]:animate-in data-[state=open]:slide-in-from-right font-sans">
+        <Dialog.Overlay className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs transition-opacity duration-200" />
+        <Dialog.Content
+          className="fixed right-0 top-0 z-50 flex h-full w-full max-w-md flex-col bg-[#FAF7F2] text-stone-900 shadow-2xl transition-transform duration-300 ease-[var(--ease-drawer,cubic-bezier(0.32,0.72,0,1))] font-sans border-l border-stone-200"
+        >
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-brown/15 p-5 sm:p-6 bg-cream-light">
-            <div className="flex items-center gap-2">
-              <Heart className="h-5 w-5 text-terracotta fill-terracotta" />
-              <Dialog.Title className="font-display text-2xl text-brown font-normal">
-                Your Wishlist ({wishlistedItems.length})
-              </Dialog.Title>
+          <div className="flex items-center justify-between border-b border-stone-200/80 px-5 py-4 bg-[#F5F0E8]">
+            <div className="flex items-center gap-2.5">
+              <span className="grid h-8 w-8 place-items-center rounded-full bg-[#FAF7F2] border border-stone-200 text-[#C88A36]">
+                <Heart className="h-4 w-4 fill-[#C88A36]" />
+              </span>
+              <div>
+                <Dialog.Title className="font-serif text-xl text-[#241814] font-normal tracking-tight">
+                  Saved Sweets
+                </Dialog.Title>
+                <p className="text-[11px] text-stone-500 font-medium">
+                  {wishlistedItems.length} {wishlistedItems.length === 1 ? "delicacy" : "delicacies"} in your wishlist
+                </p>
+              </div>
             </div>
             <Dialog.Close
               aria-label="Close Wishlist"
-              className="rounded-full p-2 text-brown/70 hover:bg-cream hover:text-brown transition-colors cursor-pointer"
+              className="rounded-full p-2 text-stone-500 hover:bg-stone-200/60 hover:text-stone-900 transition-colors cursor-pointer"
             >
-              <X className="h-5 w-5" />
+              <X className="h-4 w-4" />
             </Dialog.Close>
           </div>
 
           {/* Body */}
-          <div className="flex-1 overflow-y-auto p-5 sm:p-6">
+          <div className="flex-1 overflow-y-auto p-4 sm:p-5">
             {wishlistedItems.length === 0 ? (
-              <div className="py-16 text-center space-y-4">
-                <div className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-gold/20 text-brown">
-                  <Heart className="h-8 w-8 text-brown/40" />
+              <div className="py-20 text-center space-y-4 px-4">
+                <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-[#F5F0E8] border border-stone-200 text-stone-400">
+                  <Heart className="h-6 w-6 stroke-stone-400" />
                 </div>
-                <h3 className="font-display text-2xl text-brown">Your wishlist is empty</h3>
-                <p className="font-sans text-xs font-bold text-brown/70 max-w-xs mx-auto">
-                  Save your favorite artisanal sweets and gift boxes to enjoy later or share with family.
-                </p>
+                <div>
+                  <h3 className="font-serif text-2xl text-[#241814]">Your collection is empty</h3>
+                  <p className="font-sans text-xs text-stone-500 max-w-xs mx-auto mt-1.5 leading-relaxed">
+                    Bookmark your favorite artisanal Putharekulu and sweets to review or share anytime.
+                  </p>
+                </div>
                 <Button
                   onClick={() => setIsWishlistOpen(false)}
                   variant="primary"
-                  className="bg-brown text-white hover:bg-terracotta mt-2"
+                  className="bg-[#241814] text-white hover:bg-stone-800 text-xs mt-2"
                 >
                   Explore Collection
                 </Button>
               </div>
             ) : (
-              <ul className="divide-y divide-brown/15 space-y-3">
+              <ul className="divide-y divide-stone-200/70">
                 {wishlistedItems.map((item) => {
                   const basePrice = item.weights[0]?.price || 0;
                   return (
-                    <li key={item.slug} className="flex gap-4 pt-3 pb-3 items-center">
+                    <li key={item.slug} className="py-3.5 flex gap-3.5 items-center">
                       <Link
                         to="/shop/$slug"
                         params={{ slug: item.slug }}
                         onClick={() => setIsWishlistOpen(false)}
-                        className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg border border-brown/20 bg-cream-light"
+                        className="h-18 w-18 flex-shrink-0 overflow-hidden rounded-lg border border-stone-200 bg-stone-100"
                       >
                         <img src={item.image} alt={item.name} className="h-full w-full object-cover" />
                       </Link>
@@ -95,28 +105,29 @@ export function WishlistDrawer() {
                           to="/shop/$slug"
                           params={{ slug: item.slug }}
                           onClick={() => setIsWishlistOpen(false)}
-                          className="font-sans text-sm font-bold text-brown hover:text-terracotta truncate block"
+                          className="font-serif text-base text-[#241814] hover:text-[#C88A36] truncate block leading-tight"
                         >
                           {item.name}
                         </Link>
-                        <span className="text-xs text-brown/60 font-bold block">{item.tagline}</span>
-                        <span className="text-sm font-bold text-terracotta block mt-0.5">
+                        <span className="text-[11px] text-stone-500 truncate block mt-0.5">{item.tagline}</span>
+                        <div className="text-xs font-semibold text-stone-900 mt-1 tabular-nums">
                           From {formatPrice(basePrice)}
-                        </span>
+                        </div>
 
-                        <div className="mt-2 flex items-center gap-2">
+                        <div className="mt-2.5 flex items-center gap-2">
                           <button
                             onClick={() => handleMoveToCart(item)}
-                            className="inline-flex items-center gap-1.5 rounded-lg bg-brown px-3 py-1 text-xs font-bold text-white hover:bg-terracotta transition-colors cursor-pointer"
+                            className="inline-flex items-center gap-1.5 rounded-md bg-[#241814] px-3 py-1.5 text-xs font-medium text-white hover:bg-stone-800 transition-colors cursor-pointer active:scale-95 shadow-2xs"
                           >
-                            <ShoppingBag className="h-3.5 w-3.5" /> Move to Cart
+                            <ShoppingBag className="h-3 w-3" /> Add to Bag
                           </button>
                           <button
                             onClick={() => void toggleWishlist(item.slug)}
-                            className="rounded-lg p-1.5 text-brown/50 hover:bg-terracotta/10 hover:text-terracotta transition-colors cursor-pointer"
+                            className="rounded-md p-1.5 text-stone-400 hover:bg-stone-200/60 hover:text-stone-700 transition-colors cursor-pointer"
                             title="Remove from wishlist"
+                            aria-label={`Remove ${item.name}`}
                           >
-                            <Trash2 className="h-4 w-4" />
+                            <Trash2 className="h-3.5 w-3.5" />
                           </button>
                         </div>
                       </div>
@@ -129,10 +140,13 @@ export function WishlistDrawer() {
 
           {/* Footer */}
           {wishlistedItems.length > 0 && (
-            <div className="border-t border-brown/15 p-5 bg-cream-light space-y-2">
-              <Link to="/shop" onClick={() => setIsWishlistOpen(false)}>
-                <Button variant="secondary" className="w-full justify-center gap-2 text-xs">
-                  Continue Shopping <ArrowRight className="h-4 w-4" />
+            <div
+              className="border-t border-stone-200/80 p-4 sm:p-5 bg-[#F5F0E8] space-y-2"
+              style={{ paddingBottom: "calc(1.25rem + env(safe-area-inset-bottom))" }}
+            >
+              <Link to="/shop" onClick={() => setIsWishlistOpen(false)} className="block">
+                <Button variant="secondary" className="w-full justify-center gap-2 text-xs py-2.5">
+                  Continue Exploring <ArrowRight className="h-3.5 w-3.5" />
                 </Button>
               </Link>
             </div>

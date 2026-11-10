@@ -118,7 +118,7 @@ export function Home() {
     <div className="pb-16 lg:pb-0">
       {/* 1. HERO POSTER CAROUSEL SECTION */}
       <section className="relative overflow-hidden bg-brown text-cream" aria-label="Hero Posters">
-        <div className="relative min-h-[460px] sm:min-h-[540px] lg:min-h-[620px] flex items-center">
+        <div className="relative min-h-[420px] sm:min-h-[500px] lg:min-h-[600px] flex items-center">
           {heroPosters.map((poster, index) => {
             const isActive = index === currentSlide;
             return (
@@ -136,35 +136,33 @@ export function Home() {
                     className="w-full h-full object-cover object-center"
                   />
                   {/* Rich Gradient Overlay for Crisp Legibility */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-brown via-brown/80 to-brown/40 lg:bg-gradient-to-r lg:from-brown/95 lg:via-brown/75 lg:to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-brown via-brown/85 to-brown/40 lg:bg-gradient-to-r lg:from-brown/95 lg:via-brown/75 lg:to-transparent" />
                 </div>
 
                 {/* Poster Content */}
-                <div className="relative h-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-10 flex items-center py-14 lg:py-24">
-                  <div className="max-w-2xl space-y-4 sm:space-y-6">
-                    <div className="inline-flex items-center gap-2.5 rounded-full border border-gold bg-brown/90 backdrop-blur-md px-4 py-1.5 text-gold shadow-md">
-                      <span className="h-2.5 w-2.5 rounded-full bg-gold animate-pulse" />
-                      <span className="font-sans text-sm sm:text-base font-bold uppercase tracking-widest text-gold">
-                        {poster.eyebrow}
-                      </span>
+                <div className="relative h-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-10 flex items-center py-10 sm:py-16 lg:py-24">
+                  <div className="max-w-2xl space-y-3 sm:space-y-5">
+                    <div className="inline-flex items-center gap-1.5 rounded px-2 py-0.5 text-[10px] sm:text-xs font-medium uppercase tracking-[0.14em] text-gold/90 border border-gold/25 bg-black/40 backdrop-blur-sm">
+                      <span className="h-1.5 w-1.5 rounded-full bg-gold" />
+                      <span>{poster.eyebrow}</span>
                     </div>
 
-                    <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-normal leading-tight text-cream drop-shadow-md">
+                    <h1 className="font-display text-3xl sm:text-5xl lg:text-6xl font-normal leading-[1.15] text-cream tracking-tight">
                       {poster.title}
                     </h1>
 
-                    <p className="font-sans text-xl sm:text-2xl font-bold leading-relaxed text-cream tracking-wide max-w-xl drop-shadow-sm">
+                    <p className="font-sans text-xs sm:text-base font-normal leading-relaxed text-cream/80 max-w-lg">
                       {poster.subtitle}
                     </p>
 
-                    <div className="pt-3 sm:pt-5 flex flex-wrap items-center gap-4 sm:gap-5">
+                    <div className="pt-1 sm:pt-3 flex items-center gap-2.5 sm:gap-4">
                       <Link to={poster.primaryLink}>
-                        <Button size="lg" variant="primary" className="bg-gold text-brown hover:bg-terracotta hover:text-white font-extrabold text-base sm:text-lg shadow-lift border border-gold/80">
+                        <Button size="md" variant="gold" className="text-xs sm:text-sm font-medium h-9 sm:h-10 px-4 sm:px-5">
                           {poster.primaryCta}
                         </Button>
                       </Link>
                       <Link to={poster.secondaryLink}>
-                        <Button size="lg" variant="secondary" className="border-2 border-gold bg-brown/70 text-gold hover:bg-gold hover:text-brown font-extrabold text-base sm:text-lg shadow-lift backdrop-blur-sm">
+                        <Button size="md" variant="secondary" className="border border-white/30 bg-white/10 text-white hover:bg-white/20 text-xs sm:text-sm font-medium backdrop-blur-sm h-9 sm:h-10 px-4 sm:px-5">
                           {poster.secondaryCta}
                         </Button>
                       </Link>
@@ -179,16 +177,16 @@ export function Home() {
           <button
             onClick={prevSlide}
             aria-label="Previous slide"
-            className="absolute left-2 sm:left-4 z-20 p-2 sm:p-3 rounded-full border border-gold/40 bg-brown/70 text-cream hover:bg-gold hover:text-brown transition-colors cursor-pointer"
+            className="absolute left-2 sm:left-4 z-20 p-2 sm:p-2.5 rounded-full border border-white/20 bg-black/40 text-white hover:bg-black/70 hover:border-white/40 active:scale-95 transition-all cursor-pointer backdrop-blur-xs"
           >
-            <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
+            <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5" />
           </button>
           <button
             onClick={nextSlide}
             aria-label="Next slide"
-            className="absolute right-2 sm:right-4 z-20 p-2 sm:p-3 rounded-full border border-gold/40 bg-brown/70 text-cream hover:bg-gold hover:text-brown transition-colors cursor-pointer"
+            className="absolute right-2 sm:right-4 z-20 p-2 sm:p-2.5 rounded-full border border-white/20 bg-black/40 text-white hover:bg-black/70 hover:border-white/40 active:scale-95 transition-all cursor-pointer backdrop-blur-xs"
           >
-            <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
+            <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
           </button>
 
           {/* Carousel Dots & Badge Indicators */}
@@ -208,13 +206,13 @@ export function Home() {
       </section>
 
       {/* 2. CATEGORY HORIZONTAL SWIPE RAIL / GRID SECTION */}
-      <section className="py-8 sm:py-16 px-4 sm:px-6 lg:px-10 border-b border-brown/15 bg-cream-light/40">
-        <div className="mx-auto max-w-[1400px]">
-          <div className="text-center mb-6 sm:mb-10">
-            <h2 className="font-display text-2xl sm:text-5xl font-normal text-brown inline-block relative">
-              Shop by <span className="text-terracotta underline decoration-gold decoration-4 underline-offset-4">Category</span>
+      <section className="py-8 sm:py-14 px-4 sm:px-6 lg:px-10 border-b border-brown/10 bg-[#FAF7F2]">
+        <div className="mx-auto max-w-[1200px]">
+          <div className="text-center mb-6 sm:mb-8">
+            <h2 className="font-display text-2xl sm:text-4xl font-normal text-brown tracking-tight">
+              Curated by Category
             </h2>
-            <p className="font-sans text-xs sm:text-base font-bold text-brown/70 mt-1">Jump straight to what you're looking for</p>
+            <p className="font-sans text-xs sm:text-sm font-normal text-brown/60 mt-1">Authentic regional confectionery and artisanal pantry essentials</p>
           </div>
 
           {/* Mobile Horizontal Swipe Rail / Desktop Grid */}
@@ -224,21 +222,21 @@ export function Home() {
                 key={cat.name}
                 to="/shop"
                 search={cat.category ? { category: cat.category } : {}}
-                className="group flex-shrink-0 w-24 sm:w-auto flex flex-col items-center gap-2 p-2 sm:p-4 rounded-xl border border-brown/15 bg-cream transition-all duration-300 hover:shadow-lift snap-start"
+                className="group flex-shrink-0 w-24 sm:w-auto flex flex-col items-center gap-2 p-2 sm:p-3 rounded-lg border border-brown/10 bg-white transition-all duration-150 hover:border-brown/25 snap-start shadow-soft"
               >
-                <div className="relative h-20 w-20 sm:h-24 sm:w-24 rounded-full p-1 border-2 border-gold group-hover:border-terracotta transition-colors shadow-flat">
+                <div className="relative h-18 w-18 sm:h-20 sm:w-20 rounded-full p-0.5 border border-brown/15 group-hover:border-brown/40 transition-colors">
                   <img
                     src={cat.image}
                     alt={cat.name}
-                    className="h-full w-full rounded-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="h-full w-full rounded-full object-cover"
                   />
                   {cat.badge && (
-                    <span className="absolute -top-1 -right-1 rounded-full bg-gold px-1.5 py-0.5 font-sans text-[9px] font-bold text-brown shadow-flat">
+                    <span className="absolute -top-1 -right-1 rounded bg-[#FAF7F2] border border-brown/15 px-1 py-0.2 font-sans text-[8px] font-medium text-brown/80">
                       {cat.badge}
                     </span>
                   )}
                 </div>
-                <span className="font-sans text-xs sm:text-base font-bold text-brown group-hover:text-terracotta transition-colors truncate max-w-full">
+                <span className="font-sans text-xs sm:text-sm font-medium text-brown group-hover:text-terracotta transition-colors truncate max-w-full">
                   {cat.name}
                 </span>
               </Link>
@@ -251,17 +249,17 @@ export function Home() {
       <BrandTrustStrip />
 
       {/* 4. TABBED PRODUCT SHOWCASE GRID (2-Column Mobile Grid) */}
-      <section className="px-4 sm:px-6 lg:px-10 py-10 sm:py-20" aria-labelledby="showcase-heading">
-        <div className="mx-auto max-w-[1400px]">
+      <section className="px-4 sm:px-6 lg:px-10 py-10 sm:py-16" aria-labelledby="showcase-heading">
+        <div className="mx-auto max-w-[1200px]">
           <SectionHeading
             eyebrow="Handcrafted Selection"
-            title="Popular Heritage Delights"
-            subtitle="Select your preferred weight variant and add directly to your cart."
+            title="Signature Heritage Delights"
+            subtitle="Fresh daily batches made with Godavari jaggery and pure clarified cow butter."
           />
 
           {/* Showcase Tabs */}
-          <div className="mt-6 sm:mt-8 flex justify-center border-b border-brown/15">
-            <div className="flex space-x-2 sm:space-x-8 overflow-x-auto pb-px">
+          <div className="mt-6 sm:mt-8 flex justify-center border-b border-brown/10">
+            <div className="flex space-x-2 sm:space-x-6 overflow-x-auto pb-px">
               {[
                 { id: "bestsellers", label: "Best Sellers" },
                 { id: "new", label: "New Arrivals" },
@@ -271,10 +269,10 @@ export function Home() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as any)}
-                  className={`py-2.5 px-3 font-sans text-xs sm:text-base font-bold transition-colors border-b-2 whitespace-nowrap cursor-pointer ${
+                  className={`py-2 px-3 font-sans text-xs sm:text-sm font-medium transition-colors border-b-2 whitespace-nowrap cursor-pointer ${
                     activeTab === tab.id
-                      ? "border-terracotta text-terracotta"
-                      : "border-transparent text-brown/70 hover:text-brown"
+                      ? "border-brown text-brown"
+                      : "border-transparent text-brown/60 hover:text-brown"
                   }`}
                 >
                   {tab.label}
@@ -286,7 +284,9 @@ export function Home() {
           {/* 2-Column Mobile Product Cards Grid */}
           <div className="mt-6 sm:mt-10 grid gap-3 sm:gap-6 grid-cols-2 lg:grid-cols-4">
             {showcaseProducts.map((p) => (
-              <ProductCard key={p.slug} product={p} />
+              <div key={p.slug} className="stagger-item">
+                <ProductCard product={p} />
+              </div>
             ))}
           </div>
 
@@ -301,51 +301,51 @@ export function Home() {
       </section>
 
       {/* 5. BRAND LEGACY BANNER */}
-      <section className="bg-brown text-cream px-4 sm:px-6 lg:px-10 py-12 sm:py-20" aria-labelledby="legacy-heading">
-        <div className="mx-auto grid max-w-[1400px] items-center gap-8 sm:gap-12 lg:grid-cols-2">
+      <section className="bg-[#1B120E] text-[#FAF7F2] px-4 sm:px-6 lg:px-10 py-12 sm:py-20" aria-labelledby="legacy-heading">
+        <div className="mx-auto grid max-w-[1200px] items-center gap-8 sm:gap-12 lg:grid-cols-2">
           <div className="relative">
             <img
               src={craftSheet}
               alt="Artisan lifting paper thin Putharekulu sheet"
               loading="lazy"
-              className="rounded-xl object-cover border border-gold/40 shadow-lift"
+              className="rounded-lg object-cover border border-white/10 shadow-soft"
               width={1200}
               height={1200}
             />
-            <div className="absolute -bottom-4 -right-4 hidden sm:flex items-center gap-3 rounded-xl border border-gold/40 bg-cream p-4 text-brown shadow-lift">
-              <ShieldCheck className="h-8 w-8 text-terracotta shrink-0" />
+            <div className="absolute -bottom-3 -right-3 hidden sm:flex items-center gap-3 rounded-lg border border-white/10 bg-[#221612] p-3.5 text-[#FAF7F2] shadow-soft">
+              <ShieldCheck className="h-6 w-6 text-gold shrink-0" />
               <div>
-                <p className="font-sans text-sm font-bold">100% Authentic Guarantee</p>
-                <p className="font-sans text-xs font-bold text-brown/70">Pure A2 Ghee &amp; Organic Jaggery</p>
+                <p className="font-sans text-xs font-medium">Authentic Pot Kiln Craft</p>
+                <p className="font-sans text-[11px] font-normal text-[#FAF7F2]/60">Pure A2 Ghee &amp; Godavari Jaggery</p>
               </div>
             </div>
           </div>
 
-          <div className="space-y-4 sm:space-y-6">
-            <Eyebrow tone="gold">Artisan Tradition · Nine Generations</Eyebrow>
-            <h2 id="legacy-heading" className="font-display text-2xl sm:text-5xl font-normal leading-tight text-cream">
+          <div className="space-y-4 sm:space-y-5">
+            <Eyebrow tone="gold">Artisan Provenance · Godavari Delta</Eyebrow>
+            <h2 id="legacy-heading" className="font-display text-2xl sm:text-4xl lg:text-5xl font-normal leading-tight text-[#FAF7F2] tracking-tight">
               Crafted slowly, the way grandmothers made it.
             </h2>
-            <p className="font-sans text-sm sm:text-lg font-bold leading-relaxed text-cream/80">
-              Every Putharekulu sheet is hand-swiped over a hot earthen pot in Atreyapuram village. 
-              We use no artificial preservatives, zero palm oil, and only 100% natural clarified cow ghee.
+            <p className="font-sans text-sm sm:text-base font-normal leading-relaxed text-[#FAF7F2]/80 max-w-lg">
+              Every Putharekulu sheet is hand-swiped over an inverted earthen pot in Atreyapuram village. 
+              We use no artificial preservatives, zero palm oil, and only 100% natural clarified cow butter.
             </p>
 
-            <div className="grid grid-cols-2 gap-3 pt-3 border-t border-cream/15 font-sans text-xs sm:text-sm font-bold">
+            <div className="grid grid-cols-2 gap-3 pt-3 border-t border-white/10 font-sans text-xs font-normal text-[#FAF7F2]/80">
               <div className="flex items-center gap-2">
-                <CheckCircle2 className="h-4 w-4 text-gold shrink-0" />
+                <CheckCircle2 className="h-3.5 w-3.5 text-gold shrink-0" />
                 <span>Slow-roasted ingredients</span>
               </div>
               <div className="flex items-center gap-2">
-                <CheckCircle2 className="h-4 w-4 text-gold shrink-0" />
-                <span>Zero white sugar options</span>
+                <CheckCircle2 className="h-3.5 w-3.5 text-gold shrink-0" />
+                <span>Zero refined sugar options</span>
               </div>
               <div className="flex items-center gap-2">
-                <CheckCircle2 className="h-4 w-4 text-gold shrink-0" />
-                <span>Eco-friendly packaging</span>
+                <CheckCircle2 className="h-3.5 w-3.5 text-gold shrink-0" />
+                <span>Biodegradable boxes</span>
               </div>
               <div className="flex items-center gap-2">
-                <CheckCircle2 className="h-4 w-4 text-gold shrink-0" />
+                <CheckCircle2 className="h-3.5 w-3.5 text-gold shrink-0" />
                 <span>Airtight freshness seal</span>
               </div>
             </div>
@@ -353,7 +353,7 @@ export function Home() {
             <div className="pt-2">
               <Link to="/the-craft">
                 <Button variant="onDark" size="md">
-                  Learn About Our Craft
+                  Discover the Technique
                 </Button>
               </Link>
             </div>
@@ -362,55 +362,55 @@ export function Home() {
       </section>
 
       {/* 6. CUSTOMER REVIEWS */}
-      <section className="px-4 sm:px-6 lg:px-10 py-12 sm:py-20 bg-cream" aria-labelledby="reviews-heading">
-        <div className="mx-auto max-w-[1400px]">
+      <section className="px-4 sm:px-6 lg:px-10 py-12 sm:py-20 bg-[#FAF7F2]" aria-labelledby="reviews-heading">
+        <div className="mx-auto max-w-[1200px]">
           <SectionHeading
-            eyebrow="Real Buyer Reviews"
-            title="Over 10,000+ Happy Customers"
-            subtitle="Rated 4.9 ★★★★★ across 1,500+ verified customer ratings."
+            eyebrow="Customer Notes"
+            title="Cherished Across Generations"
+            subtitle="Verified reviews from families celebrating weddings, festivals, and everyday reunions."
           />
 
           <div className="mt-8 sm:mt-12 grid gap-4 sm:gap-6 md:grid-cols-3">
             {[
               {
-                quote: "The Dry Fruit Putharekulu melted in my mouth. Exactly like my childhood memories in Godavari district!",
+                quote: "The Dry Fruit Putharekulu melted in my mouth. Exactly like my childhood memories in Godavari district.",
                 author: "Lakshmi R.",
                 location: "Hyderabad",
                 verified: true,
                 rating: 5,
               },
               {
-                quote: "Ordered 50 gift boxes for our daughter's wedding return gifts. The packaging and fresh ghee aroma wowed every guest!",
+                quote: "Ordered 50 gift boxes for our daughter's wedding return gifts. The packaging and fresh ghee aroma wowed every guest.",
                 author: "Siddharth V.",
                 location: "Bengaluru",
                 verified: true,
                 rating: 5,
               },
               {
-                quote: "Fast express delivery to USA! Arrived completely fresh and crispy in airtight tins.",
+                quote: "Express international delivery was flawless. Arrived completely fresh and crispy in airtight tins.",
                 author: "Prasad K.",
                 location: "Dallas, Texas",
                 verified: true,
                 rating: 5,
               },
             ].map((rev, idx) => (
-              <figure key={idx} className="rounded-xl border border-brown/15 bg-cream-light p-5 sm:p-6 shadow-flat space-y-3">
+              <figure key={idx} className="rounded-lg border border-brown/10 bg-white p-5 sm:p-6 shadow-soft space-y-3">
                 <div className="flex items-center gap-1 text-gold">
                   {[...Array(rev.rating)].map((_, i) => (
-                    <Star key={i} className="h-4 w-4 fill-gold text-gold" />
+                    <Star key={i} className="h-3.5 w-3.5 fill-gold text-gold" />
                   ))}
                 </div>
-                <blockquote className="font-display text-lg sm:text-xl leading-relaxed text-brown">
+                <blockquote className="font-display text-base sm:text-lg italic font-normal leading-relaxed text-brown">
                   "{rev.quote}"
                 </blockquote>
-                <figcaption className="border-t border-brown/15 pt-3 flex items-center justify-between font-sans text-xs font-bold">
+                <figcaption className="border-t border-brown/10 pt-3 flex items-center justify-between font-sans text-xs">
                   <div>
-                    <p className="text-brown">{rev.author}</p>
-                    <p className="text-brown/70">{rev.location}</p>
+                    <p className="font-medium text-brown">{rev.author}</p>
+                    <p className="text-brown/60 text-[11px]">{rev.location}</p>
                   </div>
                   {rev.verified && (
-                    <span className="rounded-full bg-green/15 px-2 py-0.5 text-green">
-                      ✓ Verified Buyer
+                    <span className="rounded bg-green/10 border border-green/20 px-2 py-0.5 text-[10px] font-medium text-green">
+                      Verified Order
                     </span>
                   )}
                 </figcaption>

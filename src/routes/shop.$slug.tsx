@@ -93,43 +93,43 @@ function ProductDetail() {
 
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-10 py-6 sm:py-10">
         {/* Breadcrumb Navigation */}
-        <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 font-sans text-xs font-bold text-brown/70 mb-6">
-          <Link to="/" className="hover:text-terracotta">Home</Link>
-          <ChevronRight className="h-3.5 w-3.5 text-brown/50" />
-          <Link to="/shop" className="hover:text-terracotta">Shop</Link>
-          <ChevronRight className="h-3.5 w-3.5 text-brown/50" />
-          <Link to="/shop" search={{ category: product.category }} className="hover:text-terracotta">{product.category}</Link>
-          <ChevronRight className="h-3.5 w-3.5 text-brown/50" />
-          <span className="text-brown truncate font-bold">{product.name}</span>
+        <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 font-sans text-xs font-normal text-brown/60 mb-6">
+          <Link to="/" className="hover:text-brown">Home</Link>
+          <ChevronRight className="h-3 w-3 text-brown/40" />
+          <Link to="/shop" className="hover:text-brown">Shop</Link>
+          <ChevronRight className="h-3 w-3 text-brown/40" />
+          <Link to="/shop" search={{ category: product.category }} className="hover:text-brown">{product.category}</Link>
+          <ChevronRight className="h-3 w-3 text-brown/40" />
+          <span className="text-brown truncate font-medium">{product.name}</span>
         </nav>
 
         {/* MAIN PDP GRID */}
         <div className="grid gap-8 lg:grid-cols-12">
           {/* LEFT COLUMN: Gallery */}
-          <div className="lg:col-span-6 space-y-4">
-            <div className="relative overflow-hidden rounded-xl border border-brown/15 bg-cream-light group">
+          <div className="lg:col-span-6 space-y-3">
+            <div className="relative overflow-hidden rounded-lg border border-brown/10 bg-white group">
               <img
                 src={product.image}
                 alt={product.name}
                 width={1200}
                 height={1200}
                 onClick={() => setLightboxOpen(true)}
-                className="aspect-square w-full object-cover transition-transform duration-500 group-hover:scale-105 cursor-zoom-in"
+                className="aspect-square w-full object-cover transition-transform duration-500 group-hover:scale-[1.02] cursor-zoom-in"
               />
               <button
                 onClick={() => setLightboxOpen(true)}
-                className="absolute bottom-3 right-3 flex items-center gap-1 rounded-full bg-cream/90 backdrop-blur px-3 py-1.5 font-sans text-xs font-bold text-brown shadow-flat hover:bg-gold hover:text-brown cursor-pointer"
+                className="absolute bottom-3 right-3 flex items-center gap-1.5 rounded border border-brown/10 bg-white/90 backdrop-blur px-2.5 py-1 font-sans text-xs font-medium text-brown shadow-soft hover:bg-white cursor-pointer"
               >
-                <ZoomIn className="h-4 w-4" /> Lightbox Zoom
+                <ZoomIn className="h-3.5 w-3.5" /> Lightbox Zoom
               </button>
               <button
                 type="button"
                 aria-pressed={isWished}
                 aria-label={isWished ? `Remove ${product.name} from wishlist` : `Add ${product.name} to wishlist`}
                 onClick={() => toggleWishlist(product.slug)}
-                className="absolute top-3 right-3 z-10 grid h-10 w-10 place-items-center rounded-full bg-cream/90 backdrop-blur text-brown transition-colors duration-200 hover:text-terracotta shadow-flat cursor-pointer"
+                className="absolute top-3 right-3 z-10 grid h-8 w-8 place-items-center rounded-full bg-white/90 backdrop-blur text-brown transition-colors duration-150 hover:text-terracotta border border-brown/10 cursor-pointer"
               >
-                <Heart className={cn("h-5 w-5 stroke-[2]", isWished && "fill-terracotta text-terracotta")} />
+                <Heart className={cn("h-4 w-4 stroke-[1.75]", isWished && "fill-terracotta text-terracotta")} />
               </button>
               {product.badge && (
                 <span className="absolute top-3 left-3">
@@ -140,82 +140,82 @@ function ProductDetail() {
               )}
             </div>
 
-            <div className="flex gap-3 overflow-x-auto pb-2">
+            <div className="flex gap-2.5 overflow-x-auto pb-1">
               {[product.image, product.image].map((img, idx) => (
                 <button
                   key={idx}
                   onClick={() => setLightboxOpen(true)}
-                  className="h-20 w-20 shrink-0 rounded-lg border-2 border-terracotta p-0.5 overflow-hidden cursor-pointer"
+                  className="h-16 w-16 shrink-0 rounded border border-brown/20 p-0.5 overflow-hidden cursor-pointer"
                 >
-                  <img src={img} alt="Thumbnail" className="h-full w-full object-cover rounded-md" />
+                  <img src={img} alt="Thumbnail" className="h-full w-full object-cover rounded" />
                 </button>
               ))}
             </div>
           </div>
 
           {/* RIGHT COLUMN: Specs */}
-          <div className="lg:col-span-6 space-y-6">
+          <div className="lg:col-span-6 space-y-5">
             <div>
-              <span className="eyebrow text-terracotta font-bold uppercase tracking-widest">{product.category}</span>
-              <h1 className="font-display text-4xl sm:text-5xl font-normal leading-tight text-brown mt-1">
+              <span className="eyebrow text-terracotta font-medium uppercase tracking-[0.14em] text-[11px]">{product.category}</span>
+              <h1 className="font-display text-3xl sm:text-4xl font-normal leading-tight text-brown mt-1 tracking-tight">
                 {product.name}
               </h1>
-              <p className="mt-1 font-sans text-base font-bold text-brown/70 italic">{product.tagline}</p>
+              <p className="mt-1 font-sans text-sm font-normal text-brown/70">{product.tagline}</p>
 
-              <div className="mt-3 flex items-center gap-3">
+              <div className="mt-2.5 flex items-center gap-2.5">
                 <Rating value={product.rating || 4.9} count={reviewsCount} />
-                <span className="font-sans text-xs font-bold text-brown/70">({reviewsCount} verified customer reviews)</span>
+                <span className="font-sans text-xs font-normal text-brown/60">({reviewsCount} verified ratings)</span>
               </div>
             </div>
 
             {/* Price Display */}
-            <div className="flex items-baseline gap-3 border-y border-brown/15 py-4">
-              <span className="font-sans text-3xl font-bold text-terracotta">
+            <div className="flex items-baseline gap-3 border-y border-brown/10 py-3.5">
+              <span className="font-sans text-2xl sm:text-3xl font-semibold text-brown tabular-nums">
                 {formatPrice(selectedVariant.price * qty)}
               </span>
               {selectedVariant.msrp && selectedVariant.msrp > selectedVariant.price && (
                 <>
-                  <span className="font-sans text-lg font-bold text-brown/50 line-through tabular-nums">
+                  <span className="font-sans text-base text-brown/40 line-through tabular-nums">
                     {formatPrice(selectedVariant.msrp * qty)}
                   </span>
-                  <span className="rounded bg-gold/20 px-2.5 py-0.5 font-sans text-xs font-bold text-brown">
+                  <span className="rounded border border-gold/30 bg-[#FFF9EE] px-2 py-0.5 font-sans text-xs font-medium text-[#8F5B1D]">
                     Save {Math.round(((selectedVariant.msrp - selectedVariant.price) / selectedVariant.msrp) * 100)}%
                   </span>
                 </>
               )}
-              <span className="font-sans text-xs font-bold text-brown/60 ml-auto">Inclusive of all taxes</span>
+              <span className="font-sans text-xs font-normal text-brown/50 ml-auto">Inclusive of all taxes</span>
             </div>
 
             {/* Weight Variant Selector Pills */}
             <div>
-              <p className="eyebrow text-brown font-bold mb-2">Select Weight Variant:</p>
-              <div className="flex flex-wrap gap-2.5">
+              <p className="font-sans text-xs font-medium text-brown mb-2 uppercase tracking-wide">Select Weight Variant:</p>
+              <div className="flex flex-wrap gap-2">
                 {weights.map((w: any, i: number) => (
                   <button
                     key={w.label}
                     onClick={() => setSelectedVariantIndex(i)}
                     className={cn(
-                      "flex items-center gap-2 rounded-lg border px-4 py-2.5 font-sans text-xs font-bold transition-all duration-200 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terracotta",
+                      "flex items-center gap-2 rounded border px-3.5 py-2 font-sans text-xs font-medium transition-colors cursor-pointer",
                       i === selectedVariantIndex
-                        ? "border-terracotta bg-terracotta/15 text-terracotta"
-                        : "border-brown/20 bg-cream-light text-brown/70 hover:border-brown hover:bg-cream",
+                        ? "border-brown bg-brown text-white"
+                        : "border-brown/15 bg-white text-brown/70 hover:border-brown/40",
                     )}
                   >
                     <span>{w.label}</span>
-                    <span className="font-bold text-brown">{formatPrice(w.price)}</span>
+                    <span className="font-medium text-inherit">{formatPrice(w.price)}</span>
                   </button>
                 ))}
               </div>
             </div>
 
             {/* Quantity Selector */}
-            <div className="flex items-center gap-4">
-              <span className="eyebrow text-brown font-bold">Quantity:</span>
+            <div className="flex items-center gap-3">
+              <span className="font-sans text-xs font-medium text-brown uppercase tracking-wide">Quantity:</span>
               <QuantitySelector value={qty} onChange={setQty} />
             </div>
 
             {/* Actions */}
-            <div className="space-y-3 pt-2">
+            <div className="space-y-2.5 pt-1">
               <div className="grid grid-cols-2 gap-3">
                 <Button
                   size="lg"
@@ -230,16 +230,16 @@ function ProductDetail() {
                       qty,
                     })
                   }
-                  className="justify-center gap-2 border-brown text-brown hover:bg-brown hover:text-white"
+                  className="justify-center gap-2"
                 >
-                  <ShoppingBag className="h-4 w-4" /> Add to Cart
+                  <ShoppingBag className="h-4 w-4" /> Add to Bag
                 </Button>
 
                 <Button
                   size="lg"
-                  variant="accent"
+                  variant="gold"
                   onClick={() => openExpress(product.name, selectedVariant.label, selectedVariant.price, qty)}
-                  className="justify-center gap-2 bg-terracotta text-white hover:bg-brown shadow-lift"
+                  className="justify-center gap-2"
                 >
                   <Zap className="h-4 w-4 fill-current" /> Express Buy Now
                 </Button>
@@ -249,32 +249,32 @@ function ProductDetail() {
                 size="md"
                 variant="secondary"
                 onClick={() => toggleWishlist(product.slug)}
-                className="w-full justify-center gap-2 border-brown/20 bg-cream/40 text-brown hover:border-terracotta hover:text-terracotta transition-colors"
+                className="w-full justify-center gap-2 text-xs"
               >
-                <Heart className={cn("h-4 w-4 stroke-[2]", isWished && "fill-terracotta text-terracotta")} />
+                <Heart className={cn("h-3.5 w-3.5 stroke-[1.75]", isWished && "fill-[#C88A36] text-[#C88A36]")} />
                 {isWished ? "Saved in Your Wishlist (Click to remove)" : "Save to Wishlist"}
               </Button>
             </div>
 
             {/* Trust Badges */}
-            <div className="grid grid-cols-3 gap-2 rounded-lg border border-brown/15 bg-cream-light p-3 text-center font-sans text-xs font-bold">
+            <div className="grid grid-cols-3 gap-2 rounded-md border border-brown/10 bg-white p-3 text-center font-sans text-xs font-normal">
               <div className="flex flex-col items-center gap-1">
-                <ShieldCheck className="h-5 w-5 text-terracotta" />
-                <span className="text-brown">100% Authentic</span>
+                <ShieldCheck className="h-4 w-4 text-brown/70" />
+                <span className="text-brown/80 text-[11px]">100% Authentic</span>
               </div>
               <div className="flex flex-col items-center gap-1">
-                <PackageCheck className="h-5 w-5 text-terracotta" />
-                <span className="text-brown">Freshly Packed</span>
+                <PackageCheck className="h-4 w-4 text-brown/70" />
+                <span className="text-brown/80 text-[11px]">Freshly Packed</span>
               </div>
               <div className="flex flex-col items-center gap-1">
-                <Truck className="h-5 w-5 text-terracotta" />
-                <span className="text-brown">Express Shipping</span>
+                <Truck className="h-4 w-4 text-brown/70" />
+                <span className="text-brown/80 text-[11px]">Express Shipping</span>
               </div>
             </div>
 
             {/* Information Tabs */}
-            <div className="border-t border-brown/15 pt-4">
-              <div className="flex border-b border-brown/15 font-sans text-xs font-bold">
+            <div className="border-t border-brown/10 pt-4">
+              <div className="flex border-b border-brown/10 font-sans text-xs font-medium">
                 {[
                   { id: "desc", label: "Description" },
                   { id: "ing", label: "Ingredients & Nutrition" },
@@ -286,8 +286,8 @@ function ProductDetail() {
                     onClick={() => setActiveAccordion(tab.id as any)}
                     className={`py-2 px-3 border-b-2 transition-colors cursor-pointer ${
                       activeAccordion === tab.id
-                        ? "border-terracotta text-terracotta"
-                        : "border-transparent text-brown/70 hover:text-brown"
+                        ? "border-brown text-brown"
+                        : "border-transparent text-brown/60 hover:text-brown"
                     }`}
                   >
                     {tab.label}
@@ -295,7 +295,7 @@ function ProductDetail() {
                 ))}
               </div>
 
-              <div className="py-4 font-sans text-sm font-bold leading-relaxed text-brown/80">
+              <div className="py-3 font-sans text-xs sm:text-sm font-normal leading-relaxed text-brown/80">
                 {activeAccordion === "desc" && <p>{product.description}</p>}
                 {activeAccordion === "ing" && (
                   <div className="space-y-2">
@@ -394,12 +394,12 @@ function ProductDetail() {
         </section>
       </div>
 
-      {/* MOBILE STICKY BOTTOM BAR */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 lg:hidden border-t border-brown/15 bg-cream/95 backdrop-blur-md p-3 shadow-lift font-sans">
+      {/* MOBILE STICKY BOTTOM BAR (Floats cleanly right above the bottom tab bar) */}
+      <div className="fixed bottom-[calc(52px+env(safe-area-inset-bottom))] left-0 right-0 z-40 lg:hidden border-t border-brown/10 bg-white/95 backdrop-blur-md px-4 py-2.5 shadow-soft font-sans">
         <div className="flex items-center justify-between gap-3">
-          <div>
-            <span className="font-sans text-xs font-bold text-brown/70">{selectedVariant.label}</span>
-            <p className="font-sans text-lg font-bold text-terracotta">{formatPrice(selectedVariant.price * qty)}</p>
+          <div className="min-w-0">
+            <span className="font-sans text-[11px] font-normal text-brown/60 truncate block">{selectedVariant.label}</span>
+            <p className="font-sans text-base font-semibold text-brown tabular-nums">{formatPrice(selectedVariant.price * qty)}</p>
           </div>
 
           <div className="flex items-center gap-2">
@@ -416,15 +416,15 @@ function ProductDetail() {
                   qty,
                 })
               }
-              className="text-xs px-3 border-brown text-brown"
+              className="text-xs px-3 h-8"
             >
-              Add
+              Add to Bag
             </Button>
             <Button
               size="sm"
-              variant="accent"
+              variant="gold"
               onClick={() => openExpress(product.name, selectedVariant.label, selectedVariant.price, qty)}
-              className="text-xs px-3 bg-terracotta text-white"
+              className="text-xs px-3.5 h-8"
             >
               Express Buy
             </Button>

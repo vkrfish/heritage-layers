@@ -5,29 +5,21 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * 9 STORIES & CO. — Brand Style Guide Design Tokens
- * Colors: Story Brown (#4A2C20), Terracotta (#8B3E2F), Dry Fruit Gold (#DBA55A), Leaf Green (#546B3F), Rice Cream (#F5E9D7)
- * Fonts: Dirtylane (headings/titles) & Chathura Bold 700 (body/UI)
+ * 9 STORIES & CO. — Unslopped Heritage Luxury Design Tokens
+ * Warm parchment editorial system:
+ * Display: Cormorant Garamond (High-craft editorial serif)
+ * Sans / UI: Plus Jakarta Sans (Clean, modern legibility)
  */
 
-@font-face {
-  font-family: "Dirtylane";
-  src: url("/fonts/Dirtylane.woff2") format("woff2"),
-       url("/fonts/Dirtylane.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
 @theme inline {
-  --radius-sm: 0.375rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 0.75rem;
-  --radius-xl: 1rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
 
-  --font-display: "Dirtylane", "Dancing Script", cursive;
-  --font-sans: "Chathura", sans-serif;
-  --font-script: "Dirtylane", "Dancing Script", cursive;
+  --font-display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-script: "Cormorant Garamond", Georgia, serif;
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -49,63 +41,131 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  /* Brand 5-color palette tokens */
-  --color-brown: #4A2C20;
-  --color-terracotta: #8B3E2F;
-  --color-gold: #DBA55A;
-  --color-green: #546B3F;
-  --color-cream: #F5E9D7;
-  --color-cream-light: #FAF4EB;
+  /* Heritage Warm Luxury Palette */
+  --color-brown: #2E1E17;
+  --color-terracotta: #A85B24;
+  --color-gold: #C88A36;
+  --color-green: #485A36;
+  --color-cream: #FAF7F2;
+  --color-cream-light: #FFFFFF;
 
-  --shadow-soft: 0 2px 8px rgba(74, 44, 32, 0.08);
-  --shadow-flat: 0 1px 3px rgba(74, 44, 32, 0.12);
-  --shadow-lift: 0 8px 24px rgba(74, 44, 32, 0.12);
+  --shadow-soft: 0 1px 3px rgba(36, 24, 20, 0.05);
+  --shadow-flat: 0 1px 2px rgba(36, 24, 20, 0.06);
+  --shadow-lift: 0 10px 30px -10px rgba(36, 24, 20, 0.08);
 }
 
 :root {
-  --radius: 0.5rem; /* 8px default radius */
+  --radius: 0.375rem;
 
-  /* 5 Brand Colors */
-  --brown: #4A2C20;
-  --terracotta: #8B3E2F;
-  --gold: #DBA55A;
-  --green: #546B3F;
-  --cream: #F5E9D7;
-  --cream-light: #FAF4EB;
+  /* Warm Parchment Ramp */
+  --brown: #2E1E17;
+  --terracotta: #A85B24;
+  --gold: #C88A36;
+  --green: #485A36;
+  --cream: #FAF7F2;
+  --cream-light: #FFFFFF;
 
-  --background: var(--cream);
-  --foreground: var(--brown);
+  --background: #FAF7F2;
+  --foreground: #241814;
 
-  --card: #FBF7F0;
-  --card-foreground: var(--brown);
+  --card: #FFFFFF;
+  --card-foreground: #241814;
 
-  --popover: #FBF7F0;
-  --popover-foreground: var(--brown);
+  --popover: #FFFFFF;
+  --popover-foreground: #241814;
 
-  --primary: var(--brown);
-  --primary-foreground: #FFFFFF;
+  --primary: #241814;
+  --primary-foreground: #FAF7F2;
 
-  --secondary: var(--cream);
-  --secondary-foreground: var(--brown);
+  --secondary: #F4EFE7;
+  --secondary-foreground: #241814;
 
-  --accent: var(--terracotta);
+  --accent: #A85B24;
   --accent-foreground: #FFFFFF;
 
-  --muted: var(--cream-light);
-  --muted-foreground: rgba(74, 44, 32, 0.7);
+  --muted: #F3ECE1;
+  --muted-foreground: #78665D;
 
-  --border: rgba(74, 44, 32, 0.15);
-  --input: rgba(74, 44, 32, 0.2);
-  --ring: var(--terracotta);
+  --border: rgba(36, 24, 20, 0.08);
+  --input: rgba(36, 24, 20, 0.12);
+  --ring: #A85B24;
 
-  --destructive: var(--terracotta);
+  --destructive: #B91C1C;
   --destructive-foreground: #FFFFFF;
 
-  --success: var(--green);
+  --success: #485A36;
   --success-foreground: #FFFFFF;
 
-  --on-dark: var(--cream);
-  --on-dark-muted: rgba(245, 233, 215, 0.8);
+  --on-dark: #FAF7F2;
+  --on-dark-muted: rgba(250, 247, 242, 0.75);
+
+  /* Emil Kowalski Animation System */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+
+  /* Figma Simple Design System (SDS) Button Tokens */
+  --sds-btn-shadow-primary: inset 0 1px 0 0 rgba(255, 255, 255, 0.18), inset 0 0 0 1px rgba(255, 255, 255, 0.08), 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+  --sds-btn-shadow-primary-active: inset 0 2px 4px 0 rgba(0, 0, 0, 0.35), inset 0 0 0 1px rgba(0, 0, 0, 0.3);
+  --sds-btn-shadow-gold: inset 0 1px 0 0 rgba(255, 255, 255, 0.4), inset 0 0 0 1px rgba(168, 91, 36, 0.35), 0 1px 3px 0 rgba(200, 138, 54, 0.25);
+  --sds-btn-shadow-neutral: inset 0 1px 0 0 rgba(255, 255, 255, 0.9), inset 0 0 0 1px rgba(36, 24, 20, 0.12), 0 1px 2px 0 rgba(36, 24, 20, 0.04);
+}
+
+/* Figma SDS & Emil Kowalski Tactile Button Physics */
+.sds-btn-primary {
+  background-color: #241814;
+  color: #FAF7F2;
+  box-shadow: var(--sds-btn-shadow-primary);
+  transition: all 140ms var(--ease-out);
+}
+.sds-btn-primary:hover:not(:disabled) {
+  background-color: #382620;
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.24), inset 0 0 0 1px rgba(255, 255, 255, 0.12), 0 2px 6px 0 rgba(0, 0, 0, 0.25);
+}
+.sds-btn-primary:active:not(:disabled) {
+  transform: scale(0.975) translateY(0.5px);
+  box-shadow: var(--sds-btn-shadow-primary-active);
+}
+
+.sds-btn-gold {
+  background-color: #C88A36;
+  color: #1B120E;
+  box-shadow: var(--sds-btn-shadow-gold);
+  transition: all 140ms var(--ease-out);
+}
+.sds-btn-gold:hover:not(:disabled) {
+  background-color: #D69742;
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.5), inset 0 0 0 1px rgba(168, 91, 36, 0.45), 0 3px 8px 0 rgba(200, 138, 54, 0.35);
+}
+.sds-btn-gold:active:not(:disabled) {
+  transform: scale(0.975) translateY(0.5px);
+  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.25);
+}
+
+.sds-btn-neutral {
+  background-color: #FFFFFF;
+  color: #241814;
+  box-shadow: var(--sds-btn-shadow-neutral);
+  transition: all 140ms var(--ease-out);
+}
+.sds-btn-neutral:hover:not(:disabled) {
+  background-color: #FAF7F2;
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 1), inset 0 0 0 1px rgba(36, 24, 20, 0.2), 0 2px 4px 0 rgba(36, 24, 20, 0.06);
+}
+.sds-btn-neutral:active:not(:disabled) {
+  transform: scale(0.975) translateY(0.5px);
+  box-shadow: inset 0 1px 3px 0 rgba(36, 24, 20, 0.1);
+}
+
+/* Tactile button feedback (Emil Kowalski Recipe) */
+button,
+[role="button"] {
+  transition: transform 160ms var(--ease-out), background-color 150ms ease, border-color 150ms ease, color 150ms ease, opacity 150ms ease;
+}
+
+button:active:not(:disabled),
+[role="button"]:active:not([aria-disabled="true"]) {
+  transform: scale(0.97);
 }
 
 @layer base {
@@ -115,46 +175,67 @@
 
   html {
     scroll-behavior: smooth;
-    font-size: 16px;
+    font-size: 15px;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11", "tnum";
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Emil Kowalski Mobile-Native Polish */
+  button, a, [role="button"] {
+    touch-action: manipulation;
+  }
+
+  button, [role="button"] {
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  /* Prevent iOS Safari input auto-zoom */
+  @media (pointer: coarse) {
+    input, select, textarea {
+      font-size: 16px !important;
+    }
   }
 
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
-    font-weight: 700;
-    font-size: 1.125rem; /* Chathura runs small, size up to 1.125rem */
-    line-height: 1.5;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.6;
     -webkit-font-smoothing: antialiased;
   }
 
   h1 {
     font-family: var(--font-display);
-    font-size: clamp(2.5rem, 6vw, 4.5rem);
-    font-weight: 400;
+    font-size: clamp(2.5rem, 5vw, 4.25rem);
+    font-weight: 500;
     line-height: 1.1;
+    letter-spacing: -0.015em;
     color: var(--color-brown);
   }
 
   h2 {
     font-family: var(--font-display);
-    font-size: clamp(2rem, 4vw, 3rem);
-    font-weight: 400;
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 500;
     line-height: 1.15;
+    letter-spacing: -0.01em;
     color: var(--color-brown);
   }
 
   h3 {
     font-family: var(--font-display);
-    font-size: 1.75rem;
-    font-weight: 400;
-    line-height: 1.2;
+    font-size: 1.625rem;
+    font-weight: 500;
+    line-height: 1.25;
     color: var(--color-brown);
   }
 
   h4, h5, h6 {
     font-family: var(--font-display);
-    font-weight: 400;
+    font-weight: 500;
     color: var(--color-brown);
   }
 
@@ -164,12 +245,13 @@
   }
 
   a {
-    color: var(--color-terracotta);
+    color: var(--color-brown);
     transition: color 150ms ease;
   }
 
   a:hover {
-    text-decoration: underline;
+    color: var(--color-terracotta);
+    text-decoration: none;
   }
 
   :focus-visible {
@@ -178,8 +260,8 @@
   }
 
   ::selection {
-    background: var(--color-terracotta);
-    color: #FFFFFF;
+    background: #EEDBC8;
+    color: #241814;
   }
 }
 
@@ -187,21 +269,22 @@
 
 @utility eyebrow {
   font-family: var(--font-sans);
-  font-size: 0.875rem;
-  letter-spacing: 0.25em;
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
-  font-weight: 700;
-  color: var(--color-brown);
+  font-weight: 500;
+  color: var(--color-terracotta);
 }
 
 @utility rule-gold {
   &::after {
     content: "";
     display: block;
-    width: 3.5rem;
-    height: 1.5px;
-    margin-top: 1rem;
+    width: 2.5rem;
+    height: 1px;
+    margin-top: 0.75rem;
     background: var(--color-gold);
+    opacity: 0.6;
   }
 }
 
@@ -209,10 +292,42 @@
   background-color: var(--color-cream);
 }
 
+/* Emil Kowalski: Card image hover zoom & Stagger entrance */
+.product-image-zoom {
+  will-change: transform;
+  transition: transform 380ms var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .group:hover .product-image-zoom {
+    transform: scale(1.025);
+  }
+}
+
+@keyframes stagger-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.stagger-item {
+  animation: stagger-in 260ms var(--ease-out) both;
+}
+
+.stagger-item:nth-child(1) { animation-delay: 20ms; }
+.stagger-item:nth-child(2) { animation-delay: 50ms; }
+.stagger-item:nth-child(3) { animation-delay: 80ms; }
+.stagger-item:nth-child(4) { animation-delay: 110ms; }
+
 @utility reveal {
   opacity: 0;
-  transform: translateY(12px);
-  animation: reveal-in 0.5s ease forwards;
+  transform: translateY(8px);
+  animation: reveal-in 350ms var(--ease-out) forwards;
 }
 
 @keyframes reveal-in {

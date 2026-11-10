@@ -35,11 +35,11 @@ export function MarqueeBanner() {
   }, [list.length]);
 
   return (
-    <div className="bg-brown text-cream px-3 py-1.5 text-center font-sans text-xs font-bold tracking-wider overflow-hidden border-b border-gold/30">
-      <div className="flex items-center justify-center gap-2 transition-all duration-500">
-        <Sparkles className="h-3 w-3 text-gold shrink-0 animate-pulse" />
-        <span className="truncate uppercase text-[11px] sm:text-xs">{list[index % list.length]}</span>
-        <Sparkles className="h-3 w-3 text-gold shrink-0 animate-pulse" />
+    <div className="bg-[#1B120E] text-[#FAF7F2] px-4 py-2 text-center font-sans text-xs font-normal tracking-wide border-b border-white/[0.06]">
+      <div className="flex items-center justify-center gap-2">
+        <span className="h-1 w-1 rounded-full bg-gold/80"></span>
+        <span className="truncate text-[11px] text-[#FAF7F2]/90">{list[index % list.length]}</span>
+        <span className="h-1 w-1 rounded-full bg-gold/80"></span>
       </div>
     </div>
   );
@@ -155,8 +155,8 @@ export function Navbar() {
                 value={searchQuery}
                 onFocus={() => setSearchOpen(true)}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="A2 Ghee, Putharekulu, and Fresh Sweets...."
-                className="w-full h-10 rounded-full border border-brown/20 bg-cream-light pl-4 pr-10 font-sans text-xs font-bold text-brown placeholder:text-brown/50 focus:border-terracotta focus:outline-none"
+                placeholder="Search delicacies..."
+                className="w-full h-10 rounded-md border border-brown/15 bg-white pl-4 pr-10 font-sans text-xs font-normal text-brown placeholder:text-brown/40 focus:border-brown/40 focus:outline-none"
               />
               <Search className="absolute right-3.5 h-4 w-4 text-brown/60 pointer-events-none" />
             </div>
@@ -221,8 +221,8 @@ export function Navbar() {
                 <li key={l.to}>
                   <Link
                     to={l.to}
-                    className="relative font-sans text-lg font-bold tracking-wide text-brown transition-colors duration-200 hover:text-terracotta py-1 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-terracotta after:transition-all after:duration-200 hover:after:w-full"
-                    activeProps={{ className: "text-brown font-bold after:w-full" }}
+                    className="relative font-sans text-sm font-medium tracking-normal text-brown/80 transition-colors duration-150 hover:text-brown py-1 after:absolute after:bottom-0 after:left-0 after:h-[1.5px] after:w-0 after:bg-brown after:transition-all after:duration-150 hover:after:w-full"
+                    activeProps={{ className: "text-brown font-semibold after:w-full" }}
                     activeOptions={{ exact: l.to === "/" }}
                   >
                     {l.label}
@@ -320,16 +320,16 @@ export function Navbar() {
 
       {/* Slide-in Mobile Drawer Navigation */}
       {menuOpen && (
-        <div className="fixed inset-0 z-50 flex lg:hidden bg-brown/60 backdrop-blur-sm animate-in fade-in">
-          <div className="w-[80%] max-w-[320px] h-full bg-cream p-5 shadow-lift border-r border-brown/20 flex flex-col justify-between animate-in slide-in-from-left">
+        <div className="fixed inset-0 z-50 flex lg:hidden bg-black/40 backdrop-blur-sm transition-opacity duration-200">
+          <div className="w-[82%] max-w-[300px] h-full bg-[#FAF7F2] p-5 shadow-2xl border-r border-brown/10 flex flex-col justify-between transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]">
             <div>
-              <div className="flex items-center justify-between border-b border-brown/15 pb-4">
-                <img src={logoFull} alt="9 Stories & Co." className="h-8 w-auto mix-blend-multiply" />
+              <div className="flex items-center justify-between border-b border-brown/10 pb-3">
+                <img src={logoFull} alt="9 Stories & Co." className="h-7 w-auto mix-blend-multiply" />
                 <button
                   onClick={() => setMenuOpen(false)}
-                  className="grid h-9 w-9 place-items-center rounded-full text-brown hover:bg-cream-light"
+                  className="grid h-8 w-8 place-items-center rounded-full text-brown/70 hover:bg-white"
                 >
-                  <X className="h-5 w-5" />
+                  <X className="h-4 w-4" />
                 </button>
               </div>
 
@@ -339,8 +339,8 @@ export function Navbar() {
                     <Link
                       to={l.to}
                       onClick={() => setMenuOpen(false)}
-                      className="flex min-h-11 items-center rounded-lg px-3 text-base font-bold text-brown hover:bg-cream-light hover:text-terracotta"
-                      activeProps={{ className: "bg-terracotta/15 text-terracotta" }}
+                      className="flex min-h-10 items-center rounded-md px-3 text-sm font-medium text-brown/80 hover:bg-white hover:text-brown transition-colors"
+                      activeProps={{ className: "bg-white text-brown font-semibold shadow-soft" }}
                       activeOptions={{ exact: l.to === "/" }}
                     >
                       {l.label}
@@ -350,55 +350,68 @@ export function Navbar() {
               </ul>
             </div>
 
-            <div className="border-t border-brown/15 pt-4 font-sans text-xs font-bold text-brown/70 space-y-2">
-              <p>Handcrafted Andhra Sweets</p>
-              <p className="text-[11px] text-terracotta">Atreyapuram, Andhra Pradesh</p>
+            <div className="border-t border-brown/10 pt-4 font-sans text-xs font-normal text-brown/60 space-y-1">
+              <p className="font-medium text-brown">9 Stories &amp; Co.</p>
+              <p className="text-[11px]">Handcrafted in Atreyapuram, Godavari</p>
             </div>
           </div>
         </div>
       )}
 
-      {/* Fixed Mobile Bottom Navigation Bar (< 768px) */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 h-[60px] bg-brown text-cream flex items-center justify-around border-t border-gold/30 shadow-lift lg:hidden">
+      {/* Fixed Mobile Bottom Navigation Bar (< 1024px) */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 h-[calc(52px+env(safe-area-inset-bottom))] pb-[env(safe-area-inset-bottom)] bg-[#FAF7F2]/95 backdrop-blur-md flex items-center justify-around border-t border-brown/10 shadow-soft lg:hidden">
         <Link
           to="/"
-          className="flex flex-col items-center justify-center gap-0.5 text-cream hover:text-gold"
-          activeProps={{ className: "text-gold font-bold" }}
+          className="flex flex-col items-center justify-center gap-1 text-brown/60 hover:text-brown transition-colors"
+          activeProps={{ className: "text-brown font-semibold" }}
           activeOptions={{ exact: true }}
         >
-          <Home className="h-5 w-5" />
-          <span className="font-sans text-[11px] font-bold uppercase tracking-wide">Home</span>
+          <Home className="h-4 w-4" />
+          <span className="font-sans text-[10px] tracking-tight">Home</span>
         </Link>
 
         <Link
           to="/shop"
-          className="flex flex-col items-center justify-center gap-0.5 text-cream hover:text-gold"
-          activeProps={{ className: "text-gold font-bold" }}
+          className="flex flex-col items-center justify-center gap-1 text-brown/60 hover:text-brown transition-colors"
+          activeProps={{ className: "text-brown font-semibold" }}
         >
-          <Package className="h-5 w-5" />
-          <span className="font-sans text-[11px] font-bold uppercase tracking-wide">Shop</span>
+          <Package className="h-4 w-4" />
+          <span className="font-sans text-[10px] tracking-tight">Shop</span>
         </Link>
 
         <button
-          onClick={() => setOpen(true)}
-          className="relative flex flex-col items-center justify-center gap-0.5 text-cream hover:text-gold cursor-pointer"
+          onClick={() => setIsWishlistOpen(true)}
+          className="relative flex flex-col items-center justify-center gap-1 text-brown/60 hover:text-brown transition-colors cursor-pointer"
         >
-          <ShoppingBag className="h-5 w-5" />
+          <Heart className="h-4 w-4" />
+          {wishlist.length > 0 && (
+            <span className="absolute -top-1 -right-1 grid h-3.5 min-w-3.5 place-items-center rounded-full bg-gold px-1 font-sans text-[9px] font-semibold text-white">
+              {wishlist.length}
+            </span>
+          )}
+          <span className="font-sans text-[10px] tracking-tight">Wishlist</span>
+        </button>
+
+        <button
+          onClick={() => setOpen(true)}
+          className="relative flex flex-col items-center justify-center gap-1 text-brown/60 hover:text-brown transition-colors cursor-pointer"
+        >
+          <ShoppingBag className="h-4 w-4" />
           {count > 0 && (
-            <span className="absolute -top-1 right-2 grid h-4 min-w-4 place-items-center rounded-full bg-gold px-1 font-sans text-[10px] font-bold text-brown">
+            <span className="absolute -top-1 -right-1 grid h-3.5 min-w-3.5 place-items-center rounded-full bg-brown px-1 font-sans text-[9px] font-semibold text-white">
               {count}
             </span>
           )}
-          <span className="font-sans text-[11px] font-bold uppercase tracking-wide">Cart</span>
+          <span className="font-sans text-[10px] tracking-tight">Cart</span>
         </button>
 
         <button
           type="button"
           onClick={handleAccountClick}
-          className="flex flex-col items-center justify-center gap-0.5 text-cream hover:text-gold cursor-pointer"
+          className="flex flex-col items-center justify-center gap-1 text-brown/60 hover:text-brown transition-colors cursor-pointer"
         >
-          <User className="h-5 w-5" />
-          <span className="font-sans text-[11px] font-bold uppercase tracking-wide">Account</span>
+          <User className="h-4 w-4" />
+          <span className="font-sans text-[10px] tracking-tight">Account</span>
         </button>
       </div>
     </>

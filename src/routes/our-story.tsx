@@ -64,43 +64,43 @@ function BotanicalLeafIllustration({ className }: { className?: string }) {
 
 function OurStory() {
   return (
-    <div className="bg-cream font-sans">
+    <div className="bg-[#FAF7F2] font-sans">
       {/* HERO SECTION */}
-      <section className="relative isolate overflow-hidden bg-cream py-16 lg:py-24 border-b border-brown/15">
-        <div className="mx-auto grid max-w-[1400px] items-center gap-12 px-5 lg:grid-cols-2 lg:px-10">
-          <div className="max-w-2xl reveal space-y-4">
+      <section className="relative isolate overflow-hidden bg-[#FAF7F2] py-14 lg:py-20 border-b border-brown/10">
+        <div className="mx-auto grid max-w-[1200px] items-center gap-10 px-5 lg:grid-cols-2 lg:px-10">
+          <div className="max-w-xl space-y-4">
             <SectionHeading
               align="left"
-              eyebrow="Our Story"
-              title="Nine generations. One recipe."
+              eyebrow="Provenance"
+              title="Nine generations. One unhurried recipe."
               subtitle="We didn't invent Putharekulu. We simply refused to let it become something faster."
             />
           </div>
 
-          <div className="relative flex items-center justify-center p-6">
-            <div className="relative w-full max-w-md aspect-square rounded-xl bg-cream-light/60 border border-brown/15 p-8 flex items-center justify-center">
-              <BotanicalLeafIllustration className="w-full h-full max-h-[280px] object-contain" />
+          <div className="relative flex items-center justify-center p-4">
+            <div className="relative w-full max-w-sm aspect-square rounded-lg bg-white border border-brown/10 p-8 flex items-center justify-center shadow-soft">
+              <BotanicalLeafIllustration className="w-full h-full max-h-[260px] object-contain opacity-40" />
             </div>
           </div>
         </div>
       </section>
 
       {/* STORY BODY */}
-      <section className="px-5 py-16 lg:px-10 lg:py-24">
-        <div className="mx-auto grid max-w-[1400px] gap-14 lg:grid-cols-[1.1fr_1fr] items-center">
-          <div className="max-w-2xl space-y-6 font-sans text-lg font-bold leading-relaxed text-brown/85">
+      <section className="px-5 py-14 lg:px-10 lg:py-20">
+        <div className="mx-auto grid max-w-[1200px] gap-12 lg:grid-cols-[1.1fr_1fr] items-center">
+          <div className="max-w-xl space-y-5 font-sans text-base sm:text-lg font-normal leading-relaxed text-brown/80">
             <p>
-              In Atreyapuram, a village on the banks of the Godavari, the morning begins with the
-              sound of a ladle against clay. The rice has soaked overnight. The pot is warm. And a
-              sheet thinner than paper is about to be lifted with nothing but fingertips.
+              In Atreyapuram, a village nestled along the Godavari River delta, the morning begins with the
+              sound of a ladle against warm earthen clay. The rice has soaked overnight. The inverted pot kiln is gently heated. And a
+              sheet thinner than paper is lifted with nothing but calloused fingertips.
             </p>
             <p>
-              Our family has made this sweet for nine generations. It has never scaled well, and we
-              have never tried to make it. Every sheet is a decision. Every fold is a hand.
+              Our family has preserved this culinary art across nine generations. It has never scaled to industrial machinery, and we
+              have never tried to make it. Every gossamer sheet is an individual decision. Every fold is an artisan's hand.
             </p>
             <p>
-              9 Stories & Co. exists so this sweet travels — to a wedding in Chennai, a Diwali table
-              in London, a homesick student in Toronto — without losing the kitchen it came from.
+              9 Stories & Co. exists so this 300-year sweet travels across the globe — to a wedding in Chennai, a Diwali table
+              in London, a homesick family in New York — without ever losing the quiet village kitchen it was born in.
             </p>
           </div>
           <img
@@ -109,21 +109,21 @@ function OurStory() {
             loading="lazy"
             width={1200}
             height={1400}
-            className="rounded-xl border border-brown/15 object-cover shadow-lift"
+            className="rounded-lg border border-brown/10 object-cover shadow-soft"
           />
         </div>
       </section>
 
       {/* TIMELINE */}
-      <section className="bg-cream-light px-5 py-16 lg:px-10 lg:py-24 border-t border-brown/15">
-        <div className="mx-auto max-w-3xl">
-          <SectionHeading align="left" eyebrow="Timeline" title="How we got here" />
-          <ol className="mt-12 border-l border-terracotta/40 font-sans">
+      <section className="bg-white px-5 py-14 lg:px-10 lg:py-20 border-t border-brown/10">
+        <div className="mx-auto max-w-2xl">
+          <SectionHeading align="left" eyebrow="Chronicle" title="A century on the Godavari" />
+          <ol className="mt-10 border-l border-gold/40 font-sans">
             {timeline.map(([year, copy]) => (
-              <li key={year} className="relative pb-10 pl-8 last:pb-0">
-                <span className="absolute top-1.5 -left-[5px] h-2.5 w-2.5 rounded-full bg-terracotta" />
-                <p className="font-display text-4xl text-brown">{year}</p>
-                <p className="mt-2 font-sans text-base font-bold leading-relaxed text-brown/80">{copy}</p>
+              <li key={year} className="relative pb-8 pl-7 last:pb-0">
+                <span className="absolute top-1.5 -left-[4.5px] h-2 w-2 rounded-full bg-gold" />
+                <p className="font-display text-3xl text-brown font-normal">{year}</p>
+                <p className="mt-1.5 font-sans text-sm sm:text-base font-normal leading-relaxed text-brown/70">{copy}</p>
               </li>
             ))}
           </ol>
